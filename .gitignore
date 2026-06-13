@@ -1,0 +1,5 @@
+node_modules/
+.yana/
+*.log
+.env
+.DS_Store

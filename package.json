@@ -1,0 +1,29 @@
+{
+  "name": "yana-web",
+  "version": "0.1.0",
+  "description": "Yana — self-hosted AI workspace. Multi-provider chat (Claude, GPT, Gemini, Groq…), encrypted API keys, memory, missions. Run anywhere in one command.",
+  "main": "server.js",
+  "bin": {
+    "yana": "./bin/yana.js"
+  },
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ai", "chat", "claude", "openai", "gemini", "groq", "self-hosted",
+    "yana", "yamtam", "multi-provider", "llm", "assistant"
+  ],
+  "author": "phamlongh230",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phamlongh230-lgtm/yana-web.git"
+  },
+  "dependencies": {
+    "yamtam-core": "^0.1.0"
+  }
+}

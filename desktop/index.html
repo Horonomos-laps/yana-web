@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <title>Yana AI</title>
+  <link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+  <link href="https://fonts.bunny.net/css?family=be-vietnam-pro:300,400,500,600,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="themes.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Plain JS first — sets window.YANA before any JSX runs -->
+  <script src="/shared/crypto-store.js"></script>
+  <script src="/shared/data.js"></script>
+  <!-- JSX components in dependency order -->
+  <script type="text/babel" src="/shared/tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="dashboard.jsx"></script>
+  <script type="text/babel" src="chat.jsx"></script>
+  <script type="text/babel" src="spaces.jsx"></script>
+  <script type="text/babel" src="system.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

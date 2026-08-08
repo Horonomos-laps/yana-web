@@ -1,46 +1,80 @@
-# Yana
+<p align="center">
+  <h1 align="center">🌊 Yana AI — Web</h1>
+</p>
 
-Self-hosted AI workspace. One command to run.
+<p align="center">
+  <strong>The first interface built on Yana AI core — chat, route, and orchestrate without touching the infrastructure.</strong>
+</p>
 
-## Quick start
+<p align="center">
+  <img src="https://img.shields.io/badge/runtime-Node.js_≥18-339933?style=flat-square&logo=node.js" />
+  <img src="https://img.shields.io/badge/dependencies-zero-2f7e6e?style=flat-square" />
+  <img src="https://img.shields.io/badge/keys-AES--256--GCM-7d6aa8?style=flat-square" />
+  <img src="https://img.shields.io/badge/data-100%25_real-b96b80?style=flat-square" />
+  <img src="https://img.shields.io/badge/providers-6-3a7ca5?style=flat-square" />
+</p>
 
-```bash
-npx yana
+---
+
+> **This repo is a read-only snapshot** of `tools/yana-web/` from the
+> [Yana AI](https://github.com/yanacuti1121/Yana-AI) monorepo, published
+> here so the app is browsable on its own. Most screens run standalone,
+> but Agent Space (`/api/agents`) reads live from the parent monorepo's
+> `core/agents/` directory and won't return data outside it. For active
+> development, work in the monorepo — this snapshot is updated
+> occasionally, not on every commit.
+
+```
+User → Yana AI → Yana AI Core (Router · Safety · Context) → Model
 ```
 
-Opens at `http://localhost:8081`. Add your API key in **System → Providers**, start chatting.
+Zero-dependency Node.js server + React (via Babel standalone) glass-morphism UI.
+No build step. No signup. Bring your own API key.
 
-## Features
-
-- **Multi-provider** — Claude, OpenAI, Gemini, Groq, DeepSeek, OpenRouter, Ollama
-- **Encrypted keys** — API keys stored with AES-256-GCM, never sent anywhere except the provider you choose
-- **Memory** — Yana remembers context across conversations
-- **Missions** — break goals into tracked tasks
-- **Mobile + Desktop UI** — auto-detects device, separate optimised shells
-- **Self-hosted** — runs on your machine, your data stays local
-
-## Install globally
+## Run
 
 ```bash
-npm install -g yana-web
-yana
+node server.js                 # → http://127.0.0.1:8081
+PORT=3000 node server.js       # custom port
+HOST=0.0.0.0 node server.js    # expose beyond loopback (containers only)
 ```
 
-## Environment variables
+## Screens — all real data
 
-| Variable | Default | Description |
-|---|---|---|
-| `PORT` | `8081` | Server port |
-| `HOST` | `127.0.0.1` | Bind address (`0.0.0.0` for Docker/remote) |
-| `YANA_DATA_DIR` | `~/.yana` | Where auth, memory and missions are stored |
-| `YANA_ROOT` | `process.cwd()` | Optional: path to a YAMTAM engine checkout for skill routing |
+| Screen | Source |
+|---|---|
+| 🌊 Welcome | first-run intro page — what Yana is, feature highlights, "Get started" → login |
+| 🔑 Login | create password on first run (scrypt hash), then HttpOnly session cookie — AI-app style, VI/EN, remember-30d, Caps Lock hint, strength meter |
+| 🏠 Dashboard | `/api/status` (MANIFEST) · `/api/dashboard` (L1 memory + audit log + uptime) |
+| 💬 Chat | SSE streaming to 6 providers, provider picker, route classify + skill, history survives reloads |
+| 🎯 Missions | `/api/missions` — file-backed CRUD, "Plan with Yana" LLM task breakdown, click-to-advance tasks |
+| 🤖 Agent Space | `/api/agents` — 95 real agents from `core/agents/` frontmatter |
+| 🌸 Memory Garden | `/api/memories` — L1 atomic facts with confidence + freshness |
+| 🧩 Skills | `/api/skills` — on-disk counts grouped by import pack |
+| 🔌 Providers | encrypted vault status + `/api/models` live model lists + `/api/usage` |
 
-## Docker
+## Security
 
-```bash
-docker run -p 8081:8081 -e HOST=0.0.0.0 -v ~/.yana:/root/.yana ghcr.io/phamlongh230-lgtm/yana-web
+- 🔑 **Login gate** (`auth.js`) — single-user password (scrypt, random salt) in `.yana/auth.json` (mode 600), 256-bit session tokens in an HttpOnly SameSite=Lax cookie, login rate-limited 5/15min per IP. Every page and API except `/health`, `/login.html`, and `/api/auth/*` requires a session.
+- 🔐 **Key vault** (`crypto-store.js`) — provider keys encrypted at rest with AES-256-GCM; the master key is a non-extractable WebCrypto `CryptoKey` in IndexedDB. localStorage only ever holds ciphertext. See rule `66-client-secret-encryption-law`.
+- 🛡️ Server binds `127.0.0.1` by default, per-IP rate limiting (60 POST/min), CSP + security headers, path-traversal-proof static serving, no API keys in URLs.
+
+## API
+
+```
+GET  /health             GET  /api/status        GET  /api/dashboard
+GET  /api/agents         GET  /api/memories      GET  /api/skills
+GET  /api/usage          GET  /api/missions      POST /api/missions
+POST /api/missions/update POST /api/missions/delete
+POST /api/models         POST /api/route         POST /api/chat
+POST /api/index          GET  /api/auth/status   POST /api/auth/setup
+POST /api/auth/login     POST /api/auth/logout
 ```
 
-## License
+## Providers
 
-MIT
+Anthropic · OpenAI · Gemini · Groq · DeepSeek · OpenRouter — vision support where the provider allows it, live model lists for Groq/OpenRouter.
+
+---
+
+Part of [Yana AI](https://github.com/yanacuti1121/Yana-AI) · Apache 2.0

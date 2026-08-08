@@ -13,8 +13,11 @@
 const fs   = require('fs');
 const path = require('path');
 
+const qdrant = require('./qdrant-client');
+const { embed } = require('./embeddings');
+
 // Same persistent data dir as auth.js/missions.js — survives redeploys.
-const DATA_DIR = process.env.YANA_DATA_DIR || path.join(require('os').homedir(), '.yana');
+const DATA_DIR = process.env.YANA_DATA_DIR || path.join(__dirname, '.yana');
 const FILE     = path.join(DATA_DIR, 'memory.json');
 
 const MAX_MEMORIES = 200;   // hard storage quota — oldest entries fall off the end
@@ -24,6 +27,9 @@ const TTL_DAYS     = Math.max(1, Number(process.env.YANA_MEMORY_TTL_DAYS) || 90)
 // Saved memories are re-injected into future system prompts, which makes the
 // store a prompt-injection persistence vector (OWASP LLM01). Reject entries
 // that look like instructions rather than facts about the user.
+// DF-5: MEMORY: lines are re-injected into the system prompt on every turn.
+// This list must catch adversarial content that looks like facts but contains
+// instruction overrides. Expand beyond the minimal set to cover known patterns.
 const INJECTION_PATTERNS = [
   /ignore\s+(?:(?:all|previous|prior|the|above|your)\s+)*(instructions|rules)/i,
   /you\s+are\s+now/i,
@@ -31,6 +37,19 @@ const INJECTION_PATTERNS = [
   /system\s*:/i,
   /\[INST\]/i,
   /<\|im_start\|>/i,
+  // Extended patterns — multi-turn and advanced jailbreak vectors (rule 43)
+  /forget\s+(?:everything|all\s+(?:instructions|rules)|your\s+training)/i,
+  /developer\s+mode/i,
+  /dan\s+mode/i,
+  /jailbreak/i,
+  /ignore\s+previous/i,
+  /override\s+(?:mode|instructions|rules)/i,
+  /act\s+as\s+(?:if|though)\s+you/i,
+  /pretend\s+(?:you\s+are|to\s+be)/i,
+  /from\s+now\s+on\s+you/i,
+  /respond\s+as\s+(?:if|though)\s+you/i,
+  /disregard\s+(?:your|all|prior)/i,
+  /\|\|prompt_injection/i,
 ];
 
 function load() {
@@ -57,6 +76,14 @@ function add(text) {
   const entry = { id: 'ym' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: clean, ts: Date.now() };
   memories.unshift(entry);
   save(memories.slice(0, MAX_MEMORIES));
+
+  // Best-effort semantic indexing — fire-and-forget, never blocks this call.
+  // JSON file above is already the durable write; this just keeps the
+  // optional Qdrant index in sync when YANA_QDRANT_URL is set.
+  if (qdrant.isAvailable()) {
+    embed(clean).then((vector) => { if (vector) qdrant.upsertMemory(entry, vector); }).catch(() => {});
+  }
+
   return { memory: entry };
 }
 
@@ -76,6 +103,7 @@ function remove(id) {
   const next = memories.filter(m => m.id !== id);
   if (next.length === memories.length) return false;
   save(next);
+  if (qdrant.isAvailable()) qdrant.deleteMemory(id).catch(() => {});
   return true;
 }
 
@@ -85,6 +113,23 @@ function contextBlock(n) {
   const memories = load().slice(0, n || 12);
   if (!memories.length) return null;
   return memories.map(m => '- ' + m.text).join('\n');
+}
+
+// Semantic-search variant of contextBlock(), used when YANA_QDRANT_URL is
+// set and an embedding model is reachable. Falls back to the plain
+// newest-n contextBlock() on any failure or when Qdrant is off — callers
+// always get a result, never an error.
+async function searchRelevant(query, n) {
+  if (qdrant.isAvailable()) {
+    try {
+      const vector = await embed(query);
+      if (vector) {
+        const hits = await qdrant.searchSimilar(vector, n || 12);
+        if (hits && hits.length) return hits.map(h => '- ' + h.text).join('\n');
+      }
+    } catch (_) { /* fall through to contextBlock */ }
+  }
+  return contextBlock(n);
 }
 
 // ── HTTP handlers ─────────────────────────────────────────────────────────────
@@ -109,4 +154,4 @@ function handleDelete(req, res, body) {
   json(res, 200, { ok: true });
 }
 
-module.exports = { add, remove, load, prune, contextBlock, handleList, handleAdd, handleDelete, MAX_MEMORIES, MAX_LEN, TTL_DAYS };
+module.exports = { add, remove, load, prune, contextBlock, searchRelevant, handleList, handleAdd, handleDelete, MAX_MEMORIES, MAX_LEN, TTL_DAYS };

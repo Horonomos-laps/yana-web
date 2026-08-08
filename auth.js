@@ -14,7 +14,7 @@ const path   = require('path');
 // Persistent data dir. Default: dot-dir next to the server (static server never
 // serves it). Override with YANA_DATA_DIR to point at a mounted volume
 // (e.g. /data on Railway) so accounts survive redeploys.
-const DATA_DIR      = process.env.YANA_DATA_DIR || path.join(require('os').homedir(), '.yana');
+const DATA_DIR      = process.env.YANA_DATA_DIR || path.join(__dirname, '.yana');
 const AUTH_FILE     = path.join(DATA_DIR, 'auth.json');
 const SESSIONS_FILE = path.join(DATA_DIR, 'sessions.json');
 const COOKIE        = 'yana_sid';
@@ -33,6 +33,15 @@ function loadJson(file) {
 function saveJson(file, data) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(file, JSON.stringify(data), { mode: 0o600 });
+}
+
+// Atomic create-only write — throws EEXIST instead of overwriting. Used for
+// account setup, where isSetUp()-then-writeFileSync would otherwise let two
+// concurrent POST /api/auth/setup requests both pass the check before either
+// writes, silently letting the second request's account overwrite the first.
+function saveJsonExclusive(file, data) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(data), { mode: 0o600, flag: 'wx' });
 }
 
 function hashPassword(password) {
@@ -91,24 +100,44 @@ function isAuthed(req) {
 
 // req.secure is resolved by server.js (X-Forwarded-Proto behind a trusted
 // proxy) — the Secure flag keeps the session cookie off plain-HTTP hops.
+// SameSite=Strict, not Lax: this is a single-user local-app-style login, not
+// something users reach via an external link that should carry the cookie
+// on first cross-site navigation — server.js's Origin check (CSRF guard)
+// already rejects cross-origin mutations, but Strict means the browser
+// never attaches the cookie to a cross-site request in the first place,
+// which also covers simple cross-site GETs Origin-checking doesn't gate.
 function setCookie(req, res, token) {
   const ttl    = (sessions[token] && sessions[token].ttl) || SESSION_TTL;
   const secure = req.secure ? '; Secure' : '';
   res.setHeader('Set-Cookie',
-    `${COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${ttl / 1000}${secure}`);
+    `${COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${ttl / 1000}${secure}`);
 }
 
 function clearCookie(req, res) {
   const secure = req.secure ? '; Secure' : '';
-  res.setHeader('Set-Cookie', `${COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secure}`);
+  res.setHeader('Set-Cookie', `${COOKIE}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${secure}`);
 }
 
 // ── Rate limit (login only — stricter than the global POST limiter) ──────────
+// hits Map only ever grew — no entry was ever removed once its window
+// expired, just left stale (lazily overwritten only if that exact IP tried
+// again). On a public deployment (Railway/Render/Cloudflare — this server
+// does run there, see YANA_DATA_DIR above) with many distinct visitor IPs,
+// that's slow unbounded growth for the life of the process. Prune expired
+// entries opportunistically on each check (2026-07-08 audit fix) rather
+// than adding a timer — cheap relative to the scrypt hashing this guards.
+function pruneLoginRate(now) {
+  for (const [ip, rec] of LOGIN_RATE.hits) {
+    if (now - rec.start > LOGIN_RATE.windowMs) LOGIN_RATE.hits.delete(ip);
+  }
+}
+
 function loginRateLimited(req) {
   // req.clientIp is the proxy-aware address resolved by server.js — without it
   // every visitor behind Railway's proxy would share one rate-limit bucket
   const ip  = req.clientIp || req.socket.remoteAddress || 'unknown';
   const now = Date.now();
+  pruneLoginRate(now);
   let rec = LOGIN_RATE.hits.get(ip);
   if (!rec || now - rec.start > LOGIN_RATE.windowMs) rec = { count: 0, start: now };
   rec.count++;
@@ -147,6 +176,10 @@ function validUsername(name) {
 }
 
 // First run only: create the account (username + password), then sign in.
+// The isSetUp() precheck below is an early-exit for the common case only —
+// it does NOT provide the actual race safety. Two concurrent requests can
+// both pass it before either writes; saveJsonExclusive's atomic `wx` flag
+// is what actually guarantees only the first write wins.
 function handleSetup(req, res, body) {
   if (isSetUp()) { json(res, 409, { error: 'Already set up' }); return; }
   const username = body && body.username;
@@ -157,11 +190,16 @@ function handleSetup(req, res, body) {
   if (typeof password !== 'string' || password.length < 6) {
     json(res, 400, { error: 'Password must be at least 6 characters' }); return;
   }
-  saveJson(AUTH_FILE, {
-    ...hashPassword(password),
-    username: normalizeUsername(username),
-    created: new Date().toISOString(),
-  });
+  try {
+    saveJsonExclusive(AUTH_FILE, {
+      ...hashPassword(password),
+      username: normalizeUsername(username),
+      created: new Date().toISOString(),
+    });
+  } catch (err) {
+    if (err.code === 'EEXIST') { json(res, 409, { error: 'Already set up' }); return; }
+    throw err;
+  }
   setCookie(req, res, createSession(!!body.remember));
   json(res, 200, { ok: true });
 }

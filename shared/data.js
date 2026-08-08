@@ -4,6 +4,7 @@
 // /api/usage, and YanaVault for provider keys.
 window.YANA = {
   username: null, // filled from /api/auth/status
+  version:  null, // filled from /api/status
   stats: {
     // filled from /api/status below — 0 until the server answers
     agents: 0,
@@ -28,14 +29,17 @@ window.YANA = {
   // Static catalog only — connection status, usage, latency, and keys are
   // real values resolved at runtime (YanaVault + GET /api/usage)
   providers: [
+    { id: "auto",       name: "🤖 Auto",    company: "Smart route", models: [],                                      role: "Auto-selects best provider based on task type" },
     { id: "claude",     name: "Claude",     company: "Anthropic",  models: ["Opus 4.8", "Sonnet 4.6", "Haiku 4.5"], role: "Primary — reasoning & orchestration" },
     { id: "openai",     name: "OpenAI",     company: "OpenAI",     models: ["GPT-4o", "GPT-4o mini"],               role: "Drafting & vision" },
     { id: "gemini",     name: "Gemini",     company: "Google",     models: ["2.0 Flash", "1.5 Pro"],                role: "Long context & search" },
     { id: "groq",       name: "Groq",       company: "Groq",       models: ["Llama 4 70B"],                         role: "Router — sub-300ms decisions" },
     { id: "deepseek",   name: "DeepSeek",   company: "DeepSeek",   models: ["V3", "R1"],                            role: "Deep reasoning — cost-efficient" },
     { id: "openrouter", name: "OpenRouter", company: "OpenRouter", models: ["Fallback pool · 40+ models"],          role: "Overflow & fallback routing" },
-    { id: "9router",    name: "9Router",    company: "Local gateway", models: ["40+ providers · auto-fallback"],    role: "Quota armor — localhost:20128, never hit limits" },
-    { id: "ollama",     name: "Ollama",     company: "On-device",  models: ["llama3.2", "qwen3", "gemma3"],         role: "Sovereign tier — rule 68, text never leaves the machine" },
+    { id: "turbofieldfare", name: "TurboFieldfare", company: "On-device", models: ["Gemma 4 26B-A4B"],              role: "Sovereign tier — strongest on-device model, localhost:8091, text never leaves the machine", desktopOnly: true },
+    { id: "9router",    name: "9Router",    company: "Local gateway", models: ["40+ providers · auto-fallback"],    role: "Quota armor — localhost:20128, never hit limits", desktopOnly: true },
+    { id: "ollama",     name: "Ollama",     company: "On-device",  models: ["llama3.2", "qwen3", "gemma3"],         role: "Sovereign tier — rule 68, text never leaves the machine", desktopOnly: true },
+    { id: "lmstudio",   name: "LM Studio",  company: "On-device",  models: ["local-model"],                         role: "Local server — port 1234, load any model in the app", desktopOnly: true },
   ],
 
   // missions are created at runtime by the Mission Composer — none preloaded
@@ -53,8 +57,9 @@ function yanaTouch() {
 
 // Pull live stats from MANIFEST.json via server
 fetch("/api/status").then(function(r) { return r.json(); }).then(function(d) {
-  if (d.skills) window.YANA.stats.skills = d.skills;
-  if (d.agents) window.YANA.stats.agents = d.agents;
+  if (d.skills)   window.YANA.stats.skills = d.skills;
+  if (d.agents)   window.YANA.stats.agents = d.agents;
+  if (d.version)  window.YANA.version      = d.version;
   yanaTouch();
 }).catch(function() {});
 

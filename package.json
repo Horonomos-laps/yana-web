@@ -1,29 +1,28 @@
 {
   "name": "yana-web",
   "version": "0.1.0",
-  "description": "Yana — self-hosted AI workspace. Multi-provider chat (Claude, GPT, Gemini, Groq…), encrypted API keys, memory, missions. Run anywhere in one command.",
-  "main": "server.js",
-  "bin": {
-    "yana": "./bin/yana.js"
-  },
+  "private": true,
   "type": "commonjs",
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "start": "node server.js"
-  },
-  "keywords": [
-    "ai", "chat", "claude", "openai", "gemini", "groq", "self-hosted",
-    "yana", "yamtam", "multi-provider", "llm", "assistant"
-  ],
-  "author": "phamlongh230",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/phamlongh230-lgtm/yana-web.git"
+    "start": "npm run build:desktop && node server.js",
+    "build:desktop": "vite build --config desktop-src/vite.config.mjs"
   },
   "dependencies": {
-    "yamtam-core": "^0.1.0"
+    "@qdrant/js-client-rest": "1.18.0",
+    "highlight.js": "11.9.0",
+    "marked": "12.0.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "6.4.3"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "fsevents@2.3.3": true
   }
 }

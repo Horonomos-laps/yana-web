@@ -1,7 +1,7 @@
 'use strict';
 // Yana Missions — file-backed mission store (.yana/missions.json).
 //
-// A mission is created from a goal, classified by the YAMTAM router
+// A mission is created from a goal, classified by the Yana AI router
 // (simple/complex/external → owner + starter tasks), then planned in detail
 // by the LLM from the UI ("Plan with Yana" calls /api/chat and PATCHes the
 // task list back here). Progress is always computed from task states —
@@ -9,11 +9,11 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { classifySensitivity } = require('yamtam-core');
+const { classifySensitivity } = require('./lib/core');
 
 // Same persistent data dir as auth.js — YANA_DATA_DIR points at a mounted
 // volume (e.g. /data on Railway) so missions survive redeploys.
-const DATA_DIR = process.env.YANA_DATA_DIR || path.join(require('os').homedir(), '.yana');
+const DATA_DIR = process.env.YANA_DATA_DIR || path.join(__dirname, '.yana');
 const FILE     = path.join(DATA_DIR, 'missions.json');
 const MAX_MISSIONS = 200;
 const MAX_TASKS    = 30;
@@ -52,7 +52,7 @@ function sanitizeTasks(tasks) {
   })).filter(t => t.name);
 }
 
-// ── Handlers (routeFn = yamtam-core route(), injected by server.js) ──────────
+// ── Handlers (routeFn = route(), injected by server.js) ──────────────────────
 function handleList(req, res) {
   json(res, 200, { missions: load().map(withProgress) });
 }
@@ -63,7 +63,7 @@ async function handleCreate(req, res, body, routeFn) {
 
   // Rule 68 — missions are persisted to disk; confidential content may not
   // cross that boundary. Checked here directly (not via routeFn) so an old
-  // yamtam-rt binary without sensitivity fields can't sneak one through.
+  // yana-rt binary without sensitivity fields can't sneak one through.
   const sens = classifySensitivity(name);
   if (sens.sensitivity === 'confidential' || sens.sensitivity === 'sovereign') {
     json(res, 403, {

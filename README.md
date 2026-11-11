@@ -16,14 +16,6 @@
 
 ---
 
-> **This repo is a read-only snapshot** of `tools/yana-web/` from the
-> [Yana AI](https://github.com/yanacuti1121/Yana-AI) monorepo, published
-> here so the app is browsable on its own. Most screens run standalone,
-> but Agent Space (`/api/agents`) reads live from the parent monorepo's
-> `core/agents/` directory and won't return data outside it. For active
-> development, work in the monorepo — this snapshot is updated
-> occasionally, not on every commit.
-
 ```
 User → Yana AI → Yana AI Core (Router · Safety · Context) → Model
 ```
@@ -34,10 +26,14 @@ No build step. No signup. Bring your own API key.
 ## Run
 
 ```bash
-node server.js                 # → http://127.0.0.1:8081
-PORT=3000 node server.js       # custom port
-HOST=0.0.0.0 node server.js    # expose beyond loopback (containers only)
+npm start                      # build:desktop, then node server.js → http://127.0.0.1:8081
+PORT=3000 npm start            # custom port
+HOST=0.0.0.0 npm start         # expose beyond loopback (containers only)
 ```
+
+`npm start` runs `build:desktop` first — the UI is served from `desktop/`
+(Vite build output), so a plain `node server.js` only works if that build
+already exists from a previous run.
 
 ## Screens — all real data
 
@@ -71,10 +67,89 @@ POST /api/index          GET  /api/auth/status   POST /api/auth/setup
 POST /api/auth/login     POST /api/auth/logout
 ```
 
+## Robot bridge
+
+`robot.js` lets an ESP32 device speaking the XiaoZhi/yana-robot WebSocket
+protocol (`docs/websocket.md`, `docs/mcp-protocol.md` in the `yana-robot`
+firmware repo) use this server as its voice AI backend, instead of
+`xiaozhi.me` or a self-hosted XiaoZhi server. No firmware changes needed —
+point the device's server URL at `wss://<this-host>/robot/ws`.
+
+- Device connects, sends `hello`; this server replies `hello` and (if the
+  device advertises `features.mcp`) opens an MCP session as the **client**
+  (the device is the MCP **server** — it owns the tools).
+- Voice pipeline: ASR + chat both use `YANA_ROBOT_LLM_PROVIDER` (default
+  `groq`) via the same `PROVIDERS`/`connectToProvider` table `/api/chat`
+  uses (now in `lib/providers.js`). Groq's ASR endpoint
+  (`/openai/v1/audio/transcriptions`) reuses the same key as chat — no
+  second provider needed.
+- TTS defaults to the VieNeu-TTS v3 Turbo sidecar (`tts-sidecar/`, same as
+  `/api/tts`). Its ONNX stream is converted from 48 kHz float audio to 24 kHz
+  mono PCM16, then Opus-encoded and paced in 60 ms packets for the device.
+  VieNeu only produces Vietnamese/English — set `YANA_ROBOT_TTS_PROVIDER=openai`
+  to speak other languages instead (e.g. Korean), via OpenAI's
+  `/v1/audio/speech` endpoint (requires its own API key; voices are
+  English-optimized but multilingual, following Whisper's language list).
+- Tool calls the model decides to make are translated into real MCP
+  `tools/call` requests sent to the device (e.g. `self.wheelbot.move_forward`)
+  — see the `yana-robot` repo's board `README.md` for the full tool list.
+
+Env vars (Railway/production):
+
+| Var | Purpose |
+|---|---|
+| `YANA_ROBOT_DEVICE_TOKEN` | Bearer token the device must send (`Authorization` header) to connect. Leave unset only for local testing. |
+| `YANA_ROBOT_LLM_API_KEY` | API key for `YANA_ROBOT_LLM_PROVIDER`, used for both chat and ASR. |
+| `YANA_ROBOT_LLM_PROVIDER` | Key into `PROVIDERS` (default `groq`). |
+| `YANA_ROBOT_LLM_MODEL` | Overrides the provider's default chat model. |
+| `YANA_ROBOT_ASR_MODEL` | Groq transcription model (default `whisper-large-v3-turbo`). |
+| `YANA_ROBOT_WS_PATH` | WebSocket path (default `/robot/ws`). |
+| `YANA_ROBOT_TTS_PROVIDER` | `vieneu` (default, local, free, Vietnamese/English) or `openai` (cloud, multilingual — use this for Korean). |
+| `YANA_ROBOT_TTS_API_KEY` | API key for OpenAI TTS. Falls back to `YANA_ROBOT_LLM_API_KEY` if unset. |
+| `YANA_ROBOT_TTS_OPENAI_MODEL` | OpenAI TTS model (default `gpt-4o-mini-tts`). |
+| `YANA_ROBOT_TTS_OPENAI_VOICE` | OpenAI TTS voice (default `alloy`). |
+| `YANA_ROBOT_TTS_PACKET_INTERVAL_MS` | Delay between 60 ms Opus packets (default `55`) to avoid overflowing the firmware's 1.2 s decode queue. |
+
+### Local VieNeu-TTS v3 setup
+
+VieNeu v3 requires Python 3.10–3.13. On macOS and CPU servers, use its
+torch-free ONNX backend:
+
+```sh
+cd tools/yana-web/tts-sidecar
+python3.13 -m venv .venv  # or any Python 3.10–3.13
+.venv/bin/python -m pip install -r requirements.txt
+./run.sh
+```
+
+The first synthesis downloads the VieNeu model; `GET http://127.0.0.1:7861/health`
+stays lightweight and reports whether it has been loaded. Useful sidecar settings:
+
+| Var | Default | Purpose |
+|---|---|---|
+| `VIENEU_SIDECAR_PORT` | `7861` | Local sidecar port. |
+| `VIENEU_VOICE` | `Phạm Tuyên` | Preset voice used when a request omits `voice`. |
+| `VIENEU_BACKEND` | `onnx` | Low-latency CPU streaming backend. |
+| `VIENEU_PRECISION` | `int8` | Fast ONNX precision; use `fp32` for maximum quality. |
+| `VIENEU_THREADS` | `0` | ONNX worker threads (`0` lets VieNeu choose). |
+
+Compatibility endpoints: `POST /tts` returns a 24 kHz WAV for desktop/mobile;
+`POST /tts/stream` returns 24 kHz mono PCM16 for the robot bridge. VieNeu v3
+ignores the old `style` field; choose a preset voice to change character.
+
+Not yet verified on real hardware — see `_test_robot.js` for what's covered
+(WebSocket handshake + MCP `initialize`/`tools/list` handshake only; the
+ASR/chat/TTS pipeline needs a real device + real API calls to test).
+
+**Local testing:** run this server locally (`npm start`, see Run above),
+then point the device's server URL at `ws://<your-machine's-LAN-IP>:8081/robot/ws`
+instead of the Railway `wss://` URL — same protocol either way, just plain
+`ws://` since there's no TLS on localhost.
+
 ## Providers
 
 Anthropic · OpenAI · Gemini · Groq · DeepSeek · OpenRouter — vision support where the provider allows it, live model lists for Groq/OpenRouter.
 
 ---
 
-Part of [Yana AI](https://github.com/yanacuti1121/Yana-AI) · Apache 2.0
+Part of [Yana AI](../../README.md) · Apache 2.0

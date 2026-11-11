@@ -50,3 +50,17 @@ jobs:
       - name: Build
         working-directory: site
         run: npm run build
+
+  dependency-audit:
+    name: npm audit (production dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Audit yana-web
+        run: npm audit --omit=dev --package-lock-only
+      - name: Audit yana-desktop
+        working-directory: yana-desktop
+        run: npm audit --omit=dev --package-lock-only

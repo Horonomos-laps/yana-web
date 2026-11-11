@@ -23,6 +23,27 @@ User → Yana AI → Yana AI Core (Router · Safety · Context) → Model
 Zero-dependency Node.js server + React (via Babel standalone) glass-morphism UI.
 No build step. No signup. Bring your own API key.
 
+## Repository layout
+
+This repository holds the web side of Yana. It was split out of the main
+repository, [Yana-AI](https://github.com/yanacuti1121/Yana-AI), which keeps the
+Rust runtime, the `core/` rules and hooks, and the PyPI and crates.io packages.
+
+| Path | What it is |
+|---|---|
+| root (`server.js`, `lib/`, `desktop-src/`, `_test_*.js`, ...) | The web app described below |
+| `site/` | Astro site. `npm run build` writes to `docs-dist/`, which is git-ignored |
+| `docs/` | The static website: HTML, CSS, JS and assets. Vercel (project `yana-ai-docs`) and Cloudflare Workers (`wrangler.jsonc`, `assets.directory` is `docs`) serve it. Markdown documentation stays in Yana-AI |
+| `worker.js`, `wrangler.jsonc`, `vercel.json` | Cloudflare Worker and hosting configuration |
+| `yana-desktop/` | Electron shell that bundles this server. A copy from Yana-AI. Its packaging config reads `../../core`, `../../MANIFEST.json` and `../../target/...`, which exist only in Yana-AI, so build it there for now |
+| `.github/workflows/ci.yml` | Runs every root `_test_*.js` file and the Astro build |
+
+Some files, for example `desktop-old/`, exist only because the earlier snapshot
+of this repository had them. They were kept, not removed.
+
+Status: the website still deploys from Yana-AI until Vercel and Cloudflare are
+reconnected to this repository. The desktop app is built from Yana-AI.
+
 ## Run
 
 ```bash

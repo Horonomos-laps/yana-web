@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Node tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci --ignore-scripts
+      - name: Run every _test_ file at the root
+        run: |
+          fail=0
+          for f in _test_*.js _test_*.mjs; do
+            echo "::group::$f"
+            if ! timeout 120 node "$f"; then
+              echo "FAILED: $f"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
+
+  site:
+    name: Astro site build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install
+        working-directory: site
+        run: npm ci --ignore-scripts
+      - name: Build
+        working-directory: site
+        run: npm run build

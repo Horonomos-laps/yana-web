@@ -214,12 +214,12 @@
         </h2>
         <p class="dl-os-desc" style="font-size: 15px; margin-bottom: 24px; color: #475569;">For Macs with Apple silicon (M1 and later) running macOS 14 Sonoma or newer. Open the <strong>.dmg</strong> and drag <strong>Yana</strong> into Applications. Yana Studio is already inside, nothing else to install.</p>
         <div class="dl-btn-group" style="display: flex; flex-direction: column; gap: 12px;">
-          <a href="https://github.com/Horonomos-laps/Yana-AI/releases/download/app-v1.0.0/Yana-1.0.0.dmg" data-dl-dmg class="btn-spring-2026 btn-spring-primary dl-main-btn" style="padding: 16px 28px; font-size: 16px; justify-content: center;">
+          <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.0.0/Yana-1.0.0.dmg" data-dl-dmg class="btn-spring-2026 btn-spring-primary dl-main-btn" style="padding: 16px 28px; font-size: 16px; justify-content: center;">
             Download Yana <span data-dl-version>1.0.0</span> (.dmg) · <span data-dl-size>475 MB</span> ↓
           </a>
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12px; color: #64748b; padding: 4px 8px; font-family: var(--font-mono);">
-            <span>DMG ARM64 · or the <a href="https://github.com/Horonomos-laps/Yana-AI/releases/download/app-v1.0.0/Yana-1.0.0.zip" style="color: #2563eb; text-decoration: none; font-weight: 600;">.zip build</a></span>
-            <a href="https://github.com/Horonomos-laps/Yana-AI/releases/tag/app-v1.0.0" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 600;">SHA-256 and release notes ↗</a>
+            <span>DMG ARM64 · or the <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.0.0/Yana-1.0.0.zip" style="color: #2563eb; text-decoration: none; font-weight: 600;">.zip build</a></span>
+            <a href="https://github.com/Horonomos-laps/Yana-studio/releases/tag/app-v1.0.0" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 600;">SHA-256 and release notes ↗</a>
           </div>
           <div class="dl-sha">SHA-256 (.dmg): b7b77b697d8f03d7c78561e527b40668a401e09d2aa8ccf712b8f08d0269617c</div>
         </div>
@@ -255,7 +255,7 @@
         <div class="ver-date" data-ver-date="app" data-loading="1">Checking…</div>
         <p class="ver-desc">The macOS app with Yana and Yana Studio. Release tags look like <code>app-v…</code>.</p>
         <div class="ver-how">Update: in the app, Settings → Update</div>
-        <a class="ver-link" href="https://github.com/Horonomos-laps/Yana-AI/releases" target="_blank" rel="noopener noreferrer">See all releases ↗</a>
+        <a class="ver-link" href="https://github.com/Horonomos-laps/Yana-studio/releases" target="_blank" rel="noopener noreferrer">See all releases ↗</a>
       </div>
       <div class="ver-card">
         <span class="ver-kind">RUNTIME · CRATES.IO</span>
@@ -341,7 +341,7 @@
     (function () {
       var LOCALE = 'en-US';
       var VERSION = /^\d+\.\d+\.\d+$/;
-      var DOWNLOAD_PREFIX = 'https://github.com/Horonomos-laps/Yana-AI/releases/download/app-v';
+      var DOWNLOAD_PREFIX = 'https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v';
       var TIMEOUT_MS = 8000;
 
       function getJson(url) {
@@ -364,7 +364,7 @@
         document.querySelectorAll('[data-ver-date="' + key + '"]').forEach(function (el) { if (el.dataset.loading) el.textContent = ''; });
       }
 
-      getJson('https://api.github.com/repos/Horonomos-laps/Yana-AI/releases?per_page=30').then(function (list) {
+      getJson('https://api.github.com/repos/Horonomos-laps/Yana-studio/releases?per_page=30').then(function (list) {
         var release = list.filter(function (r) { return !r.draft && !r.prerelease && /^app-v\d+\.\d+\.\d+$/.test(r.tag_name); })[0];
         if (!release) return markUnknown('app');
         show('app', release.tag_name.slice(5), release.published_at);

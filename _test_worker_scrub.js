@@ -22,7 +22,7 @@ const SCRUBBER_PATH = path.join(__dirname, 'lib', 'output-scrubber.js');
 async function loadWorker() {
   const src = fs.readFileSync(WORKER_PATH, 'utf8');
   const rewritten = src.replace(
-    "from './tools/yana-web/lib/output-scrubber.js';",
+    "from './lib/output-scrubber.js';",
     `from 'file://${SCRUBBER_PATH}';`
   );
   if (rewritten === src) {

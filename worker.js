@@ -22,7 +22,7 @@
 // pure JS with no Node built-ins specifically so it could run here too —
 // see scrubGroqStream() below, which wires it into a TransformStream
 // instead of the server.js Node-stream version.
-import { OutputScrubber } from './tools/yana-web/lib/output-scrubber.js';
+import { OutputScrubber } from './lib/output-scrubber.js';
 
 const ALLOWED_ORIGINS = [
   'https://yana-ai.pages.dev', // confirmed canonical origin (docs/index.html's <link rel="canonical">)

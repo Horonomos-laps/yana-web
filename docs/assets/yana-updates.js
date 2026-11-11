@@ -48,11 +48,11 @@
     return new Intl.DateTimeFormat(vi ? 'vi-VN' : ko ? 'ko-KR' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value));
   };
   const safeReleaseUrl = (release, project) => {
-    const fallback = `https://github.com/yanacuti1121/${project.repo}/releases`;
+    const fallback = `https://github.com/Horonomos-laps/${project.repo}/releases`;
     try {
       const url = new URL(release.html_url);
       if (url.protocol === 'https:' && url.hostname === 'github.com' &&
-          url.pathname.toLowerCase().startsWith(`/yanacuti1121/${project.repo.toLowerCase()}/releases/`)) return url.href;
+          url.pathname.toLowerCase().startsWith(`/horonomos-laps/${project.repo.toLowerCase()}/releases/`)) return url.href;
     } catch (_) { /* malformed remote URL: use the repository Releases page */ }
     return fallback;
   };
@@ -76,7 +76,7 @@
   async function getAllReleases(project) {
     const all = [];
     for (let page = 1; ; page += 1) {
-      const batch = await getJson(`https://api.github.com/repos/yanacuti1121/${project.repo}/releases?per_page=100&page=${page}`);
+      const batch = await getJson(`https://api.github.com/repos/Horonomos-laps/${project.repo}/releases?per_page=100&page=${page}`);
       if (!Array.isArray(batch)) throw new Error('Invalid release format');
       all.push(...batch.filter(item => item && !item.draft && item.published_at));
       if (batch.length < 100) return all;

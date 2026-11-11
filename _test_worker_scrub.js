@@ -16,7 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const WORKER_PATH = path.join(__dirname, '..', '..', 'worker.js');
+const WORKER_PATH = path.join(__dirname, 'worker.js');
 const SCRUBBER_PATH = path.join(__dirname, 'lib', 'output-scrubber.js');
 
 async function loadWorker() {

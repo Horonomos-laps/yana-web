@@ -26,7 +26,7 @@ No build step. No signup. Bring your own API key.
 ## Repository layout
 
 This repository holds the web side of Yana. It was split out of the main
-repository, [Yana-AI](https://github.com/yanacuti1121/Yana-AI), which keeps the
+repository, [Yana-AI](https://github.com/Horonomos-laps/Yana-AI), which keeps the
 Rust runtime, the `core/` rules and hooks, and the PyPI and crates.io packages.
 
 | Path | What it is |

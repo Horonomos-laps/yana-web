@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: yanacuti1121/yana-ai/.github/actions/scan@main
+      - uses: Horonomos-laps/yana-ai/.github/actions/scan@main
         with:
           target: '.'
           fail-on: 'high'          # fail CI on HIGH or CRITICAL findings

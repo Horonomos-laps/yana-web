@@ -1,5 +1,5 @@
 (() => {
-  const REPO = "yanacuti1121/Yana-AI";
+  const REPO = "Horonomos-laps/Yana-AI";
   const API = `https://api.github.com/repos/${REPO}`;
   const RELEASES_URL = `https://github.com/${REPO}/releases`;
   const state = { lang: "en", releases: [] };
@@ -330,10 +330,10 @@
     const resourceLinks = [
       item(route("download.html", "download-en.html"), copy.download, copy.downloadDetail, pageIs("download.html", "download-en.html")),
       item(route("ecosystem.html", "ecosystem-en.html"), copy.ecosystem, copy.ecosystemDetail, pageIs("ecosystem.html", "ecosystem-en.html")),
-      item("https://github.com/yanacuti1121/Yana-AI/releases", copy.releases, copy.releasesDetail),
-      item("https://github.com/yanacuti1121/Yana-AI/blob/main/ROADMAP.md", copy.roadmap, copy.roadmapDetail),
-      item("https://github.com/yanacuti1121/Yana-AI/blob/main/SECURITY.md", copy.security, copy.securityDetail),
-      item("https://github.com/yanacuti1121/Yana-AI", copy.source, copy.sourceDetail)
+      item("https://github.com/Horonomos-laps/Yana-AI/releases", copy.releases, copy.releasesDetail),
+      item("https://github.com/Horonomos-laps/Yana-AI/blob/main/ROADMAP.md", copy.roadmap, copy.roadmapDetail),
+      item("https://github.com/Horonomos-laps/Yana-AI/blob/main/SECURITY.md", copy.security, copy.securityDetail),
+      item("https://github.com/Horonomos-laps/Yana-AI", copy.source, copy.sourceDetail)
     ];
     const brand = document.body.classList.contains("home-page")
       ? `<a class="brand home-brand" href="${route("index.html", "en.html")}" aria-label="Yana ${copy.home}"><span class="home-brand-mark" aria-hidden="true">Y</span><span>Yana</span></a>`

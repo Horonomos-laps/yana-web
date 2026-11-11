@@ -61,7 +61,9 @@ class SiteStudioVersionTests(unittest.TestCase):
         # The fix removes static numbers; it must not remove the dynamic source.
         script = (DOCS / "assets" / "ecosystem-pages.js").read_text(encoding="utf-8")
         self.assertIn("/releases?per_page=", script)
-        self.assertIn("isStudio15OrNewer", script)
+        # The filter used to be "Studio 1.5 or newer" on Yana-AI; the app now ships as app-vX.Y.Z from Yana-studio.
+        self.assertIn("isAppRelease", script)
+        self.assertIn("Horonomos-laps/Yana-studio", script)
         self.assertIn("latest.name || latest.tag_name", script)
 
 

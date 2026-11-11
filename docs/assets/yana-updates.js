@@ -26,6 +26,7 @@
   };
   const projects = [
     { id: 'core', name: 'Yana AI', repo: 'Yana-AI' },
+    { id: 'studio', name: 'Yana Studio', repo: 'Yana-studio' },
     { id: 'wheelbot', name: 'Yana Wheelbot', repo: 'yana-wheelbot' },
     { id: 'terminal', name: 'Yana AI Chat Terminal', repo: 'Yana-AI-Chat_Teminal' }
   ];
@@ -78,7 +79,9 @@
     for (let page = 1; ; page += 1) {
       const batch = await getJson(`https://api.github.com/repos/Horonomos-laps/${project.repo}/releases?per_page=100&page=${page}`);
       if (!Array.isArray(batch)) throw new Error('Invalid release format');
-      all.push(...batch.filter(item => item && !item.draft && item.published_at));
+      // The macOS app (app-v*) moved to Yana-studio; an older copy may still exist in Yana-AI.
+      all.push(...batch.filter(item => item && !item.draft && item.published_at &&
+        !(project.id === 'core' && String(item.tag_name || '').startsWith('app-v'))));
       if (batch.length < 100) return all;
     }
   }

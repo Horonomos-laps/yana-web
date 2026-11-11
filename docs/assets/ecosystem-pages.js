@@ -1,5 +1,5 @@
 (() => {
-  const REPO = "Horonomos-laps/Yana-AI";
+  const REPO = "Horonomos-laps/Yana-studio";
   const API = `https://api.github.com/repos/${REPO}`;
   const RELEASES_URL = `https://github.com/${REPO}/releases`;
   const state = { lang: "en", releases: [] };
@@ -75,17 +75,10 @@
     return "other";
   }
 
-  function releaseVersion(release) {
-    const source = `${release.tag_name || ""} ${release.name || ""}`;
-    const match = source.match(/(?:^|[^\d])(\d+)\.(\d+)\.(\d+)(?:[^\d]|$)/);
-    return match ? match.slice(1).map(Number) : null;
-  }
-
-  function isStudio15OrNewer(release) {
-    const version = releaseVersion(release);
-    if (!version) return false;
-    const [major, minor] = version;
-    return major > 1 || (major === 1 && minor >= 5);
+  // The Studio repository publishes the app as app-vX.Y.Z; drafts and pre-releases are not offered.
+  const APP_TAG = /^app-v\d+\.\d+\.\d+$/;
+  function isAppRelease(release) {
+    return !release.draft && !release.prerelease && APP_TAG.test(release.tag_name || "");
   }
 
   function makeAssetLink(asset) {
@@ -196,7 +189,7 @@
         signal: typeof AbortSignal.timeout === "function" ? AbortSignal.timeout(FETCH_TIMEOUT_MS) : undefined
       });
       if (!response.ok) throw new Error(`GitHub API ${response.status}`);
-      state.releases = (await response.json()).filter((release) => !release.draft && isStudio15OrNewer(release));
+      state.releases = (await response.json()).filter(isAppRelease);
       if (!state.releases.length) throw new Error("No Studio 1.5+ public releases");
       renderReleaseSurfaces();
     } catch (error) {

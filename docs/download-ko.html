@@ -13,7 +13,7 @@
           <article class="os-card"><div class="os-title"><h3>Linux</h3></div><p class="meta">x64</p></article>
         </div>
       </div>
-      <div class="error-note" data-release-error>GitHub Releases를 불러오지 못했습니다. <a href="https://github.com/Horonomos-laps/Yana-AI/releases">GitHub에서 직접 확인하세요</a></div>
+      <div class="error-note" data-release-error>GitHub Releases를 불러오지 못했습니다. <a href="https://github.com/Horonomos-laps/Yana-studio/releases">GitHub에서 직접 확인하세요</a></div>
     </div>
   </section>
   <section class="section" style="padding-top:0">
@@ -44,7 +44,7 @@ yana-rt mission create "add-auth"</code></div><p style="margin-top:12px">터미�
       <article class="product-card"><div><p class="eyebrow">임시 서명 (AD-HOC)의 의미</p><h3>서명은 있지만 Developer ID 인증서는 없습니다.</h3><p>임시 서명은 등록된 개발자 신원 없이 앱 코드를 암호학적으로 봉인하는 방식입니다. macOS가 빌드 이후 파일의 손상이나 변조를 확인할 수 있게 합니다. <strong>서명이 없는 상태</strong>와는 다르지만 Apple Developer ID 인증서가 제공하는 신뢰는 없습니다. Apple이 문서화한 서명 방식 (<code>codesign --sign -</code>)을 Apple Silicon에서 앱을 실행하기 위해 사용한 것이며 Apple의 검토나 보증을 뜻하지 않습니다.</p></div></article>
       <article class="product-card"><div><p class="eyebrow">WINDOWS</p><h3>Windows SmartScreen에도 경고가 표시될 수 있습니다.</h3><p>Windows 설치 파일 (<code>.exe</code>)은 현재 <strong>코드 서명이 없습니다</strong> . 프로젝트는 아직 유료 코드 서명 인증서를 사용하지 않습니다. 처음 <code>.exe</code>파일을 실행하면 “Windows의 PC 보호”가 표시될 수 있습니다. <strong>추가 정보</strong> → <strong>실행</strong> 을 선택해 진행할 수 있습니다. 서명되지 않은 앱에 표시되는 경고이며, 이 경고만으로 앱의 고장이나 안전 여부를 판단할 수는 없습니다.</p></div></article>
       <article class="product-card"><div><p class="eyebrow">LINUX</p><h3>AppImage는 먼저 실행 권한을 부여합니다.</h3><p>파일 형식이 <code>.AppImage</code>라면 실행 권한을 주고 직접 실행하세요: <code>chmod +x Yana-Studio-*.AppImage &amp;&amp; ./Yana-Studio-*.AppImage</code>. <code>.deb</code>패키지는 <code>sudo dpkg -i Yana-Studio-*.deb</code>명령으로 설치하거나 배포판의 패키지 관리자로 열 수 있습니다. Linux에도 공식 릴리스에서 내려받고 체크섬을 확인한다는 원칙은 같습니다.</p></div></article>
-      <article class="product-card"><div><p class="eyebrow">다운로드 검증</p><h3>체크섬을 확인하세요</h3><p>릴리스에는 설치 파일의 SHA-256 체크섬이 게시됩니다. 다운로드한 파일이 전송 중 손상되거나 변조되지 않았는지 확인하려면 터미널에서 다음 명령을 실행하세요:</p><div class="product-art"><code>shasum -a 256 ~/Downloads/Yana-Studio-*</code></div><p>출력된 값은 <a href="https://github.com/Horonomos-laps/Yana-AI/releases">릴리스 페이지</a>에 게시된 체크섬과 비교하세요. 이는 공개된 파일과의 일치 여부를 확인하는 무결성 검사이며 코드 서명이나 공증을 대신하지 않습니다.</p></article>
+      <article class="product-card"><div><p class="eyebrow">다운로드 검증</p><h3>체크섬을 확인하세요</h3><p>릴리스에는 설치 파일의 SHA-256 체크섬이 게시됩니다. 다운로드한 파일이 전송 중 손상되거나 변조되지 않았는지 확인하려면 터미널에서 다음 명령을 실행하세요:</p><div class="product-art"><code>shasum -a 256 ~/Downloads/Yana-Studio-*</code></div><p>출력된 값은 <a href="https://github.com/Horonomos-laps/Yana-studio/releases">릴리스 페이지</a>에 게시된 체크섬과 비교하세요. 이는 공개된 파일과의 일치 여부를 확인하는 무결성 검사이며 코드 서명이나 공증을 대신하지 않습니다.</p></article>
     </div>
     <p class="meta" style="margin-top:24px;text-align:center">향후 macOS의 Developer ID 서명과 공증, Windows의 Authenticode 서명이 적용되면 경고와 설치 절차가 달라질 수 있습니다. 그때 이 안내도 업데이트합니다. 자세한 내용은 <a href="https://github.com/Horonomos-laps/Yana-AI/blob/main/docs/MACOS_INSTALL.md">GitHub의 macOS 설치 안내</a>에서 확인하세요.</p>
   </section>

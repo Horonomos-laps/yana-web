@@ -1,0 +1,61 @@
+name: Website numbers
+
+# The counts shown on the website (skills, agents, commands, hooks, rules, the
+# product version) come from the Yana-AI repository. In Yana-AI,
+# core/scripts/check_counts.py checks docs/index.html and docs/commands.html
+# against the file system. After the split those two pages live here, so this
+# workflow checks out Yana-AI, puts this repository's two pages into that tree
+# and runs the same script. Nothing in Yana-AI is changed.
+#
+# On failure, run the same script with --fix in a Yana-AI checkout that has
+# these two pages copied in, and copy the changed pages back here.
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'docs/index.html'
+      - 'docs/commands.html'
+      - '.github/workflows/website-numbers.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/index.html'
+      - 'docs/commands.html'
+      - '.github/workflows/website-numbers.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  counts:
+    name: Counts match Yana-AI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, same pin as Yana-AI
+        with:
+          path: web
+
+      - name: Checkout Yana-AI (source of the numbers)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, same pin as Yana-AI
+        with:
+          repository: yanacuti1121/Yana-AI
+          ref: main
+          path: yana-ai
+
+      - name: Put the website pages into the Yana-AI tree
+        run: |
+          set -euo pipefail
+          mkdir -p yana-ai/docs yana-ai/.claude/docs
+          cp web/docs/index.html yana-ai/docs/index.html
+          cp web/docs/commands.html yana-ai/docs/commands.html
+          # Yana-AI keeps a byte-identical mirror of the home page under .claude/docs
+          cp web/docs/index.html yana-ai/.claude/docs/index.html
+
+      - name: Check the numbers
+        working-directory: yana-ai
+        run: python3 core/scripts/check_counts.py

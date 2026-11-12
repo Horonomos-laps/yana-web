@@ -10,7 +10,8 @@
   const stem=page.replace(/\.html$/,"").replace(/-(en|ko)$/,"");
   const koreanPages=new Set(englishPages);
   const languageHref=vi?(page==="index.html"?"en.html":englishPages.has(stem)?`${stem}-en.html`:"en.html"):(stem==="en"||stem==="ko"?"index.html":`${stem}.html`);
-  const route=name=>vi?`${name}.html`:(name==="index"?(ko?"ko.html":"en.html"):ko&&koreanPages.has(name)?`${name}-ko.html`:`${name}-en.html`);
+  const singleLanguagePages=new Set(["integrations","macbook_3d_showcase"]); // no -en/-ko versions: link the one page for every language
+  const route=name=>singleLanguagePages.has(name)?`${name}.html`:vi?`${name}.html`:(name==="index"?(ko?"ko.html":"en.html"):ko&&koreanPages.has(name)?`${name}-ko.html`:`${name}-en.html`);
   document.body.classList.add("sakura-site");
 
   if(stem==="wheelbot"&&location.hash){
@@ -79,6 +80,8 @@
       resources:{label:copy.resources,title:copy.resourcesTitle,items:[
         item("whitepaper","whitepaper","Báo cáo kỹ thuật (Whitepaper)","Technical Whitepaper","Kiến trúc điều phối, benchmark & ranh giới an toàn","Architecture, benchmarks & safety boundaries","📄","whitepaper report research architecture benchmark"),
         item("download","download","Tải Studio & CLI","Download Studio & CLI","Bộ cài macOS, Win, Linux & PyPI CLI","Installers for Mac, Windows, Linux & PyPI","↓","download mac windows linux pypi pip"),
+        item("integrations","integrations","Tích hợp","Integrations","Dùng Yana với agent bạn đang có","Use Yana with the agent you already have","⇄","integrations agent claude code cursor codex"),
+        item("showcase","macbook_3d_showcase","Trình diễn MacBook 3D","3D MacBook showcase","Xem Yana Studio trên MacBook Pro M5","See Yana Studio on a MacBook Pro M5","▣","macbook 3d showcase demo studio"),
         item("updates","updates","Cập nhật / Changelog","Updates / Changelog","Lịch sử phiên bản & lộ trình phát triển","Ecosystem release history & roadmap","◴","releases version changelog updates"),
         item("support","support","Hỗ trợ & Liên hệ","Support & Contact","Email, điện thoại, Facebook, TikTok & GitHub","Official contact channels & creator links","?","help contact support email"),
         item("legal","legal-notices","Bản quyền & Pháp lý","Legal Notices & Copyright","Giấy phép Apache 2.0 & thông báo bản quyền","Apache 2.0 license & legal copyright notices","§","legal license copyright disclaimer"),

@@ -44,8 +44,12 @@
 }
 /* Every other step is drawn in outline, so the row reads as a rhythm rather than a block. */
 .home-page .hero-ribbon-row--flow li:nth-child(even) {
-  color: transparent;
-  -webkit-text-stroke: 1.2px #1d1d1f;
+  /* A transparent fill showed the inner contours where the font's strokes overlap (T, h, ư, n, a).
+     Painting the stroke first and a white fill over it hides them: the stroke is doubled to 2.4px so
+     the visible outer half is still 1.2px. */
+  color: #fff;
+  -webkit-text-stroke: 2.4px #1d1d1f;
+  paint-order: stroke fill;
 }
 .home-page .hero-ribbon-row--flow li::after {
   content: "→";

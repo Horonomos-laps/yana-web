@@ -1,7 +1,7 @@
 # ── Yana Web — production Dockerfile ──────────────────────────────────────
 # Compatible: Linux · macOS · Windows (via Docker Desktop)
 # Arch:       amd64 · arm64 (Apple M-series, Raspberry Pi, AWS Graviton)
-# Base:       node:20-alpine — ~50MB, no CVEs vs ubuntu/debian
+# Base:       node:24-alpine — ~50MB, no CVEs vs ubuntu/debian
 #
 # Build (từ root repo):
 #   docker build -f tools/yana-web/Dockerfile -t yana-web .
@@ -26,7 +26,7 @@ COPY Cargo.toml Cargo.lock rust-toolchain.toml README.md LICENSE ./
 COPY src/ ./src/
 RUN cargo build --locked --release --bin yana-rt
 
-FROM node:20-alpine
+FROM node:24-alpine
 
 # ── System hardening ───────────────────────────────────────────────────────
 RUN apk add --no-cache tini su-exec \

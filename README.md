@@ -1,14 +1,27 @@
+<p align="center">
+  <img src="logo.png" alt="Yana" width="96">
+</p>
+
 <h1 align="center">Yana Web</h1>
 
+<h3 align="center">Your Yana, in a browser. Served from your own machine.</h3>
+
 <p align="center">
-  <strong>The website and the local web app of the Yana ecosystem.</strong><br>
-  Chat, missions and an encrypted key vault in a browser, served from your own machine.
+  The website and the local web app of the Yana ecosystem:<br>
+  chat, missions and an encrypted key vault, with no sign-up and no bundled keys.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat-square&logo=node.js" alt="Node 18 or newer">
-  <img src="https://img.shields.io/badge/keys-AES--256--GCM-7d6aa8?style=flat-square" alt="Keys encrypted with AES-256-GCM">
-  <img src="https://img.shields.io/badge/license-Apache--2.0-2563eb?style=flat-square" alt="Apache 2.0 license">
+  <a href="https://github.com/Horonomos-laps/yana-web/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/Horonomos-laps/yana-web/ci.yml?branch=main&label=CI&style=flat" alt="CI" height="20"></a>
+  <img src="https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat&logo=node.js" alt="Node 18 or newer" height="20">
+  <img src="https://img.shields.io/badge/keys-AES--256--GCM-7d6aa8?style=flat" alt="Keys encrypted with AES-256-GCM" height="20">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-2563eb?style=flat" alt="Apache 2.0 license" height="20"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Horonomos-laps/Yana-AI"><img src="https://img.shields.io/badge/Yana--AI-runtime_and_rules-475569?style=flat" alt="Yana-AI" height="20"></a>
+  <img src="https://img.shields.io/badge/yana--web-you_are_here-8b5cf6?style=flat" alt="yana-web, this repository" height="20">
+  <a href="https://github.com/Horonomos-laps/Yana-studio"><img src="https://img.shields.io/badge/Yana--studio-desktop_apps-475569?style=flat" alt="Yana-studio" height="20"></a>
 </p>
 
 <p align="center">
@@ -20,7 +33,25 @@
   <a href="https://yana.vutam.link">Website</a>
 </p>
 
----
+<p align="center">
+  <sub>
+    <a href="https://github.com/Horonomos-laps/Yana-AI/blob/main/CODE_OF_CONDUCT.md">Code of conduct</a> ·
+    <a href="https://github.com/Horonomos-laps/Yana-AI/blob/main/CONTRIBUTING.md">Contributing</a> ·
+    <a href="LICENSE">Apache-2.0 license</a> ·
+    <a href="https://github.com/Horonomos-laps/Yana-AI/blob/main/SECURITY.md">Security policy</a>
+  </sub>
+</p>
+
+<br>
+
+<table>
+  <tr>
+    <td align="center" width="25%"><h3>9</h3><sub>screens, all reading<br>real data</sub></td>
+    <td align="center" width="25%"><h3>6</h3><sub>model providers<br>bring your own key</sub></td>
+    <td align="center" width="25%"><h3>AES-256-GCM</h3><sub>provider keys<br>encrypted at rest</sub></td>
+    <td align="center" width="25%"><h3>127.0.0.1</h3><sub>default bind,<br>loopback only</sub></td>
+  </tr>
+</table>
 
 ## The Yana ecosystem
 

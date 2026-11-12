@@ -1,176 +1,188 @@
+<h1 align="center">Yana Web</h1>
+
 <p align="center">
-  <h1 align="center">🌊 Yana AI — Web</h1>
+  <strong>The website and the local web app of the Yana ecosystem.</strong><br>
+  Chat, missions and an encrypted key vault in a browser, served from your own machine.
 </p>
 
 <p align="center">
-  <strong>The first interface built on Yana AI core — chat, route, and orchestrate without touching the infrastructure.</strong>
+  <img src="https://img.shields.io/badge/node-%E2%89%A518-339933?style=flat-square&logo=node.js" alt="Node 18 or newer">
+  <img src="https://img.shields.io/badge/keys-AES--256--GCM-7d6aa8?style=flat-square" alt="Keys encrypted with AES-256-GCM">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-2563eb?style=flat-square" alt="Apache 2.0 license">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/runtime-Node.js_≥18-339933?style=flat-square&logo=node.js" />
-  <img src="https://img.shields.io/badge/dependencies-zero-2f7e6e?style=flat-square" />
-  <img src="https://img.shields.io/badge/keys-AES--256--GCM-7d6aa8?style=flat-square" />
-  <img src="https://img.shields.io/badge/data-100%25_real-b96b80?style=flat-square" />
-  <img src="https://img.shields.io/badge/providers-6-3a7ca5?style=flat-square" />
+  <a href="#what-is-in-this-repository">Contents</a> ·
+  <a href="#run-the-web-app">Run</a> ·
+  <a href="#screens">Screens</a> ·
+  <a href="#security">Security</a> ·
+  <a href="#robot-bridge">Robot bridge</a> ·
+  <a href="https://yana.vutam.link">Website</a>
 </p>
 
 ---
 
+## The Yana ecosystem
+
+| Repository | Role |
+| --- | --- |
+| **[Yana-AI](https://github.com/Horonomos-laps/Yana-AI)** | Runtime `yana-rt`, governance rules and hooks, CLI, agents and skills |
+| **yana-web** (this repo) | The website at yana.vutam.link, and a local web app |
+| **[Yana-studio](https://github.com/Horonomos-laps/Yana-studio)** | Desktop apps: native macOS app, Yana Studio, Yana IDE |
+
+This repository does two jobs. It is the **public website**, and it is a **local web
+app** that lets you chat with a model, plan missions and browse agents, skills and
+memory from a browser. The web app reads its agents, skills and manifest from a
+Yana-AI checkout, so it needs one next to it (see [Run](#run-the-web-app)).
+
+```text
+You  →  yana-web  →  Yana-AI core (router, safety, context)  →  Model
 ```
-User → Yana AI → Yana AI Core (Router · Safety · Context) → Model
-```
 
-Zero-dependency Node.js server + React (via Babel standalone) glass-morphism UI.
-No build step. No signup. Bring your own API key.
-
-## Repository layout
-
-This repository holds the web side of Yana. It was split out of the main
-repository, [Yana-AI](https://github.com/Horonomos-laps/Yana-AI), which keeps the
-Rust runtime, the `core/` rules and hooks, and the PyPI and crates.io packages.
+## What is in this repository
 
 | Path | What it is |
-|---|---|
-| root (`server.js`, `lib/`, `desktop-src/`, `_test_*.js`, ...) | The web app described below |
+| --- | --- |
+| `server.js`, `lib/`, `auth.js`, `crypto-store.js`, `missions.js`, `memory.js` | The local web app server |
+| `desktop-src/` | The web app UI source. Vite builds it to `desktop/` |
+| `robot.js`, `tts-sidecar/` | Voice bridge for an ESP32 robot, and the local text-to-speech service |
 | `site/` | Astro site. `npm run build` writes to `docs-dist/`, which is git-ignored |
-| `docs/` | The static website: HTML, CSS, JS and assets. Vercel (project `yana-ai-docs`) and Cloudflare Workers (`wrangler.jsonc`, `assets.directory` is `docs`) serve it. Markdown documentation stays in Yana-AI |
-| `worker.js`, `wrangler.jsonc`, `vercel.json` | Cloudflare Worker and hosting configuration |
-| `yana-desktop/` | Electron shell that bundles this server. A copy from Yana-AI. Its packaging config reads `../../core`, `../../MANIFEST.json` and `../../target/...`, which exist only in Yana-AI, so build it there for now |
-| `.github/workflows/ci.yml` | Runs every root `_test_*.js` file and the Astro build |
+| `docs/` | The static website: HTML, CSS, JS and assets. Markdown documentation stays in Yana-AI |
+| `worker.js`, `wrangler.jsonc`, `vercel.json` | Hosting configuration for Cloudflare Workers and Vercel |
+| `yana-desktop/` | Electron shell that bundles this server. Its packaging config reads paths that exist only in Yana-AI, so build it there for now |
+| `_test_*.js`, `tests/` | Tests. CI runs every root `_test_*.js` file and the Astro build |
 
-Some files, for example `desktop-old/`, exist only because the earlier snapshot
-of this repository had them. They were kept, not removed.
+Some files, for example `desktop-old/`, are kept from the earlier snapshot of this
+repository and have not been removed.
 
-Status: the website still deploys from Yana-AI until Vercel and Cloudflare are
-reconnected to this repository. The desktop app is built from Yana-AI.
+### Where the website is served from
 
-## Run
+The `docs/` folder is deployed by two Git integrations, both pointed at this
+repository's `main` branch: Vercel (project `yana-ai-docs`, root directory `docs`) and
+a Cloudflare Worker (`wrangler.jsonc`, `assets.directory` is `docs`). Download and
+update pages read release data from the Yana-studio repository.
+
+## Run the web app
+
+You need Node 18 or newer and a Yana-AI checkout.
 
 ```bash
-npm start                      # build:desktop, then node server.js → http://127.0.0.1:8081
-PORT=3000 npm start            # custom port
-HOST=0.0.0.0 npm start         # expose beyond loopback (containers only)
+git clone https://github.com/Horonomos-laps/Yana-AI.git ../Yana-AI
+export YANA_ROOT_DIR="$(cd ../Yana-AI && pwd)"   # where the server finds core/ and MANIFEST.json
+
+npm ci
+npm start                       # builds the UI, then serves http://127.0.0.1:8081
+PORT=3000 npm start             # custom port
+HOST=0.0.0.0 npm start          # expose beyond loopback (containers only)
 ```
 
-`npm start` runs `build:desktop` first — the UI is served from `desktop/`
-(Vite build output), so a plain `node server.js` only works if that build
-already exists from a previous run.
+`npm start` runs `build:desktop` first. The UI is served from `desktop/`, so a plain
+`node server.js` works only if that build already exists from an earlier run.
 
-## Screens — all real data
+The server has few runtime dependencies (`react`, `ws`, `marked`, `dompurify`, the
+xterm packages, `opusscript` and the Qdrant client). It needs an API key from you for
+any model you want to use; there is no sign-up and no key is bundled.
+
+## Screens
+
+Every screen reads real data from the server. None of them shows placeholder numbers.
 
 | Screen | Source |
-|---|---|
-| 🌊 Welcome | first-run intro page — what Yana is, feature highlights, "Get started" → login |
-| 🔑 Login | create password on first run (scrypt hash), then HttpOnly session cookie — AI-app style, VI/EN, remember-30d, Caps Lock hint, strength meter |
-| 🏠 Dashboard | `/api/status` (MANIFEST) · `/api/dashboard` (L1 memory + audit log + uptime) |
-| 💬 Chat | SSE streaming to 6 providers, provider picker, route classify + skill, history survives reloads |
-| 🎯 Missions | `/api/missions` — file-backed CRUD, "Plan with Yana" LLM task breakdown, click-to-advance tasks |
-| 🤖 Agent Space | `/api/agents` — 95 real agents from `core/agents/` frontmatter |
-| 🌸 Memory Garden | `/api/memories` — L1 atomic facts with confidence + freshness |
-| 🧩 Skills | `/api/skills` — on-disk counts grouped by import pack |
-| 🔌 Providers | encrypted vault status + `/api/models` live model lists + `/api/usage` |
+| --- | --- |
+| Welcome | First-run intro, then a link to the login |
+| Login | Create a password on first run (scrypt hash), then an HttpOnly session cookie. Vietnamese and English |
+| Dashboard | `/api/status` (manifest), `/api/dashboard` (L1 memory, audit log, uptime) |
+| Chat | Server-sent events to 6 providers, provider picker, route classification, history that survives reloads |
+| Missions | `/api/missions`: file-backed create, update, delete, and a "Plan with Yana" task breakdown |
+| Agent Space | `/api/agents`: agents read from the frontmatter in `core/agents/` |
+| Memory Garden | `/api/memories`: L1 atomic facts with confidence and freshness |
+| Skills | `/api/skills`: on-disk counts grouped by import pack |
+| Providers | Encrypted vault status, live model lists from `/api/models`, usage from `/api/usage` |
+
+**Providers:** Anthropic, OpenAI, Gemini, Groq, DeepSeek and OpenRouter. Vision works
+where the provider allows it. Live model lists are available for Groq and OpenRouter.
 
 ## Security
 
-- 🔑 **Login gate** (`auth.js`) — single-user password (scrypt, random salt) in `.yana/auth.json` (mode 600), 256-bit session tokens in an HttpOnly SameSite=Lax cookie, login rate-limited 5/15min per IP. Every page and API except `/health`, `/login.html`, and `/api/auth/*` requires a session.
-- 🔐 **Key vault** (`crypto-store.js`) — provider keys encrypted at rest with AES-256-GCM; the master key is a non-extractable WebCrypto `CryptoKey` in IndexedDB. localStorage only ever holds ciphertext. See rule `66-client-secret-encryption-law`.
-- 🛡️ Server binds `127.0.0.1` by default, per-IP rate limiting (60 POST/min), CSP + security headers, path-traversal-proof static serving, no API keys in URLs.
+- **Login gate** (`auth.js`): one user, password stored as a scrypt hash with a random salt in `.yana/auth.json` (mode 600). Session tokens are 256-bit, in an HttpOnly SameSite=Lax cookie. Login is limited to 5 attempts per 15 minutes per IP. Every page and API except `/health`, `/login.html` and `/api/auth/*` needs a session.
+- **Key vault** (`crypto-store.js`): provider keys are encrypted at rest with AES-256-GCM. The master key is a non-extractable WebCrypto `CryptoKey` in IndexedDB, and `localStorage` only holds ciphertext.
+- **Server defaults:** binds to `127.0.0.1`, rate-limits POST requests to 60 per minute per IP, sends CSP and security headers, serves static files with path-traversal checks, and never puts an API key in a URL.
+
+An XSS bug in the page could still call the vault's decrypt function. The vault
+protects storage dumps, backups and sync, not a compromised page.
 
 ## API
 
-```
-GET  /health             GET  /api/status        GET  /api/dashboard
-GET  /api/agents         GET  /api/memories      GET  /api/skills
-GET  /api/usage          GET  /api/missions      POST /api/missions
-POST /api/missions/update POST /api/missions/delete
-POST /api/models         POST /api/route         POST /api/chat
-POST /api/index          GET  /api/auth/status   POST /api/auth/setup
+```text
+GET  /health             GET  /api/status         GET  /api/dashboard
+GET  /api/agents         GET  /api/memories       GET  /api/skills
+GET  /api/usage          GET  /api/missions       POST /api/missions
+POST /api/missions/update  POST /api/missions/delete
+POST /api/models         POST /api/route          POST /api/chat
+POST /api/index          GET  /api/auth/status    POST /api/auth/setup
 POST /api/auth/login     POST /api/auth/logout
 ```
 
 ## Robot bridge
 
-`robot.js` lets an ESP32 device speaking the XiaoZhi/yana-robot WebSocket
-protocol (`docs/websocket.md`, `docs/mcp-protocol.md` in the `yana-robot`
-firmware repo) use this server as its voice AI backend, instead of
-`xiaozhi.me` or a self-hosted XiaoZhi server. No firmware changes needed —
-point the device's server URL at `wss://<this-host>/robot/ws`.
+`robot.js` lets an ESP32 device that speaks the XiaoZhi / yana-robot WebSocket
+protocol use this server as its voice backend. Point the device's server URL at
+`wss://<this-host>/robot/ws`. No firmware change is needed.
 
-- Device connects, sends `hello`; this server replies `hello` and (if the
-  device advertises `features.mcp`) opens an MCP session as the **client**
-  (the device is the MCP **server** — it owns the tools).
-- Voice pipeline: ASR + chat both use `YANA_ROBOT_LLM_PROVIDER` (default
-  `groq`) via the same `PROVIDERS`/`connectToProvider` table `/api/chat`
-  uses (now in `lib/providers.js`). Groq's ASR endpoint
-  (`/openai/v1/audio/transcriptions`) reuses the same key as chat — no
-  second provider needed.
-- TTS defaults to the VieNeu-TTS v3 Turbo sidecar (`tts-sidecar/`, same as
-  `/api/tts`). Its ONNX stream is converted from 48 kHz float audio to 24 kHz
-  mono PCM16, then Opus-encoded and paced in 60 ms packets for the device.
-  VieNeu only produces Vietnamese/English — set `YANA_ROBOT_TTS_PROVIDER=openai`
-  to speak other languages instead (e.g. Korean), via OpenAI's
-  `/v1/audio/speech` endpoint (requires its own API key; voices are
-  English-optimized but multilingual, following Whisper's language list).
-- Tool calls the model decides to make are translated into real MCP
-  `tools/call` requests sent to the device (e.g. `self.wheelbot.move_forward`)
-  — see the `yana-robot` repo's board `README.md` for the full tool list.
+Status: only the WebSocket handshake and the MCP `initialize` / `tools/list` exchange
+are covered by tests (`_test_robot.js`). The speech-to-text, chat and text-to-speech
+pipeline has not been verified on real hardware.
 
-Env vars (Railway/production):
+<details>
+<summary><b>How it works, environment variables and the local TTS service</b></summary>
 
-| Var | Purpose |
-|---|---|
-| `YANA_ROBOT_DEVICE_TOKEN` | Bearer token the device must send (`Authorization` header) to connect. Leave unset only for local testing. |
-| `YANA_ROBOT_LLM_API_KEY` | API key for `YANA_ROBOT_LLM_PROVIDER`, used for both chat and ASR. |
-| `YANA_ROBOT_LLM_PROVIDER` | Key into `PROVIDERS` (default `groq`). |
+- The device connects and sends `hello`. The server replies `hello` and, if the device advertises `features.mcp`, opens an MCP session as the client. The device is the MCP server and owns the tools.
+- Speech recognition and chat both use `YANA_ROBOT_LLM_PROVIDER` (default `groq`) through the same provider table as `/api/chat` (`lib/providers.js`). Groq's transcription endpoint reuses the chat key.
+- Text-to-speech defaults to the VieNeu-TTS v3 Turbo sidecar in `tts-sidecar/`. Its 48 kHz float audio is converted to 24 kHz mono PCM16, Opus-encoded and sent in 60 ms packets. VieNeu speaks Vietnamese and English only; set `YANA_ROBOT_TTS_PROVIDER=openai` for other languages such as Korean.
+- Tool calls the model decides to make become MCP `tools/call` requests to the device, for example `self.wheelbot.move_forward`. The tool list is in the robot firmware's board README.
+
+| Variable | Purpose |
+| --- | --- |
+| `YANA_ROBOT_DEVICE_TOKEN` | Bearer token the device sends in the `Authorization` header. Leave unset only for local testing. |
+| `YANA_ROBOT_LLM_API_KEY` | API key for `YANA_ROBOT_LLM_PROVIDER`, used for chat and transcription. |
+| `YANA_ROBOT_LLM_PROVIDER` | Key into the provider table. Default `groq`. |
 | `YANA_ROBOT_LLM_MODEL` | Overrides the provider's default chat model. |
-| `YANA_ROBOT_ASR_MODEL` | Groq transcription model (default `whisper-large-v3-turbo`). |
-| `YANA_ROBOT_WS_PATH` | WebSocket path (default `/robot/ws`). |
-| `YANA_ROBOT_TTS_PROVIDER` | `vieneu` (default, local, free, Vietnamese/English) or `openai` (cloud, multilingual — use this for Korean). |
-| `YANA_ROBOT_TTS_API_KEY` | API key for OpenAI TTS. Falls back to `YANA_ROBOT_LLM_API_KEY` if unset. |
-| `YANA_ROBOT_TTS_OPENAI_MODEL` | OpenAI TTS model (default `gpt-4o-mini-tts`). |
-| `YANA_ROBOT_TTS_OPENAI_VOICE` | OpenAI TTS voice (default `alloy`). |
-| `YANA_ROBOT_TTS_PACKET_INTERVAL_MS` | Delay between 60 ms Opus packets (default `55`) to avoid overflowing the firmware's 1.2 s decode queue. |
+| `YANA_ROBOT_ASR_MODEL` | Groq transcription model. Default `whisper-large-v3-turbo`. |
+| `YANA_ROBOT_WS_PATH` | WebSocket path. Default `/robot/ws`. |
+| `YANA_ROBOT_TTS_PROVIDER` | `vieneu` (default, local, Vietnamese and English) or `openai` (cloud, multilingual). |
+| `YANA_ROBOT_TTS_API_KEY` | API key for OpenAI TTS. Falls back to `YANA_ROBOT_LLM_API_KEY`. |
+| `YANA_ROBOT_TTS_OPENAI_MODEL` | OpenAI TTS model. Default `gpt-4o-mini-tts`. |
+| `YANA_ROBOT_TTS_OPENAI_VOICE` | OpenAI TTS voice. Default `alloy`. |
+| `YANA_ROBOT_TTS_PACKET_INTERVAL_MS` | Delay between Opus packets. Default `55`, to avoid overflowing the firmware's 1.2 s decode queue. |
 
-### Local VieNeu-TTS v3 setup
-
-VieNeu v3 requires Python 3.10–3.13. On macOS and CPU servers, use its
-torch-free ONNX backend:
+**Local VieNeu-TTS v3 setup.** It needs Python 3.10 to 3.13 and uses a torch-free ONNX backend.
 
 ```sh
-cd tools/yana-web/tts-sidecar
-python3.13 -m venv .venv  # or any Python 3.10–3.13
+cd tts-sidecar
+python3.13 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 ./run.sh
 ```
 
-The first synthesis downloads the VieNeu model; `GET http://127.0.0.1:7861/health`
-stays lightweight and reports whether it has been loaded. Useful sidecar settings:
+The first synthesis downloads the model. `GET http://127.0.0.1:7861/health` stays light
+and reports whether it has loaded.
 
-| Var | Default | Purpose |
-|---|---|---|
-| `VIENEU_SIDECAR_PORT` | `7861` | Local sidecar port. |
-| `VIENEU_VOICE` | `Phạm Tuyên` | Preset voice used when a request omits `voice`. |
-| `VIENEU_BACKEND` | `onnx` | Low-latency CPU streaming backend. |
-| `VIENEU_PRECISION` | `int8` | Fast ONNX precision; use `fp32` for maximum quality. |
-| `VIENEU_THREADS` | `0` | ONNX worker threads (`0` lets VieNeu choose). |
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `VIENEU_SIDECAR_PORT` | `7861` | Local sidecar port |
+| `VIENEU_VOICE` | `Phạm Tuyên` | Preset voice when a request omits `voice` |
+| `VIENEU_BACKEND` | `onnx` | Low-latency CPU streaming backend |
+| `VIENEU_PRECISION` | `int8` | Fast ONNX precision. Use `fp32` for the best quality |
+| `VIENEU_THREADS` | `0` | ONNX worker threads. `0` lets VieNeu choose |
 
-Compatibility endpoints: `POST /tts` returns a 24 kHz WAV for desktop/mobile;
-`POST /tts/stream` returns 24 kHz mono PCM16 for the robot bridge. VieNeu v3
-ignores the old `style` field; choose a preset voice to change character.
+`POST /tts` returns a 24 kHz WAV for desktop and mobile. `POST /tts/stream` returns
+24 kHz mono PCM16 for the robot bridge.
 
-Not yet verified on real hardware — see `_test_robot.js` for what's covered
-(WebSocket handshake + MCP `initialize`/`tools/list` handshake only; the
-ASR/chat/TTS pipeline needs a real device + real API calls to test).
+**Testing locally.** Run `npm start`, then point the device at
+`ws://<your-LAN-IP>:8081/robot/ws`. It is the same protocol without TLS.
 
-**Local testing:** run this server locally (`npm start`, see Run above),
-then point the device's server URL at `ws://<your-machine's-LAN-IP>:8081/robot/ws`
-instead of the Railway `wss://` URL — same protocol either way, just plain
-`ws://` since there's no TLS on localhost.
+</details>
 
-## Providers
+## More
 
-Anthropic · OpenAI · Gemini · Groq · DeepSeek · OpenRouter — vision support where the provider allows it, live model lists for Groq/OpenRouter.
-
----
-
-Part of [Yana AI](../../README.md) · Apache 2.0
+[Yana-AI](https://github.com/Horonomos-laps/Yana-AI) · [Yana-studio](https://github.com/Horonomos-laps/Yana-studio) · [yana.vutam.link](https://yana.vutam.link) · [Apache 2.0](LICENSE)

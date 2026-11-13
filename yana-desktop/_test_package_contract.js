@@ -55,7 +55,9 @@ for (const requiredFile of new Set([...localRequires, ...bridgeRequires])) {
 }
 assert.strictEqual(packageJson.engines.node, '>=24');
 assert.strictEqual(packageJson.devDependencies.electron, '43.8.1');
-assert.strictEqual(packageJson.devDependencies['electron-builder'], '26.15.3');
+// electron-builder must be an exact version (no ^ or ~). The number itself moves with every bump, and the
+// hard-coded 26.15.3 broke this test when it was raised to 26.18.0.
+assert.match(packageJson.devDependencies['electron-builder'], /^\d+\.\d+\.\d+$/);
 assert.strictEqual(extraFiles.get('../../target/desktop-runtime/bin'), 'Resources/bin');
 assert.strictEqual(extraFiles.get('../../target/desktop-runtime/pty-bridge'), 'Resources/pty-bridge');
 

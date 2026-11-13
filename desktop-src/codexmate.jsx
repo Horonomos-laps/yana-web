@@ -4,11 +4,13 @@
 import React from 'react';
 import { L, PageHeader, Icons } from './components.jsx';
 import { IS_ELECTRON } from './lib/is-electron.js';
+import { parseCodexmatePort, readCodexmatePort } from './lib/codexmate-port.mjs';
 
 const { useState, useEffect, useRef } = React;
 
 export function CodemateTool() {
-  const [port, setPort]        = useState(() => localStorage.getItem("yana.codexmate.port") || "8080");
+  // The port ends up in a URL and in a copyable command, so it must be a plain number (see lib/codexmate-port.mjs).
+  const [port, setPort]        = useState(() => readCodexmatePort(localStorage.getItem("yana.codexmate.port")));
   const [status, setStatus]    = useState(null); // null | "checking" | "up" | "down"
   const [copiedIdx, setCopied] = useState(null);
   const inputRef = useRef(null);
@@ -20,7 +22,7 @@ export function CodemateTool() {
   }
 
   function check(p) {
-    const target = p || port;
+    const target = parseCodexmatePort(p) || port;
     setStatus("checking");
     fetch("http://127.0.0.1:" + target + "/", { mode: "no-cors", signal: AbortSignal.timeout(2000) })
       .then(() => setStatus("up"))
@@ -30,7 +32,7 @@ export function CodemateTool() {
   useEffect(() => { check(port); }, []);
 
   function savePort(v) {
-    const safe = v.trim();
+    const safe = parseCodexmatePort(v);
     if (!safe) return;
     localStorage.setItem("yana.codexmate.port", safe);
     setPort(safe);

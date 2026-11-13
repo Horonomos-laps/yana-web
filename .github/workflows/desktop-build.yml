@@ -97,11 +97,13 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable branch
 
-      - name: Generate 512x512 icon from SVG (Linux)
+      # icon.svg only wraps the same PNG as a base64 <image href="data:...">, which the ImageMagick on
+      # ubuntu-26.04 cannot open (it treats the data URI as a file name). Resize the PNG itself instead.
+      - name: Generate 512x512 icon from PNG (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y imagemagick
-          convert -background none tools/yana-desktop/build/icon.svg -resize 512x512 tools/yana-desktop/build/icon.png
+          convert tools/yana-desktop/build/icon.png -resize 512x512 tools/yana-desktop/build/icon.png
 
       - name: Generate 512x512 icon from SVG (macOS)
         if: runner.os == 'macOS'
@@ -121,8 +123,11 @@ jobs:
         if: runner.os != 'Windows'
         run: bash core/scripts/prefetch-pdfium.sh
 
+      # Yana-AI's Cargo.toml has default = ["cli", "mcp"]. The desktop runtime contract
+      # (tools/yana-desktop/runtime-feature-contract.js) requires mcp to be excluded, so the default
+      # features must be turned off or verify:runtime fails with "feature mismatch for mcp".
       - name: Build bundled runtime
-        run: cargo build --release --features cli,pty-bridge --bin yana-rt --bin pty_bridge
+        run: cargo build --release --no-default-features --features cli,pty-bridge --bin yana-rt --bin pty_bridge
 
       - name: Smoke test bundled runtime binaries
         if: runner.os != 'Windows'

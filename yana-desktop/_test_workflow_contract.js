@@ -16,6 +16,8 @@ assert.match(workflow, /run: npm test/);
 assert.match(workflow, /^  publish:\n[\s\S]*?    needs: build/m);
 assert.match(workflow, /assemble-release\.js/);
 assert.match(workflow, /contents: write/);
-assert.match(workflow, /softprops\/action-gh-release@[0-9a-f]{40} # v3\.0\.2 \(node24\)/);
+// The release action must be pinned to a full commit SHA with a version comment. The version number is
+// not fixed here: it moves with every action bump and a hard-coded one broke this test (v3.0.2 vs v3.0.3).
+assert.match(workflow, /softprops\/action-gh-release@[0-9a-f]{40} # v\d+\.\d+\.\d+ \(node24\)/);
 
 console.log('Desktop workflow contract tests passed: 10');

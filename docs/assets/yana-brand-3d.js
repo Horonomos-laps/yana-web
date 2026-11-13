@@ -52,25 +52,27 @@
     varying vec3 vPosition;
     varying float vRim;
     uniform mediump float uScroll;
+    // vRim carries a palette index: the mesh is a voxel rabbit built from the Yana pixel logo.
+    vec3 palette(float i){
+      if(i<0.5) return vec3(0.15,0.18,0.36);
+      if(i<1.5) return vec3(0.94,0.95,0.99);
+      if(i<2.5) return vec3(0.84,0.85,0.96);
+      if(i<3.5) return vec3(0.44,0.46,0.52);
+      if(i<4.5) return vec3(0.29,0.33,0.45);
+      if(i<5.5) return vec3(0.43,0.49,0.92);
+      if(i<6.5) return vec3(0.33,0.78,0.94);
+      if(i<7.5) return vec3(0.08,0.41,0.88);
+      return vec3(0.99,0.59,0.71);
+    }
     void main(){
       vec3 n=normalize(vNormal);
       vec3 view=normalize(vec3(-vPosition.xy,5.0+uScroll*0.55-vPosition.z));
-      vec3 reflection=reflect(-view,n);
-      vec3 light=normalize(vec3(-0.55+uScroll*0.35,0.8,0.95));
-      float facing=max(dot(n,view),0.0);
-      float fresnel=pow(1.0-facing,3.0);
+      vec3 light=normalize(vec3(-0.45+uScroll*0.35,0.75,0.85));
       float diffuse=max(dot(n,light),0.0);
-      // Analytic studio reflections: no textures, extra canvas or postprocessing.
-      float softbox=pow(max(dot(reflection,normalize(vec3(-0.6,0.75,0.7))),0.0),12.0);
-      float strip=pow(max(dot(reflection,normalize(vec3(0.7,0.35,0.8))),0.0),38.0);
-      float specular=pow(max(dot(reflect(-light,n),view),0.0),72.0);
-      float floorReflection=pow(max(-reflection.y,0.0),2.0);
-      float edge=smoothstep(0.2,1.0,vRim);
-      vec3 body=mix(vec3(0.64,0.81,0.93),vec3(0.83,0.92,0.98),diffuse*0.65);
-      vec3 color=body-vec3(0.15,0.11,0.045)*floorReflection
-        -vec3(0.20,0.13,0.05)*fresnel*(1.0-edge*0.35)
-        +vec3(0.97,0.99,1.0)*(softbox*0.17+strip*0.14+specular*0.20)
-        +vec3(0.12,0.17,0.19)*fresnel*edge;
+      float facing=max(dot(n,view),0.0);
+      float rim=pow(1.0-facing,2.5);
+      vec3 base=palette(floor(vRim+0.5));
+      vec3 color=base*(0.60+0.42*diffuse)+vec3(0.08,0.10,0.14)*rim;
       gl_FragColor=vec4(clamp(color,0.0,1.0),1.0);
     }`;
   function shader(type, source) {
@@ -154,7 +156,7 @@
     if (!pending && visible && !document.hidden && (!immersive || journeyOpacity >= .015)) pending = requestAnimationFrame(draw);
   };
   const meshName = matchMedia('(max-width: 900px)').matches ? 'yana-brand-mesh-mobile' : 'yana-brand-mesh';
-  fetch(`assets/${meshName}.bin?v=20261003polish4`, { signal: lifetime.signal }).then(response => {
+  fetch(`assets/${meshName}.bin?v=20261114voxel1`, { signal: lifetime.signal }).then(response => {
     if (!response.ok) throw new Error('Mesh unavailable');
     return response.arrayBuffer();
   }).then(data => {

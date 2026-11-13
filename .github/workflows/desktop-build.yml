@@ -1,0 +1,169 @@
+name: Desktop Build (dry run)
+
+# Builds the desktop app from this repository without publishing anything.
+#
+# The desktop app was built by Yana-AI's desktop.yml. This is the same build, run from here, so the
+# desktop shell no longer has to live in Yana-AI. It uploads the installers as workflow artifacts
+# and publishes nothing: where releases are published is decided separately.
+#
+# yana-desktop/package.json still uses the paths of the old single repository (../yana-web,
+# ../../MANIFEST.json, ../../target/desktop-runtime, ../../core). So the job rebuilds that layout:
+#   <workspace>               Yana-AI (runtime source, core/, MANIFEST.json, scripts/)
+#   <workspace>/tools/yana-web      this repository (the server the app bundles)
+#   <workspace>/tools/yana-desktop  yana-desktop/ of this repository
+# Manual start only (workflow_dispatch), so it cannot run by accident.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+            artifact: |
+              tools/yana-desktop/dist/*.AppImage
+              tools/yana-desktop/dist/*.AppImage.blockmap
+              tools/yana-desktop/dist/*.deb
+              tools/yana-desktop/dist/latest-linux.yml
+          - os: ubuntu-24.04-arm
+            platform: linux
+            arch: arm64
+            artifact: |
+              tools/yana-desktop/dist/*.AppImage
+              tools/yana-desktop/dist/*.AppImage.blockmap
+              tools/yana-desktop/dist/*.deb
+              tools/yana-desktop/dist/latest-linux-arm64.yml
+          - os: macos-15-intel
+            platform: mac
+            arch: x64
+            artifact: |
+              tools/yana-desktop/dist/*.dmg
+              tools/yana-desktop/dist/*.dmg.blockmap
+              tools/yana-desktop/dist/*.zip
+              tools/yana-desktop/dist/*.zip.blockmap
+              tools/yana-desktop/dist/latest-mac.yml
+          - os: macos-15
+            platform: mac
+            arch: arm64
+            artifact: |
+              tools/yana-desktop/dist/*.dmg
+              tools/yana-desktop/dist/*.dmg.blockmap
+              tools/yana-desktop/dist/*.zip
+              tools/yana-desktop/dist/*.zip.blockmap
+              tools/yana-desktop/dist/latest-mac.yml
+          - os: windows-latest
+            platform: win
+            arch: x64
+            artifact: |
+              tools/yana-desktop/dist/*.exe
+              tools/yana-desktop/dist/*.exe.blockmap
+              tools/yana-desktop/dist/latest.yml
+
+    runs-on: ${{ matrix.os }}
+    name: Build (${{ matrix.platform }}-${{ matrix.arch }})
+    timeout-minutes: 45 # a cold Rust build plus Electron packaging; the old workflow used 30
+
+    steps:
+      - name: Checkout Yana-AI (runtime source, core/, MANIFEST.json)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Horonomos-laps/Yana-AI
+          ref: main
+
+      - name: Checkout this repository (the server and the desktop shell)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: tools/yana-web
+
+      # Yana-AI may still carry its own copy of the shell; the build must use this repository's.
+      - name: Put the desktop shell of this repository at tools/yana-desktop
+        shell: bash
+        run: |
+          rm -rf tools/yana-desktop
+          cp -R tools/yana-web/yana-desktop tools/yana-desktop
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@4360b52568e2003a75bf9bc1d59f33a8e3fc893c # stable branch
+
+      - name: Generate 512x512 icon from SVG (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y imagemagick
+          convert -background none tools/yana-desktop/build/icon.svg -resize 512x512 tools/yana-desktop/build/icon.png
+
+      - name: Generate 512x512 icon from SVG (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install imagemagick
+          magick -background none tools/yana-desktop/build/icon.svg -resize 512x512 tools/yana-desktop/build/icon.png
+
+      - name: Install web dependencies
+        working-directory: tools/yana-web
+        run: npm ci
+
+      - name: Build desktop web UI
+        working-directory: tools/yana-web
+        run: npm run build:desktop
+
+      - name: Prefetch pdfium (avoids intermittent TLS failure in liteparse-pdfium-sys's own downloader)
+        if: runner.os != 'Windows'
+        run: bash core/scripts/prefetch-pdfium.sh
+
+      - name: Build bundled runtime
+        run: cargo build --release --features cli,pty-bridge --bin yana-rt --bin pty_bridge
+
+      - name: Smoke test bundled runtime binaries
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          bash core/scripts/release-smoke-test.sh target/release/yana-rt
+          file target/release/pty_bridge | grep -qi "executable" || {
+            echo "pty_bridge does not look like a valid executable" >&2
+            exit 1
+          }
+
+      - name: Install yana-desktop dependencies
+        working-directory: tools/yana-desktop
+        run: npm ci
+
+      - name: Stage bundled runtime
+        working-directory: tools/yana-desktop
+        run: npm run stage:runtime
+
+      - name: Stage bundled code-server
+        working-directory: tools/yana-desktop
+        run: npm run stage:code-server
+
+      - name: Verify staged runtime feature contract
+        working-directory: tools/yana-desktop
+        run: npm run verify:runtime
+
+      - name: Test desktop shell
+        working-directory: tools/yana-desktop
+        run: npm test
+        env:
+          YANA_REQUIRE_RUNTIME_TEST: '1'
+
+      - name: Build app (nothing is published)
+        working-directory: tools/yana-desktop
+        run: node node_modules/electron-builder/cli.js --${{ matrix.platform }} --${{ matrix.arch }} --publish never
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: yana-desktop-${{ matrix.platform }}-${{ matrix.arch }}
+          path: ${{ matrix.artifact }}
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,50 @@
+/* One tone for the home page.
+   The sections used to pick their own accent: a different label color per section
+   (violet, rose, sky blue, amber, emerald), near-black headings next to the navy hero,
+   and green, yellow and blue highlighter marks. This file loads last and replaces that
+   with the hero's palette: navy ink, one violet accent, one soft lavender highlight.
+   Status colors inside the demo (allow, require, deny) are not touched. */
+.home-page {
+  --tone-ink: #26306a;
+  --tone-accent: #8b5cf6;
+  --tone-soft: #e3e7ff;
+}
+
+/* Section labels: same color everywhere. The nth-of-type selector matches the
+   specificity of the rotating rules in yana-ink.css, and this file loads after it. */
+.home-page main > section:nth-of-type(n) .eyebrow {
+  color: var(--tone-accent);
+}
+
+/* Headings: the navy of the hero, instead of near-black. Gradient words keep their
+   own transparent color, so only plain heading text changes. */
+.home-page.sakura-site main :is(h1, h2) {
+  color: var(--tone-ink);
+}
+
+/* Highlighter marks: one calm lavender instead of green, yellow and blue. */
+.home-page .ink--highlight-green::before,
+.home-page .ink--highlight-yellow::before,
+.home-page .ink--highlight-blue::before {
+  background: var(--tone-soft);
+}
+
+/* The 60-second demo: replaces the old steel-blue palette (--tour-*) and its
+   near-black card headings with the hero's navy and lavender. */
+.home-page .discovery-stage {
+  --tour-accent: var(--tone-ink);
+  --tour-soft: #eef0ff;
+  --tour-line: #dfe3f5;
+  --tour-text: var(--tone-ink);
+}
+.home-page .discovery-stage h3 {
+  color: var(--tone-ink);
+}
+.home-page .discovery-steps button {
+  background: #f4f5fc;
+  color: #5d6591;
+}
+.home-page .discovery-confirm {
+  background: linear-gradient(135deg, var(--tone-ink), #3b4a9c);
+  box-shadow: 0 6px 18px rgba(38, 48, 106, 0.25);
+}

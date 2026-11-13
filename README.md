@@ -83,8 +83,9 @@ You  →  yana-web  →  Yana-AI core (router, safety, context)  →  Model
 | `yana-desktop/` | Electron shell that bundles this server. Its packaging config reads paths that exist only in Yana-AI, so build it there for now |
 | `_test_*.js`, `tests/` | Tests. CI runs every root `_test_*.js` file and the Astro build |
 
-Some files, for example `desktop-old/`, are kept from the earlier snapshot of this
-repository and have not been removed.
+Some files are kept from the earlier snapshot of this repository and have not been
+removed. `desktop-old/`, an unused copy of the earlier UI that nothing loaded or
+packaged, was removed on 2026-11-14 and stays in the git history.
 
 ### Where the website is served from
 

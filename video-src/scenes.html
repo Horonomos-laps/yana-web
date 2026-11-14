@@ -161,31 +161,38 @@ function sceneWork() {
 function sceneTerminal() {
   const w = el(`<div class="win dark term"><div class="tbar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span style="margin-left:10px">yana — zsh</span><span class="tag">MINH HOẠ</span></div><div class="tbody" id="t-body"></div></div>`);
   stage.append(w);
-  const L = [ // [start time, cps (0 = instant), html builder]
-    [.3, 14, '<span class="p">$</span> yana-rt chat'],
-    [1.7, 0, '<span class="dim">yana-rt · SUPERVISED · đọc: được · chạy lệnh: chờ duyệt</span>'],
-    [2.1, 16, '<span class="you">you ›</span> Xem project này trước khi sửa.'],
-    [3.7, 20, '<span class="ya">yana ›</span> Tôi sẽ đọc cấu trúc trước.'],
-    [4.9, 0, '<span class="okc">✓ read_file package.json        ALLOW</span>'],
-    [5.5, 16, '<span class="you">you ›</span> Dọn thư mục build cũ.'],
-    [6.8, 0, '<span class="warn">! CAPABILITY REQUEST  run_command  rm -rf ./dist ./.cache</span>'],
-    [7.2, 0, '<span class="dim">  Cho phép lệnh này? [y/N]</span>'],
-    [8.0, 0, '<span class="okc">✓ approved · đã ghi vào audit</span>'],
-    [8.6, 0, '<span class="p">$</span> <span id="t-cur">█</span>'],
+  // [start time, characters per second (0 = the whole line at once), parts of [css class, text]]
+  const L = [
+    [.3, 14, [['p', '$'], ['', ' yana-rt chat']]],
+    [1.7, 0, [['dim', 'yana-rt · SUPERVISED · đọc: được · chạy lệnh: chờ duyệt']]],
+    [2.1, 16, [['you', 'you ›'], ['', ' Xem project này trước khi sửa.']]],
+    [3.7, 20, [['ya', 'yana ›'], ['', ' Tôi sẽ đọc cấu trúc trước.']]],
+    [4.9, 0, [['okc', '✓ read_file package.json        ALLOW']]],
+    [5.5, 16, [['you', 'you ›'], ['', ' Dọn thư mục build cũ.']]],
+    [6.8, 0, [['warn', '! CAPABILITY REQUEST  run_command  rm -rf ./dist ./.cache']]],
+    [7.2, 0, [['dim', '  Cho phép lệnh này? [y/N]']]],
+    [8.0, 0, [['okc', '✓ approved · đã ghi vào audit']]],
+    [8.6, 0, [['p', '$'], ['', ' '], ['blink', '█']]],
   ];
-  const strip = s => s.replace(/<[^>]+>/g, '');
+  const escapeHtml = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Builds one line from its parts, showing only the first `shown` characters (typing effect).
+  const lineHtml = (parts, shown) => {
+    let left = shown;
+    return parts.map(([cls, text]) => {
+      const part = text.slice(0, Math.max(0, left));
+      left -= text.length;
+      return part ? `<span class="${cls}">${escapeHtml(part)}</span>` : '';
+    }).join('');
+  };
   return t => {
-    const out = L.map(([s, cps, html], i) => {
-      if (t < s) return null;
-      if (!cps) return i === 7 && t >= 7.7 ? html + ' <span class="you">y</span>' : html;
-      const txt = strip(html), n = Math.max(0, Math.min(txt.length, Math.floor((t - s) * cps)));
-      if (n >= txt.length) return html;
-      const lead = html.match(/^<span[^>]*>.*?<\/span>/);
-      const head = lead ? strip(lead[0]) : '';
-      return (lead ? lead[0] : '') + txt.slice(head.length, n).replace(/</g, '&lt;');
-    }).filter(Boolean);
+    const out = L.map(([start, cps, parts], i) => {
+      if (t < start) return null;
+      const shown = cps ? Math.floor((t - start) * cps) : Infinity;
+      // the answer to the "[y/N]" question appears at 7.7 s
+      return lineHtml(i === 7 && t >= 7.7 ? [...parts, ['you', ' y']] : parts, shown);
+    }).filter(line => line !== null);
     w.querySelector('#t-body').innerHTML = out.join('\n');
-    const c = w.querySelector('#t-cur'); if (c) c.style.opacity = Math.floor(t * 2) % 2 ? 0 : 1;
+    const blink = w.querySelector('.blink'); if (blink) blink.style.opacity = Math.floor(t * 2) % 2 ? 0 : 1;
   };
 }
 

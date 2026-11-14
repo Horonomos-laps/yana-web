@@ -48,3 +48,13 @@
   background: linear-gradient(135deg, var(--tone-ink), #3b4a9c);
   box-shadow: 0 6px 18px rgba(38, 48, 106, 0.25);
 }
+
+/* Demo heading block: the label is a pill like the hero badge, and "60 giây" uses the
+   hero's gradient word (yana-ink.js marks it as rainbow) instead of the blue selection box. */
+.home-page #live-demo .chapter-header .eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--tone-soft);
+  letter-spacing: 0.1em;
+}

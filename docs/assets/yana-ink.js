@@ -12,7 +12,7 @@
 
   // [heading selector, phrase to mark, kind of mark]
   const MARKS = [
-    ['#live-demo h2', '60 giây', 'box'],
+    ['#live-demo h2', '60 giây', 'rainbow'],
     ['#how-it-works h2', 'hành động', 'highlight-green'],
     ['#terminal-origin h2', 'terminal', 'circle'],
     ['#prologue h2 em', 'Một lớp quyền hạn', 'rainbow'],

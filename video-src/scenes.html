@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Yana demo scenes</title>
+<style>
+/* Source of docs/videos/*.mp4. Every scene is a pure function of time t (seconds), so a
+   frame is the same however many times it is rendered. See video-src/README.md. */
+:root { --ink:#26306a; --muted:#6b7399; --line:rgba(38,48,106,.10); --violet:#8b5cf6; --blue:#3b82f6;
+  --soft:#e8ebff; --green:#15803d; --green-bg:#dcfce7; --amber:#b45309; --amber-bg:#fef3c7; --red:#be123c; --red-bg:#ffe4e6;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+* { box-sizing:border-box; margin:0; }
+html,body { width:1920px; height:1246px; overflow:hidden; font-family:var(--sans); color:var(--ink); }
+#desk { position:relative; width:1920px; height:1246px;
+  background:radial-gradient(52% 48% at 16% 18%, #c8d6ff 0, transparent 72%),
+             radial-gradient(48% 52% at 88% 26%, #e6d4ff 0, transparent 72%),
+             radial-gradient(64% 56% at 62% 98%, #cde8ff 0, transparent 72%),
+             radial-gradient(40% 36% at 6% 92%, #ffd9ec 0, transparent 72%),
+             linear-gradient(160deg,#eef2ff,#e3e9ff 52%,#f2ebff); }
+#menubar { position:absolute; inset:0 0 auto 0; height:32px; display:flex; align-items:center; gap:22px; padding:0 22px;
+  font-size:14px; background:rgba(255,255,255,.55); backdrop-filter:blur(24px); border-bottom:1px solid var(--line); }
+#menubar b { font-weight:700; }
+#menubar .sp { flex:1; }
+.scene { position:absolute; inset:0; }
+.win { position:absolute; left:50%; transform:translateX(-50%); background:rgba(255,255,255,.86); backdrop-filter:blur(28px);
+  border-radius:22px; border:1px solid rgba(255,255,255,.9); overflow:hidden;
+  box-shadow:0 48px 100px -34px rgba(38,48,106,.42), 0 0 0 1px rgba(38,48,106,.07); }
+.win.dark { background:#171a33; color:#e8ebff; border-color:rgba(255,255,255,.08); }
+.tbar { height:46px; display:flex; align-items:center; gap:9px; padding:0 18px; border-bottom:1px solid var(--line); font-size:14px; color:var(--muted); }
+.dark .tbar { border-color:rgba(255,255,255,.08); color:#9aa3d9; }
+.dot { width:13px; height:13px; border-radius:50%; } .r{background:#ff5f57}.y{background:#febc2e}.g{background:#28c840}
+.tag { margin-left:auto; font:600 12px var(--mono); letter-spacing:.12em; color:#9aa3d9; }
+.caption { position:absolute; left:50%; transform:translateX(-50%); bottom:96px; padding:17px 34px; border-radius:999px;
+  background:#fff; font:700 30px var(--sans); box-shadow:0 18px 44px -18px rgba(38,48,106,.4); white-space:nowrap; letter-spacing:-.01em; }
+.caption em { font-style:normal; color:var(--violet); }
+.cursor { position:absolute; width:30px; height:30px; z-index:9; filter:drop-shadow(0 3px 5px rgba(0,0,0,.3)); }
+/* chat */
+.chat { top:92px; width:900px; height:850px; }
+.chead { display:flex; align-items:center; gap:12px; padding:22px 28px 10px; }
+.chead img { width:34px; height:37px; image-rendering:pixelated; }
+.chead h1 { font:800 26px var(--sans); }
+.chead .ok { margin-left:auto; display:flex; align-items:center; gap:8px; font:700 15px var(--sans); color:var(--green); }
+.chead .ok i { width:9px; height:9px; border-radius:50%; background:#22c55e; }
+.sup { margin:6px 28px 0; display:flex; align-items:center; gap:14px; font-size:15px; color:var(--muted); }
+.pill { font:700 12px var(--mono); letter-spacing:.1em; padding:5px 11px; border-radius:999px; background:var(--soft); color:var(--violet); }
+.card { margin:18px 28px 0; border:1px solid var(--line); border-radius:16px; padding:16px 20px; background:rgba(255,255,255,.7); }
+.lab { font:700 12px var(--mono); letter-spacing:.12em; color:var(--muted); margin-bottom:8px; }
+.intent { font:600 19px var(--sans); }
+.status { font:800 16px var(--sans); margin-bottom:12px; }
+.row { display:flex; align-items:center; gap:12px; padding:8px 0; font:15px var(--mono); border-top:1px solid var(--line); }
+.row:first-of-type { border-top:0; }
+.row .chip { margin-left:auto; font:800 12px var(--mono); letter-spacing:.08em; padding:4px 10px; border-radius:999px; }
+.c-allow { background:var(--green-bg); color:var(--green); } .c-req { background:var(--amber-bg); color:var(--amber); } .c-deny { background:var(--red-bg); color:var(--red); }
+.appr { border-color:#f5d28a; background:#fffaf0; }
+.appr .top { display:flex; align-items:center; font:800 17px var(--sans); color:var(--amber); }
+.appr .top span { margin-left:auto; font:700 14px var(--mono); }
+.code { margin:12px 0; padding:12px 14px; border-radius:10px; background:#171a33; color:#e8ebff; font:16px var(--mono); }
+.btns { display:flex; gap:12px; } .btn { flex:1; text-align:center; padding:13px; border-radius:12px; font:800 16px var(--sans); }
+.b-ok { background:linear-gradient(135deg,#22c55e,#15803d); color:#fff; } .b-no { background:#fff; border:1px solid var(--line); color:var(--muted); }
+.done { font:600 17px var(--sans); }
+.input { position:absolute; left:28px; right:28px; bottom:26px; height:64px; border-radius:16px; border:1px solid var(--line); background:#fff;
+  display:flex; align-items:center; padding:0 12px 0 20px; font:19px var(--sans); }
+.input .ph { color:#9aa3d9; } .input .send { margin-left:auto; width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--blue)); color:#fff; display:grid; place-items:center; font-size:22px; }
+.caret { display:inline-block; width:2px; height:22px; background:var(--violet); vertical-align:-4px; margin-left:1px; }
+/* terminal */
+.term { top:150px; width:1320px; height:900px; }
+.tbody { padding:26px 32px; font:23px/1.55 var(--mono); color:#d6dbff; white-space:pre-wrap; }
+.tbody .p { color:#4ade80; } .tbody .dim { color:#8f98d0; } .tbody .you { color:#7dd3fc; } .tbody .ya { color:#c4b5fd; }
+.tbody .okc { color:#4ade80; font-weight:700; } .tbody .warn { color:#fbbf24; font-weight:700; }
+/* audit */
+.audit { top:140px; width:1330px; min-height:340px; }
+.ahead { display:flex; align-items:center; padding:24px 30px 14px; font:800 28px var(--sans); }
+.ahead span { margin-left:auto; font:700 16px var(--sans); color:var(--green); }
+.arow { display:grid; grid-template-columns:120px 1fr auto; gap:6px 18px; padding:15px 30px; border-top:1px solid var(--line); font:21px var(--mono); }
+.arow .tm { color:var(--muted); } .arow .st { font-weight:800; } .arow .h { grid-column:2; font-size:15px; color:var(--muted); }
+.arow .h b { background:var(--soft); color:var(--violet); padding:1px 6px; border-radius:5px; font-weight:700; }
+.arow .h b.hl { background:#c7d2fe; box-shadow:0 0 0 3px rgba(139,92,246,.25); }
+.st.allow { color:var(--green); } .st.appr { color:var(--blue); } .st.deny { color:var(--red); }
+/* capabilities */
+.mem { top:330px; width:1000px; } .mem .mf { padding:16px 24px; font:600 16px var(--mono); color:var(--muted); border-bottom:1px solid var(--line); }
+.mem .mb { padding:22px 24px 26px; font:600 25px/1.7 var(--mono); } .mb h2 { font:800 25px var(--mono); color:var(--violet); }
+.mb .cur { background:var(--soft); margin:0 -24px; padding:0 24px; }
+.rt { top:330px; width:1000px; padding:26px 32px; } .rt h3 { font:800 24px var(--sans); margin-bottom:12px; }
+.rline { display:flex; padding:13px 0; font:20px var(--sans); border-top:1px solid var(--line); } .rline span:first-child { color:var(--muted); } .rline span:last-child { margin-left:auto; font-weight:700; }
+.good { color:var(--green); }
+.wel { top:300px; width:1000px; height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; }
+.wel img.lg { width:112px; height:123px; image-rendering:pixelated; } .wel h2 { font:800 46px var(--sans); letter-spacing:-.02em; text-align:center; }
+.lang { display:flex; align-items:center; gap:10px; font:600 16px var(--sans); color:var(--muted); position:absolute; top:22px; right:30px; }
+.lang b { padding:7px 14px; border-radius:999px; background:#fff; border:1px solid var(--line); color:var(--ink); font-weight:700; }
+.lang b.on { background:linear-gradient(135deg,var(--violet),var(--blue)); color:#fff; border-color:transparent; }
+</style>
+</head>
+<body>
+<div id="desk">
+  <div id="menubar"><b>Yana Studio</b><span>Tệp</span><span>Sửa</span><span>Chọn</span><span>Xem</span><span>Đi</span><span>Chạy</span><span>Cửa sổ</span><span>Trợ giúp</span><span class="sp"></span><span>09:41</span></div>
+  <div id="stage"></div>
+</div>
+<script>
+'use strict';
+const RABBIT = '../docs/yana-rabbit.svg';
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const ease = x => 1 - Math.pow(1 - clamp(x), 3);
+const seg = (t, a, d) => clamp((t - a) / d);                  // 0..1 progress of a segment
+const show = (el, on) => { el.style.display = on ? '' : 'none'; };
+const fade = (el, p, rise = 12) => { el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * rise}px)`; };
+const typed = (text, t, start, cps) => text.slice(0, Math.max(0, Math.min(text.length, Math.floor((t - start) * cps))));
+const el = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
+const CURSOR = '<svg viewBox="0 0 24 24" class="cursor"><path d="M4 2l15 9-6.5 1.6L9 19z" fill="#171a33" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const stage = document.getElementById('stage');
+
+function caption(parts) { // parts: [[from, to, html], ...]
+  const c = el('<div class="caption"></div>'); stage.append(c);
+  return t => { const p = parts.find(x => t >= x[0] && t < x[1]); show(c, !!p); if (p) { c.innerHTML = p[2]; fade(c, Math.min(seg(t, p[0], .35), 1 - seg(t, p[1] - .3, .3)), 14); c.style.transform = `translateX(-50%) translateY(${(1 - Math.min(seg(t, p[0], .35), 1 - seg(t, p[1] - .3, .3))) * 14}px)`; } };
+}
+
+/* ---------------- work: chat with an approval ---------------- */
+function sceneWork() {
+  const task = 'Dọn các thư mục build cũ trong dự án';
+  const w = el(`<div class="win chat"><div class="chead"><img src="${RABBIT}" alt=""><h1>Yana</h1><div class="ok"><i></i>Sẵn sàng</div></div>
+    <div class="sup"><span class="pill">CÓ GIÁM SÁT</span><span>Đọc dự án: được. Chạy lệnh: chờ bạn duyệt.</span></div>
+    <div class="card" id="w-intent"><div class="lab">YÊU CẦU CỦA BẠN</div><div class="intent">${task}</div></div>
+    <div class="card" id="w-run"><div class="status" id="w-status"></div>
+      <div class="row" id="w-r1"><span class="good">✓</span><span>read_file package.json</span><span class="chip c-allow">CHO PHÉP</span></div>
+      <div class="row" id="w-r2"><span id="w-r2i">▶</span><span>run_command rm -rf ./dist ./.cache</span><span class="chip" id="w-r2c"></span></div></div>
+    <div class="card appr" id="w-appr"><div class="top">⚠ Cần bạn duyệt<span id="w-timer">29:58</span></div>
+      <div style="margin-top:8px;font:16px var(--sans)">Yana muốn dùng <b style="font-family:var(--mono);color:var(--violet)">run_command</b></div>
+      <div class="code">rm -rf ./dist ./.cache</div>
+      <div class="btns"><div class="btn b-ok" id="w-ok">Duyệt</div><div class="btn b-no">Từ chối</div></div></div>
+    <div class="card" id="w-done"><div class="done">Đã xoá <b>dist</b> và <b>.cache</b>. Lệnh đã ghi vào Audit.</div></div>
+    <div class="input"><span id="w-text"></span><span class="caret" id="w-caret"></span><span class="ph" id="w-ph">Giao việc cho Yana…</span><div class="send">↑</div></div></div>`);
+  const cur = el(CURSOR); stage.append(w, cur);
+  const cap = caption([[.3, 3.4, 'Giao việc bằng <em>tiếng Việt</em>.'], [3.6, 5.4, 'Đọc dự án: <em>luôn được phép</em>.'], [5.5, 9.6, 'Chạy lệnh: <em>phải chờ bạn duyệt</em>.'], [9.8, 12.2, 'Mọi quyết định đều <em>vào Audit</em>.']]);
+  const $ = id => w.querySelector('#' + id);
+  return t => {
+    const typing = t < 3.1;
+    $('w-text').textContent = typing ? typed(task, t, .9, 16) : '';
+    show($('w-ph'), t < .9); show($('w-caret'), typing && Math.floor(t * 2) % 2 === 0 || (t > .9 && t < 3.1));
+    show($('w-intent'), t >= 3.2); fade($('w-intent'), ease(seg(t, 3.2, .4)));
+    show($('w-run'), t >= 3.5); fade($('w-run'), ease(seg(t, 3.5, .4)));
+    const st = t < 5.3 ? ['Đang chạy', 'var(--green)'] : t < 8.9 ? ['Tạm dừng, chờ bạn duyệt', 'var(--amber)'] : t < 10.1 ? ['Đang chạy', 'var(--green)'] : ['✓ Xong', 'var(--green)'];
+    $('w-status').textContent = st[0]; $('w-status').style.color = st[1];
+    show($('w-r1'), t >= 4); fade($('w-r1'), ease(seg(t, 4, .35)), 8);
+    show($('w-r2'), t >= 4.8); fade($('w-r2'), ease(seg(t, 4.8, .35)), 8);
+    const appr = t >= 8.9;
+    $('w-r2c').className = 'chip ' + (appr ? 'c-allow' : 'c-req'); $('w-r2c').textContent = appr ? 'ĐÃ DUYỆT' : 'CẦN DUYỆT'; $('w-r2i').textContent = appr ? '✓' : '▶'; $('w-r2i').className = appr ? 'good' : '';
+    show($('w-appr'), t >= 5.5 && t < 9.4); fade($('w-appr'), ease(seg(t, 5.5, .4)) * (1 - seg(t, 9.0, .35)), 10);
+    $('w-timer').textContent = '0:' + String(Math.max(0, 59 - Math.floor(t - 5.5))).padStart(2, '0');
+    show($('w-done'), t >= 10.1); fade($('w-done'), ease(seg(t, 10.1, .4)));
+    // cursor: from the corner to the Approve button, press at 8.7
+    const b = $('w-ok').getBoundingClientRect();
+    const tx = b.left + b.width / 2 - 6, ty = b.top + b.height / 2 - 4, p = ease(seg(t, 6.6, 1.9));
+    cur.style.left = (1500 + (tx - 1500) * p) + 'px'; cur.style.top = (1000 + (ty - 1000) * p) + 'px';
+    show(cur, t >= 6.5 && t < 9.3);
+    $('w-ok').style.transform = (t > 8.6 && t < 8.85) ? 'scale(.95)' : 'none';
+    cap(t);
+  };
+}
+
+/* ---------------- terminal ---------------- */
+function sceneTerminal() {
+  const w = el(`<div class="win dark term"><div class="tbar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span style="margin-left:10px">yana — zsh</span><span class="tag">MINH HOẠ</span></div><div class="tbody" id="t-body"></div></div>`);
+  stage.append(w);
+  const L = [ // [start time, cps (0 = instant), html builder]
+    [.3, 14, '<span class="p">$</span> yana-rt chat'],
+    [1.7, 0, '<span class="dim">yana-rt · SUPERVISED · đọc: được · chạy lệnh: chờ duyệt</span>'],
+    [2.1, 16, '<span class="you">you ›</span> Xem project này trước khi sửa.'],
+    [3.7, 20, '<span class="ya">yana ›</span> Tôi sẽ đọc cấu trúc trước.'],
+    [4.9, 0, '<span class="okc">✓ read_file package.json        ALLOW</span>'],
+    [5.5, 16, '<span class="you">you ›</span> Dọn thư mục build cũ.'],
+    [6.8, 0, '<span class="warn">! CAPABILITY REQUEST  run_command  rm -rf ./dist ./.cache</span>'],
+    [7.2, 0, '<span class="dim">  Cho phép lệnh này? [y/N]</span>'],
+    [8.0, 0, '<span class="okc">✓ approved · đã ghi vào audit</span>'],
+    [8.6, 0, '<span class="p">$</span> <span id="t-cur">█</span>'],
+  ];
+  const strip = s => s.replace(/<[^>]+>/g, '');
+  return t => {
+    const out = L.map(([s, cps, html], i) => {
+      if (t < s) return null;
+      if (!cps) return i === 7 && t >= 7.7 ? html + ' <span class="you">y</span>' : html;
+      const txt = strip(html), n = Math.max(0, Math.min(txt.length, Math.floor((t - s) * cps)));
+      if (n >= txt.length) return html;
+      const lead = html.match(/^<span[^>]*>.*?<\/span>/);
+      const head = lead ? strip(lead[0]) : '';
+      return (lead ? lead[0] : '') + txt.slice(head.length, n).replace(/</g, '&lt;');
+    }).filter(Boolean);
+    w.querySelector('#t-body').innerHTML = out.join('\n');
+    const c = w.querySelector('#t-cur'); if (c) c.style.opacity = Math.floor(t * 2) % 2 ? 0 : 1;
+  };
+}
+
+/* ---------------- audit chain ---------------- */
+function sceneAudit() {
+  const rows = [
+    ['14:20:51', 'read_file package.json', 'allow', 'cho phép', 'GENESIS', 'a91f…3c', .2],
+    ['14:21:40', 'run_command rm -rf ./dist ./.cache', 'appr', 'đã duyệt', 'a91f…3c', '3c2e…9b', 1.5],
+    ['14:23:02', 'write_file .env', 'deny', 'từ chối', '3c2e…9b', '7d04…e1', 2.9],
+    ['14:23:30', 'read_file src/index.ts', 'allow', 'cho phép', '7d04…e1', 'b812…40', 4.3],
+  ];
+  const w = el(`<div class="win audit"><div class="ahead">Nhật ký Audit<span>✓ đã liên kết</span></div>${rows.map((r, i) => `<div class="arow" id="a${i}"><div class="tm">${r[0]}</div><div>${r[1]}</div><div class="st ${r[2]}">${r[3]}</div><div class="h">prev <b id="a${i}p">${r[4]}</b> → hash <b>${r[5]}</b></div></div>`).join('')}</div>`);
+  stage.append(w);
+  return t => {
+    rows.forEach((r, i) => {
+      const row = w.querySelector('#a' + i), on = t >= r[6];
+      show(row, on); fade(row, ease(seg(t, r[6], .45)), 10);
+      w.querySelector(`#a${i}p`).className = (i > 0 && t >= r[6] && t < r[6] + 1.1) ? 'hl' : '';
+    });
+  };
+}
+
+/* ---------------- capabilities: memory, models, languages ---------------- */
+function sceneCaps() {
+  const line = 'Chú thích code bằng tiếng Việt';
+  const mem = el(`<div class="win mem"><div class="mf">▤ .yana-ai/project-memory.md</div><div class="mb"><h2>## Quy ước</h2><div>- Mọi lệnh xoá phải qua ActionGate</div><div class="cur" id="m-line">- <span id="m-t"></span><span class="caret"></span></div></div></div>`);
+  const rt = el(`<div class="win rt"><h3>Runtime &amp; Mô hình AI</h3><div class="rline"><span>Yana runtime</span><span class="good">yana-rt</span></div>
+    <div class="rline"><span>Mô hình chat</span><span id="r-m">Groq · openai/gpt-oss-120b</span></div><div class="rline"><span>Ollama</span><span id="r-o" style="color:var(--muted)">chưa chạy</span></div><div class="rline"><span>LM Studio</span><span style="color:var(--muted)">chưa chạy</span></div></div>`);
+  const wel = el(`<div class="win wel"><div class="lang"><span id="l-label">Chọn ngôn ngữ hiển thị</span><b id="l-vi">Tiếng Việt</b><b id="l-en">English</b><b id="l-ko">한국어</b></div><img class="lg" src="${RABBIT}" alt=""><h2 id="l-h"></h2></div>`);
+  stage.append(mem, rt, wel);
+  const lang = [['Chào mừng đến Yana Studio', 'Chọn ngôn ngữ hiển thị', 'vi'], ['Welcome to Yana Studio', 'Select display language', 'en'], ['야나 스튜디오에 오신 것을 환영합니다', '표시 언어 선택', 'ko']];
+  const vis = (n, p) => { show(n, p > 0.001); n.style.opacity = p; n.style.transform = `translateX(-50%) translateY(${(1 - p) * 16}px)`; };
+  return t => {
+    mem.querySelector('#m-t').textContent = typed(line, t, .5, 12);
+    vis(mem, ease(seg(t, 0, .4)) * (1 - seg(t, 2.7, .3)));
+    const swap = t >= 4.9;
+    rt.querySelector('#r-m').innerHTML = swap ? '<span class="good">Ollama · qwen2.5-coder</span>' : 'Groq · openai/gpt-oss-120b';
+    rt.querySelector('#r-o').innerHTML = swap ? '<span class="good">đang chạy</span>' : 'chưa chạy';
+    vis(rt, ease(seg(t, 3.0, .4)) * (1 - seg(t, 5.8, .3)));
+    const li = t < 7.0 ? 0 : t < 8.0 ? 1 : 2;
+    wel.querySelector('#l-h').textContent = lang[li][0]; wel.querySelector('#l-label').textContent = lang[li][1];
+    ['vi', 'en', 'ko'].forEach((k, i) => wel.querySelector('#l-' + k).className = i === li ? 'on' : '');
+    vis(wel, ease(seg(t, 6.1, .4)));
+  };
+}
+
+const SCENES = { work: sceneWork, terminal: sceneTerminal, audit: sceneAudit, caps: sceneCaps };
+let update = () => {};
+window.loadScene = name => { stage.innerHTML = ''; update = SCENES[name](); update(0); };
+window.renderAt = t => { update(t); return true; };
+</script>
+</body>
+</html>

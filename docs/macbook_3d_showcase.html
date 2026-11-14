@@ -51,7 +51,8 @@
   .device.is-dragging { cursor: grabbing; }
   /* A transparent layer over the 3D iframe so a swipe on the Mac reaches this page (an iframe swallows pointer events). */
   .swipe { position: absolute; inset: 0; }
-  .swipe-hint { margin-top: 6px; text-align: center; font-size: .8rem; color: var(--muted); }
+  .swipe-hint { margin-top: 6px; text-align: center; font-size: .86rem; color: var(--muted); }
+  .swipe-hint b { color: var(--violet); }
   .device iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; transition: opacity .45s ease; }
   .pin.is-photo .device iframe { opacity: 0; pointer-events: none; }
 
@@ -137,7 +138,7 @@
           <img class="mac-photo-bezel" src="assets/apple-macbook-pro-14-silver.webp" alt="" aria-hidden="true" width="1930" height="1270" loading="lazy">
         </div>
       </div>
-      <p class="swipe-hint">Vuốt lên hoặc cuộn xuống để mở nắp máy, vuốt xuống để gập lại</p>
+      <p class="swipe-hint"><b>↑ Vuốt lên</b> hoặc cuộn xuống để mở nắp máy · vuốt xuống để gập lại</p>
     </div>
   </main>
 
@@ -158,7 +159,6 @@
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const PHOTO_AT = 0.98;        // lid value at which the photographed MacBook takes over
     const OPEN_MS = 2400;         // a full close or open
-    const FIRST_OPEN_DELAY_MS = 700;
     const GATE_RESET_MS = 3500;   // the approval card asks again this long after an answer
     const GATE_RESULT = { allow: '✓ Đã chạy · đã ghi vào audit', deny: '✕ Đã chặn · đã ghi vào audit' };
 
@@ -245,8 +245,7 @@
       if (!res.ok || res.headers.get('x-vercel-error')) throw new Error(`embed ${res.status}`);
       hasEmbed = true;
       frame.src = frame.dataset.embedSrc;
-      setLid(0);
-      setTimeout(() => animateTo(1), FIRST_OPEN_DELAY_MS);
+      setLid(0); // starts folded, like the home page: the visitor opens it
     }).catch(() => {
       // No 3D embed deployed: show the photographed Mac straight away and hide the lid controls.
       hasEmbed = false;

@@ -34,6 +34,21 @@ jobs:
           done
           exit $fail
 
+      # The web app's own modules keep their tests next to them (desktop-src/lib, desktop-src/new-app),
+      # which the loop above never reached. Each test runs from its own folder.
+      - name: Run every _test_ file under desktop-src
+        run: |
+          fail=0
+          for f in $(find desktop-src -type f \( -name '_test_*.js' -o -name '_test_*.mjs' \) -not -path '*/node_modules/*' | sort); do
+            echo "::group::$f"
+            if ! (cd "$(dirname "$f")" && timeout 120 node "$(basename "$f")"); then
+              echo "FAILED: $f"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
+
       - name: Website tests (Python, standard library)
         run: python3 -m unittest discover -s tests -p "test_*.py" -v
 

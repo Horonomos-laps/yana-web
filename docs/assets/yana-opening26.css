@@ -31,7 +31,7 @@ html.opening26-lock, html.opening26-lock body { overflow: hidden }
   box-shadow: inset 0 2px 0 #fff, 0 30px 60px -24px rgba(59, 111, 224, .6);
   animation: opening26-pop .7s cubic-bezier(.34, 1.8, .5, 1) both;
 }
-.opening26-emblem img { width: 62% }
+.opening26-emblem img { width: 56%; height: auto }
 .opening26-line {
   position: relative; margin: 0; height: 1.6em; width: 24ch;
   font: 700 1.05rem/1.6 "Nunito", ui-sans-serif, system-ui, sans-serif; color: #26306a; text-align: center;

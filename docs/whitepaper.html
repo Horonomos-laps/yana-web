@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Báo cáo Kỹ thuật Yana AI · Technical Whitepaper 2026</title>
-  <meta name="description" content="Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy. Báo cáo kiến trúc kỹ thuật và kết quả phát triển qua 2.488 commit.">
+  <title>Báo cáo Kỹ thuật Yana AI · Technical Whitepaper 2026 (cập nhật 11/2026)</title>
+  <meta name="description" content="Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy. Báo cáo kiến trúc kỹ thuật và kết quả phát triển qua 2.627 commit (cập nhật 14/11/2026).">
   <link rel="canonical" href="https://yana.vutam.link/whitepaper.html">
   <link rel="alternate" hreflang="vi" href="https://yana.vutam.link/whitepaper.html">
   <link rel="alternate" hreflang="en" href="https://yana.vutam.link/whitepaper-en.html">
@@ -44,7 +44,7 @@
             </svg>
             Tải Whitepaper (PDF)
           </a>
-          <span style="font-size:0.85rem;color:var(--wp-text-dim);">Bản chính thức · 6 Trang (84 KB)</span>
+          <span style="font-size:0.85rem;color:var(--wp-text-dim);">Bản cập nhật 11/2026 · 25 trang (2,3 MB, tiếng Anh)</span>
         </div>
         <div class="wp-lang-nav">
           <a href="whitepaper.html" class="is-active">Tiếng Việt</a>
@@ -55,12 +55,12 @@
       <!-- Header & Document Metadata -->
       <header class="wp-header">
         <div class="wp-badge-row">
-          <span class="wp-badge wp-badge--primary">BÁO CÁO DỰ ÁN · BẢN CÔNG BỐ LẦN ĐẦU</span>
+          <span class="wp-badge wp-badge--primary">BÁO CÁO DỰ ÁN · BẢN CẬP NHẬT 11/2026</span>
           <span class="wp-badge wp-badge--accent">CONTROL · VERIFY · PROTECT</span>
-          <span class="wp-badge wp-badge--tag">Yana Studio IDE 1.7</span>
+          <span class="wp-badge wp-badge--tag">Yana 1.0 · yana-rt 1.5.2</span>
         </div>
         <h1 class="wp-title">Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy</h1>
-        <p class="wp-subtitle">Sáu tháng xây dựng: Từ một kho mã trống đến Yana Studio IDE 1.7</p>
+        <p class="wp-subtitle">Gần sáu tháng xây dựng: từ một kho mã trống đến Yana 1.0 và hệ sinh thái ba kho mã</p>
 
         <dl class="wp-meta-grid">
           <div class="wp-meta-item">
@@ -73,7 +73,7 @@
           </div>
           <div class="wp-meta-item">
             <dt>Ngày công bố & Giấy phép</dt>
-            <dd>26 tháng 10, 2026 · Apache 2.0</dd>
+            <dd>14 tháng 11, 2026 · Apache 2.0 (bản đầu: 26/10/2026)</dd>
           </div>
           <div class="wp-meta-item">
             <dt>Mã nguồn & Cổng thông tin</dt>
@@ -84,13 +84,13 @@
 
       <!-- Abstract Section -->
       <section class="wp-abstract">
-        <div class="wp-abstract-title">Tóm tắt (Abstract)</div>
-        <p>Các agent lập trình hiện nay có thể xóa thư mục, đẩy mã lên kho chung hoặc đọc khóa API chỉ bằng một dòng lệnh, còn lời dặn <em>"hãy cẩn thận"</em> trong prompt không đủ để ngăn điều đó. Yana AI tách hai việc: <strong>kỹ năng (skills)</strong> dạy agent cách làm, còn <strong>quyền hành động (capabilities)</strong> chỉ đến từ một lớp riêng chạy trực tiếp trên máy người dùng. Mô hình đề xuất, Yana quyết định, con người luôn giữ quyền dừng.</p>
-        <p>Báo cáo này trình bày thiết kế, hiện thực và quá trình phát triển trong <strong>2.488 commit</strong> (từ 17/05 đến 26/10/2026), các số đo hiệu năng thực nghiệm, cách chúng tôi kiểm chứng tính an toàn, và những giới hạn còn lại. Sản phẩm hiện hành là <strong>Yana Studio IDE 1.7</strong> cho macOS (Apple Silicon), dựng trên nền Code-OSS và giao tiếp với 19 nhà cung cấp mô hình qua một runtime Rust duy nhất (<code>yana-rt</code>).</p>
-        <div class="wp-keywords">
-          <strong>Từ khóa:</strong> An toàn agent AI, kiểm soát quyền (capability governance), nhật ký nối băm (hash-chained audit logs), Model Context Protocol (MCP), Rust, Code-OSS.
-        </div>
-      </section>
+<div class="wp-abstract-title">Tóm tắt (Abstract)</div>
+<p>Các agent lập trình hiện nay có thể xóa thư mục, đẩy mã lên kho chung hoặc đọc khóa API chỉ bằng một dòng lệnh, còn lời dặn <em>"hãy cẩn thận"</em> trong prompt không đủ để ngăn điều đó. Yana AI tách hai việc: <strong>kỹ năng (skills)</strong> dạy agent cách làm, còn <strong>quyền hành động (capabilities)</strong> chỉ đến từ một lớp riêng chạy trực tiếp trên máy người dùng. Mô hình đề xuất, Yana quyết định, con người luôn giữ quyền dừng.</p>
+<p>Đây là bản cập nhật ngày 14/11/2026 của báo cáo công bố ngày 26/10/2026. Báo cáo trình bày thiết kế, hiện thực và quá trình phát triển trong <strong>2.627 commit</strong> (từ 17/05 đến 14/11/2026), các số đo hiệu năng, cách chúng tôi kiểm chứng tính an toàn, và những giới hạn còn lại. Hệ sinh thái nay gồm ba kho mã: <strong>Yana-AI</strong> (runtime Rust <code>yana-rt</code>, lớp quản trị, CLI), <strong>Yana-studio</strong> (ứng dụng macOS Yana 1.0, Studio và IDE) và <strong>yana-web</strong> (website và web app). Studio gửi mọi yêu cầu mô hình qua một runtime duy nhất (<code>yana-rt</code> 1.5.2) với 19 nhà cung cấp.</p>
+<div class="wp-keywords">
+<strong>Từ khóa:</strong> An toàn agent AI, kiểm soát quyền (capability governance), nhật ký nối băm (hash-chained audit logs), Model Context Protocol (MCP), Rust, Code-OSS.
+</div>
+</section>
 
       <!-- Section 1: Problem Statement -->
       <section class="wp-section" id="problem">
@@ -178,101 +178,69 @@
         </figure>
 
         <h3 class="wp-subsec-title">3.2 Kiến trúc hệ sinh thái (Ecosystem Architecture)</h3>
-        <div class="wp-prose">
-          <ul>
-            <li><strong>Agent Hosts (Bộ chuyển đổi thích ứng):</strong> Interceptor chặn cuộc gọi công cụ tại runtime cho Claude Code, hook theo dự án cho Codex, bộ lọc lệnh shell cho Cursor và Antigravity.</li>
-            <li><strong>Yana Applications (tools/):</strong> Yana Studio IDE 1.7 (macOS trên Code-OSS 1.141), Studio Electron tiền thân, CLI <code>yana-ai</code> (Python) và 14 máy chủ MCP bản địa.</li>
-            <li><strong>Lớp Quản trị (core/):</strong> Runtime <code>yana-rt</code> (Rust) cung cấp 40 lệnh con không phụ thuộc Python; <code>core-lock.json</code> ghim mã băm SHA-256 của ~290 tệp lõi; cổng duyệt người dùng; và <strong>Giám Thị (Supervisor)</strong> — daemon độc lập chạy trên trình lập lịch OS (launchd, systemd) ngoài tiến trình AI, khóa thực thi ngay khi phát hiện lệch cấu hình.</li>
-            <li><strong>Lớp Tri thức (Knowledge Layer):</strong> 60 role agents, 2.027 skills, 170 slash commands, 71 behavioral rules và 66 pre/post-tool hooks. Tri thức chỉ hướng dẫn agent cách làm, tuyệt đối không tự trao quyền thực thi.</li>
-            <li><strong>Động cơ Mô hình (Model Engine):</strong> Bộ định tuyến hợp nhất kết nối 13 cloud API (Anthropic, OpenAI, Gemini, Groq, DeepSeek, OpenRouter, xAI, Kimi) và 6 runtime cục bộ (Ollama, LM Studio, llama.cpp, TurboFieldfare, AirLLM, 9Router).</li>
-          </ul>
-        </div>
-
-        <figure class="wp-figure">
-          <img src="assets/fig-2-ecosystem.png" alt="Hình 2. Các thành phần của hệ sinh thái Yana AI" loading="lazy">
-          <figcaption class="wp-figure-caption"><strong>Hình 2.</strong> Các thành phần của hệ sinh thái. Nét đứt biểu thị ranh giới độc lập của các tác nhân AI; mọi lời gọi tài nguyên hệ thống đều hội tụ về lõi kiểm soát tập trung.</figcaption>
-        </figure>
-
-        <h3 class="wp-subsec-title">3.3 Phân bổ cấu trúc mã nguồn (Codebase Distribution)</h3>
-        <div class="wp-code-block">
+<div class="wp-prose">
+<ul>
+<li><strong>Agent Hosts (Bộ chuyển đổi thích ứng):</strong> Interceptor chặn cuộc gọi công cụ tại runtime cho Claude Code, hook theo dự án cho Codex, bộ lọc lệnh shell cho Cursor và Antigravity.</li>
+<li><strong>Ba kho mã (từ 11/2026):</strong> <strong>Yana-AI</strong> giữ runtime <code>yana-rt</code>, lớp quản trị, CLI <code>yana-ai</code> (Python) và lớp tri thức. <strong>Yana-studio</strong> giữ ứng dụng macOS Yana (SwiftUI), Yana Studio (Electron) và Yana IDE (lớp tùy biến trên Code-OSS). <strong>yana-web</strong> giữ website yana.vutam.link và web app chạy cục bộ (chat, missions, két khóa API mã hóa AES-256-GCM).</li>
+<li><strong>Lớp Quản trị:</strong> Runtime <code>yana-rt</code> (Rust) cung cấp 42 lệnh con không phụ thuộc Python và một máy chủ MCP bản địa với 16 công cụ; <code>core-lock.json</code> ghim mã băm SHA-256 của khoảng 290 tệp lõi; cổng duyệt của người dùng trong phiên; lệnh <code>authority verify</code> kiểm tra mọi lần thực thi đều truy về một quyết định cho phép; và <strong>Giám Thị (Supervisor)</strong>, daemon độc lập chạy trên trình lập lịch OS (launchd, systemd) ngoài tiến trình AI, khóa thực thi khi phát hiện lệch cấu hình. Giám Thị là tùy chọn và không bao giờ được cài khi chưa có sự đồng ý rõ ràng.</li>
+<li><strong>Lớp Tri thức (Knowledge Layer):</strong> 100 agent chuyên biệt, 2.035 skills, 170 slash commands, 71 luật hành vi và 66 hook trước/sau công cụ (đếm bằng <code>core/scripts/check_counts.py</code>, CI kiểm tra). Tri thức chỉ hướng dẫn agent cách làm, không bao giờ tự trao quyền thực thi.</li>
+<li><strong>Động cơ Mô hình (Model Engine):</strong> Bộ định tuyến hợp nhất kết nối 19 nhà cung cấp: 13 cloud (Anthropic, OpenAI, Gemini, Groq, DeepSeek, OpenRouter, xAI, Novita, NVIDIA, MiniMax, GLM, Hugging Face, Kimi) và 6 runtime cục bộ hoặc bộ định tuyến (Ollama, LM Studio, llama.cpp, TurboFieldfare, AirLLM, 9Router).</li>
+</ul>
+</div>
+<figure class="wp-figure">
+<img src="assets/fig-ecosystem-2026-11-vi.svg" alt="Hình 2. Ba kho mã và lõi kiểm soát" loading="lazy">
+<figcaption class="wp-figure-caption"><strong>Hình 2.</strong> Ba kho mã và lõi kiểm soát. Studio gửi mọi yêu cầu mô hình qua <code>yana-rt</code>; website và web app nằm ở kho riêng. Nét đứt: web app có bộ kết nối nhà cung cấp riêng và không đi qua <code>yana-rt</code>.</figcaption>
+</figure>
+<h3 class="wp-subsec-title">3.3 Phân bổ cấu trúc mã nguồn (Codebase Distribution)</h3>
+<div class="wp-code-block">
 <pre><code><span class="c-tree">Yana-AI/</span>
-├── <span class="c-cmd">src/</span> <span class="c-comment">yana-rt runtime: 313 file Rust, 82.133 dòng</span>
+├── <span class="c-cmd">src/</span> <span class="c-comment">yana-rt runtime: 328 file Rust, 83.717 dòng</span>
 │   ├── <span class="c-arg">capability/</span> <span class="c-comment">hệ thống quyền, thực thi dùng chung cho chat và MCP</span>
-│   ├── <span class="c-arg">guard/</span>      <span class="c-comment">chặn lệnh nguy hiểm, pipe-to-shell, quyền ghi</span>
-│   ├── <span class="c-arg">model/</span>      <span class="c-comment">19 nhà cung cấp mô hình, failover, xoay vòng API key</span>
+│   ├── <span class="c-arg">guard/</span> <span class="c-comment">chặn lệnh nguy hiểm, quyền ghi, ngân sách token</span>
+│   ├── <span class="c-arg">model/</span> <span class="c-comment">19 nhà cung cấp mô hình, failover, xoay vòng API key</span>
 │   ├── <span class="c-arg">session_db/</span> <span class="c-comment">kho phiên SQLite, tìm kiếm toàn văn, checkpoint rollback</span>
-│   ├── <span class="c-arg">os/</span>         <span class="c-comment">Yana OS: danh tính agent, hạn mức tài nguyên, giám sát</span>
-│   └── <span class="c-comment">chat/, mission/, memory/, doctor/, scanner/, … (50 mô-đun cấp cao)</span>
-├── <span class="c-cmd">core/</span> <span class="c-comment">lớp quản trị và tri thức (66 hooks, 71 rules, 2.027 skills)</span>
-├── <span class="c-cmd">tools/</span> <span class="c-comment">yana-ide (Code-OSS 1.141), studio electron cũ, cầu nối desktop & web</span>
+│   ├── <span class="c-arg">os/</span> <span class="c-comment">Yana OS: danh tính agent, hạn mức tài nguyên, giám sát</span>
+│   └── <span class="c-comment">chat/, mission/, memory/, doctor/, scanner/, … (52 mô-đun cấp cao)</span>
+├── <span class="c-cmd">core/</span> <span class="c-comment">lớp quản trị và tri thức (66 hooks, 71 rules, 2.035 skills, 100 agents)</span>
+├── <span class="c-cmd">tools/</span> <span class="c-comment">công cụ phụ: yana-terminal, yana-notch, yana-promo, cầu nối AirLLM và pixel</span>
 ├── <span class="c-cmd">adapters/</span> <span class="c-comment">Claude Code, Codex, Cursor, Antigravity</span>
-└── <span class="c-cmd">site/, docs/, ci/</span> <span class="c-comment">cổng web (Astro), tài liệu và cổng kiểm tra CI</span></code></pre>
-        </div>
-      </section>
+└── <span class="c-cmd">docs/, ci/</span> <span class="c-comment">tài liệu và cổng kiểm tra CI</span>
+<span class="c-comment">Yana-studio/ (app macOS, Studio, IDE) và yana-web/ (website, web app) là hai kho riêng.</span></code></pre>
+</div>
+</section>
 
       <!-- Section 4: Yana in Practice -->
       <section class="wp-section" id="practice">
-        <h2 class="wp-sec-title"><span class="wp-sec-num">4.</span> Yana trong thực tế</h2>
-        <div class="wp-prose">
-          <h3 class="wp-subsec-title">4.1 Giao diện người dùng & Yana Studio IDE</h3>
-          <p>Yana Studio IDE tích hợp trọn vẹn bộ công cụ của nhà phát triển trong một môi trường quen thuộc: ngăn bên trái là cây thư mục và trình soạn thảo Code-OSS, trong khi ngăn bên phải là khung chat với Yana Agent. Khung chat luôn hiển thị rõ trạng thái chính sách hiện hành: ở chế độ <code>SUPERVISED</code>, thao tác đọc file được tự động cho phép, trong khi tất cả các lệnh thực thi đều dừng lại để chờ con người bấm duyệt. Thanh trạng thái bên dưới hiển thị <code>Policy: SUPERVISED [ALLOW: read, REQUIRE: run]</code>, phiên bản runtime đang hoạt động và số dòng nhật ký kiểm toán đã xác thực (ví dụ <code>Audit 500</code>).</p>
-        </div>
-
-        <figure class="wp-figure">
-          <img src="assets/fig-yana-studio-ide.jpg" alt="Hình 4. Yana Studio IDE trên nền Code-OSS" loading="lazy">
-          <figcaption class="wp-figure-caption"><strong>Hình 4.</strong> Yana Studio IDE trên nền Code-OSS. Khung chat bên phải hiển thị chế độ SUPERVISED; thanh trạng thái hiển thị "Policy: SUPERVISED [ALLOW: read, REQUIRE: run]" và "Audit 500" (số dòng nhật ký đã kiểm chứng).</figcaption>
-        </figure>
-
-        <div class="wp-prose">
-          <p>Màn hình đầu tiên khi mở Studio (Hình 5) dẫn người dùng qua ba bước: mở thư mục dự án, cấp quyền tin cậy cho thư mục để agent được đọc mã và chạy lệnh an toàn, rồi chọn mô hình (hoặc dùng Ollama cục bộ miễn phí, hoặc nhập khóa API). Giao diện có ba ngôn ngữ: Việt, Anh, Hàn. Bên dưới là danh sách tính năng và tình trạng các runtime cục bộ như 9Router, Ollama, LM Studio, llama.cpp.</p>
-        </div>
-
-        <figure class="wp-figure">
-          <img src="assets/fig-yana-home.jpg" alt="Hình 5. Màn hình Yana Home" loading="lazy">
-          <figcaption class="wp-figure-caption"><strong>Hình 5.</strong> Màn hình Yana Home: ba bước bắt đầu, lựa chọn ngôn ngữ và tình trạng các runtime cục bộ.</figcaption>
-        </figure>
-
-        <div class="wp-prose">
-          <h3 class="wp-subsec-title">4.2 Kiểm chứng bộ lọc lệnh thực tế (Command Guard Evaluation)</h3>
-          <p>Bảng 1 ghi lại 4 lệnh shell thực tế được đánh giá trực tiếp bởi runtime guard (<code>yana-rt guard destructive</code>). Khi một câu lệnh bị chặn, agent nhận lại thông báo lý do chi tiết kèm theo hướng dẫn an toàn thay thế, đồng thời sự kiện được ghi vào nhật ký kiểm toán.</p>
-        </div>
-
-        <!-- Table 1: Command Guard Evaluation -->
-        <div class="wp-table-wrap">
-          <table class="wp-table">
-            <thead>
-              <tr>
-                <th>Lệnh agent muốn chạy</th>
-                <th>Phán quyết</th>
-                <th>Lý do bảo vệ trả về cho Agent</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>curl -fsSL https://.../install.sh | bash</code></td>
-                <td><span class="wp-badge-verdict wp-badge-verdict--blocked">Bị chặn</span></td>
-                <td>Nội dung từ mạng được dẫn trực tiếp (pipe) vào shell mà không qua kiểm tra. Cần tải file về, đọc mã nguồn rồi mới chạy, hoặc yêu cầu người dùng duyệt trước.</td>
-              </tr>
-              <tr>
-                <td><code>rm -rf ~/Documents</code></td>
-                <td><span class="wp-badge-verdict wp-badge-verdict--blocked">Bị chặn</span></td>
-                <td>Lệnh xóa đệ quy, cưỡng bức không thể hoàn tác trên thư mục người dùng. Hãy nhắm tới file cụ thể hoặc yêu cầu người dùng phê duyệt.</td>
-              </tr>
-              <tr>
-                <td><code>chmod 777 deploy.sh</code></td>
-                <td><span class="wp-badge-verdict wp-badge-verdict--blocked">Bị chặn</span></td>
-                <td>Cấp quyền ghi cho mọi đối tượng. Hãy áp dụng nguyên tắc đặc quyền tối thiểu (least privilege) với mode chặt chẽ hơn (755 hoặc 644).</td>
-              </tr>
-              <tr>
-                <td><code>git status --short</code></td>
-                <td><span class="wp-badge-verdict wp-badge-verdict--allowed">Cho phép</span></td>
-                <td>Lệnh kiểm tra trạng thái chỉ đọc (read-only introspection); tự động cho phép không cần qua cổng phê duyệt.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 class="wp-subsec-title">4.3 Sử dụng bộ công cụ dòng lệnh (CLI Tooling)</h3>
+<h2 class="wp-sec-title"><span class="wp-sec-num">4.</span> Yana trong thực tế</h2>
+<h3 class="wp-subsec-title">4.1 Yana 1.0 và Yana Studio</h3>
+<div class="wp-prose">
+<p>Yana 1.0.0 (phát hành 11/11/2026 trên kho Yana-studio) là bản tải cho macOS Apple Silicon gồm ứng dụng gốc và Yana Studio. Studio gom vào một cửa sổ những thứ người làm dự án với AI hay phải chuyển qua lại: mở thư mục thật, trình soạn thảo, terminal PTY (tối đa 12 phiên), chat, nhiệm vụ có bằng chứng và design canvas. Lớp giao diện của Studio không gọi nhà cung cấp mô hình: mọi yêu cầu đi qua <code>yana-rt</code>; khóa API đi vào Rust qua stdin và được lưu mã hóa trong kho khóa của hệ điều hành, không nằm trong tệp dự án.</p>
+<p>Khung chat luôn hiển thị chế độ hiện hành. Ở chế độ <strong>SUPERVISED</strong>, đọc dự án được tự động cho phép, còn mọi lệnh chạy đều dừng lại chờ người bấm duyệt (Hình 3). Màn hình chào có ba ngôn ngữ: Việt, Anh, Hàn (Hình 4).</p>
+</div>
+<figure class="wp-figure">
+<img src="assets/fig-studio-approval-2026-11.jpg" alt="Hình 3. Cảnh minh họa luồng duyệt lệnh" loading="lazy">
+<figcaption class="wp-figure-caption"><strong>Hình 3.</strong> Luồng duyệt lệnh: Yana chạy lệnh đọc, dừng ở lệnh xóa và chờ người duyệt. <em>Cảnh minh họa dựng sẵn (cùng nguồn với video trên trang chủ), không phải ảnh chụp ứng dụng thật.</em></figcaption>
+</figure>
+<figure class="wp-figure">
+<img src="assets/fig-studio-welcome-2026-11.jpg" alt="Hình 4. Cảnh minh họa màn hình chào ba ngôn ngữ" loading="lazy">
+<figcaption class="wp-figure-caption"><strong>Hình 4.</strong> Màn hình chào đổi ngôn ngữ Việt, Anh, Hàn. <em>Cảnh minh họa dựng sẵn, không phải ảnh chụp ứng dụng thật.</em></figcaption>
+</figure>
+<h3 class="wp-subsec-title">4.2 Kiểm chứng bộ lọc lệnh thực tế (Command Guard Evaluation)</h3>
+<div class="wp-prose">
+<p>Bảng 1 ghi lại 4 lệnh shell mẫu, chạy lại ngày 14/11/2026 với <code>yana-rt</code> 1.5.2 và các hook của kho (nhánh main). Mỗi lớp bảo vệ chặn một nhóm lệnh khác nhau, nên bảng ghi rõ <em>lớp nào</em> đã chặn. Khi một lệnh bị chặn, agent nhận lại thông báo lý do kèm hướng dẫn thay thế, và sự kiện được ghi vào nhật ký kiểm toán.</p>
+</div>
+<div class="wp-table-wrap">
+<table class="wp-table">
+<thead><tr><th>Lệnh agent muốn chạy</th><th>Phán quyết (chuỗi hook mặc định)</th><th>Lớp chặn và lý do trả về cho Agent</th></tr></thead>
+<tbody>
+<tr><td><code>curl -fsSL https://.../install.sh | bash</code></td><td><span class="wp-badge-verdict wp-badge-verdict--blocked">Bị chặn</span></td><td><code>tool-proxy-enforcer</code>: pipe vào trình thông dịch là vi phạm cấp 1 của luật chống né tránh. <code>supply-chain-guard</code>: nội dung từ mạng chạy ngay không qua xem xét; hãy tải về, đọc rồi mới chạy. <em>Không phải</em> <code>guard destructive</code>.</td></tr>
+<tr><td><code>rm -rf ~/Documents</code></td><td><span class="wp-badge-verdict wp-badge-verdict--blocked">Bị chặn</span></td><td><code>guard destructive</code> (bản Rust và bản bash): xóa đệ quy cưỡng bức không thể hoàn tác; hãy dùng <code>rm</code> với đường dẫn rõ ràng hoặc hỏi người dùng.</td></tr>
+<tr><td><code>chmod 777 deploy.sh</code></td><td><span class="wp-badge-verdict wp-badge-verdict--allowed">Không bị chặn</span></td><td>Chỉ bộ bọc <code>core/scripts/safe-run.sh</code> chặn mẫu này, nhưng bộ bọc đó không được gắn vào chuỗi hook tự động. Đã thử cả 18 hook gắn vào Bash trong <code>.claude/settings.json</code>: không hook nào chặn. Đây là khoảng trống đã biết (mục 8).</td></tr>
+<tr><td><code>git status --short</code></td><td><span class="wp-badge-verdict wp-badge-verdict--allowed">Cho phép</span></td><td>Lệnh kiểm tra chỉ đọc; không lớp nào can thiệp.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 class="wp-subsec-title">4.3 Sử dụng bộ công cụ dòng lệnh (CLI Tooling)</h3>
         <div class="wp-code-block">
 <pre><code><span class="c-comment"># Công cụ quản lý qua Python CLI</span>
 <span class="c-cmd">pip install yana-ai</span>
@@ -282,76 +250,36 @@
 <span class="c-comment"># Runtime độc lập viết bằng Rust (hoàn toàn không phụ thuộc Python)</span>
 <span class="c-cmd">cargo install yana-rt</span></code></pre>
         </div>
-      </section>
+      
+</section>
 
       <!-- Section 5: Component Statuses -->
       <section class="wp-section" id="components">
-        <h2 class="wp-sec-title"><span class="wp-sec-num">5.</span> Hiện trạng các thành phần hệ thống</h2>
-        <div class="wp-table-wrap">
-          <table class="wp-table">
-            <thead>
-              <tr>
-                <th>Thành phần</th>
-                <th>Trách nhiệm & Nhiệm vụ</th>
-                <th>Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Yana Studio IDE 1.7</strong></td>
-                <td>Môi trường desktop chuẩn mực trên macOS (Code-OSS 1.141). Loại bỏ telemetry độc quyền của Microsoft, tích hợp sẵn Yana Chat, cổng duyệt quyền, tasks có bằng chứng, 19 model providers và design canvas.</td>
-                <td><span class="wp-badge-status wp-badge-status--prod">Production</span></td>
-              </tr>
-              <tr>
-                <td><strong>Runtime yana-rt</strong></td>
-                <td>Động cơ Rust cốt lõi: vòng lặp lượt (turn loops), hợp đồng quyền hạn (capability contracts), cơ sở dữ liệu phiên SQLite, checkpoint rollback, MCP & LSP clients.</td>
-                <td><span class="wp-badge-status wp-badge-status--prod">Production</span></td>
-              </tr>
-              <tr>
-                <td><strong>Lớp Quản trị (Governance)</strong></td>
-                <td>Manifest quyền hạn, cổng phê duyệt của con người, sổ cái nối băm (hash-chained ledger), trình xác thực tính toàn vẹn <code>core-lock</code>, bộ lọc lệnh phá hủy.</td>
-                <td><span class="wp-badge-status wp-badge-status--prod">Production</span></td>
-              </tr>
-              <tr>
-                <td><strong>Giám Thị (Supervisor)</strong></td>
-                <td>Daemon chạy độc lập ngoài không gian AI theo lịch OS mỗi 6 giờ; tự động khóa toàn bộ lệnh hệ thống nếu các file kiểm soát bị sửa đổi trái phép.</td>
-                <td><span class="wp-badge-status wp-badge-status--prod">Đang hoạt động</span></td>
-              </tr>
-              <tr>
-                <td><strong>Adapters</strong></td>
-                <td>Claude Code, Codex, Cursor, Antigravity. Mức độ cưỡng chế an toàn thay đổi theo đặc thù từng host hook.</td>
-                <td><span class="wp-badge-status wp-badge-status--pre">Phụ thuộc Host</span></td>
-              </tr>
-              <tr>
-                <td><strong>Lớp Tri thức (Knowledge Layer)</strong></td>
-                <td>Role agents, skills, slash commands và các luật ứng xử để hướng dẫn hành vi của agent.</td>
-                <td><span class="wp-badge-status wp-badge-status--prod">Production</span></td>
-              </tr>
-              <tr>
-                <td><strong>Yana OS</strong></td>
-                <td>Quản lý agent cục bộ: danh tính, ranh giới tự chủ, hạn ngạch tài nguyên, cách ly tiến trình.</td>
-                <td><span class="wp-badge-status wp-badge-status--dev">Đang phát triển</span></td>
-              </tr>
-              <tr>
-                <td><strong>Studio Electron cũ</strong></td>
-                <td>Ứng dụng desktop đời trước (v1.5–1.6, tháng 9/2026). Bản IDE tái sử dụng các logic UX đã được kiểm chứng.</td>
-                <td><span class="wp-badge-status wp-badge-status--pre">Tiền thân</span></td>
-              </tr>
-              <tr>
-                <td><strong>Wheelbot</strong></td>
-                <td>Nền tảng robot ESP32-S3 điều khiển bằng giọng nói trong kho lưu trữ riêng biệt.</td>
-                <td><span class="wp-badge-status wp-badge-status--exp">Thử nghiệm</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+<h2 class="wp-sec-title"><span class="wp-sec-num">5.</span> Hiện trạng các thành phần hệ thống</h2>
+<div class="wp-table-wrap">
+<table class="wp-table">
+<thead><tr><th>Thành phần</th><th>Trách nhiệm &amp; Nhiệm vụ</th><th>Trạng thái</th></tr></thead>
+<tbody>
+<tr><td><strong>Yana 1.0 cho macOS</strong></td><td>Ứng dụng gốc (SwiftUI) cùng Yana Studio trong một bản tải, phát hành 11/11/2026 trên kho Yana-studio. Ký ad-hoc, chưa notarize.</td><td><span class="wp-badge-status wp-badge-status--prod">Đã phát hành</span></td></tr>
+<tr><td><strong>Yana Studio và Yana IDE</strong></td><td>Studio (Electron) và IDE (lớp tùy biến Code-OSS) nằm trong kho Yana-studio. Studio chưa đạt đầy đủ tính năng so với desktop trước; ngoài ứng dụng Yana 1.0.0 chưa có bản phát hành riêng từ kho mới.</td><td><span class="wp-badge-status wp-badge-status--dev">Đang phát triển</span></td></tr>
+<tr><td><strong>Runtime yana-rt</strong></td><td>Động cơ Rust cốt lõi: vòng lặp lượt, hợp đồng quyền hạn, cơ sở dữ liệu phiên SQLite, checkpoint rollback, MCP và LSP clients, <code>authority verify</code>, <code>status</code>.</td><td><span class="wp-badge-status wp-badge-status--prod">Production</span></td></tr>
+<tr><td><strong>Lớp Quản trị (Governance)</strong></td><td>Manifest quyền hạn, cổng phê duyệt của con người, sổ cái nối băm, trình xác thực <code>core-lock</code>, bộ lọc lệnh phá hủy.</td><td><span class="wp-badge-status wp-badge-status--prod">Production</span></td></tr>
+<tr><td><strong>Giám Thị (Supervisor)</strong></td><td>Daemon độc lập ngoài không gian AI, chạy theo lịch OS mỗi 6 giờ; khóa lệnh nếu các tệp kiểm soát bị sửa đổi trái phép. Tùy chọn bật.</td><td><span class="wp-badge-status wp-badge-status--prod">Đang hoạt động</span></td></tr>
+<tr><td><strong>Adapters</strong></td><td>Claude Code, Codex, Cursor, Antigravity. Mức độ cưỡng chế an toàn thay đổi theo từng host hook.</td><td><span class="wp-badge-status wp-badge-status--pre">Phụ thuộc Host</span></td></tr>
+<tr><td><strong>Lớp Tri thức (Knowledge Layer)</strong></td><td>Role agents, skills, slash commands và các luật ứng xử để hướng dẫn hành vi của agent.</td><td><span class="wp-badge-status wp-badge-status--prod">Production</span></td></tr>
+<tr><td><strong>Website và web app (yana-web)</strong></td><td>Website yana.vutam.link và web app chạy cục bộ: chat tới 6 nhà cung cấp, missions, két khóa API mã hóa AES-256-GCM.</td><td><span class="wp-badge-status wp-badge-status--prod">Đang hoạt động</span></td></tr>
+<tr><td><strong>Yana OS</strong></td><td>Quản lý agent cục bộ: danh tính, ranh giới tự chủ, hạn ngạch tài nguyên, cách ly tiến trình.</td><td><span class="wp-badge-status wp-badge-status--dev">Đang phát triển</span></td></tr>
+<tr><td><strong>Wheelbot</strong></td><td>Nền tảng robot ESP32-S3 điều khiển bằng giọng nói trong kho lưu trữ riêng biệt.</td><td><span class="wp-badge-status wp-badge-status--exp">Thử nghiệm</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
 
       <!-- Section 6: Benchmarks -->
       <section class="wp-section" id="benchmarks">
         <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
         <div class="wp-prose">
-          <p>Dữ liệu đo đạc thực nghiệm ngày 20/10/2026 trên máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong> chạy bản release của <code>yana-rt 1.5.1</code> so sánh với script Python nguyên bản (theo tài liệu <code>BENCHMARK.md</code>):</p>
+          <p>Bảng sau là bản đo ngày 20/10/2026 (báo cáo đầu), dữ liệu đo đạc thực nghiệm trên máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong> chạy bản release của <code>yana-rt 1.5.1</code> so sánh với script Python nguyên bản (theo tài liệu <code>BENCHMARK.md</code>):</p>
         </div>
 
         <div class="wp-table-wrap">
@@ -387,7 +315,7 @@
                 <td>Quét thư mục Skills (<code>core/skills</code>)</td>
                 <td><strong>0.55 s</strong></td>
                 <td>8.47 s</td>
-                <td><strong>Nhanh hơn 15.4×</strong> (duyệt toàn bộ 2.027 skill)</td>
+                <td><strong>Nhanh hơn 15.5×</strong> (Rust duyệt 1.791 tệp, Python 1.795 tệp)</td>
               </tr>
               <tr>
                 <td>Lớp bảo vệ lệnh phá hủy (Guard Latency)</td>
@@ -404,7 +332,10 @@
             </tbody>
           </table>
         </div>
-      </section>
+      <div class="wp-prose">
+<p><strong>Đo lại ngày 14/11/2026</strong> với <code>yana-rt</code> 1.5.2 (bản release, cùng máy M4 16 GB, macOS 27.3, đo bằng <code>time.perf_counter()</code> quanh từng tiến trình): khởi động nguội trung bình <strong>4.89 ms</strong> (100 lần chạy, so với 4.16 ms ở bản đo trước), lớp bảo vệ lệnh phá hủy cho một lệnh được phép <strong>5.93 ms</strong> (50 lần chạy, trước đó 4.9 ms), dung lượng binary <strong>22.9 MiB</strong> (23.996.800 byte, trước đó 18.2 MiB). Binary lớn hơn và chậm hơn một chút so với 1.5.1; bản 1.5.2 thêm máy chủ MCP nhiều công cụ hơn và các lệnh mới. Chúng tôi <em>không</em> đo lại các lệnh so sánh với Python (<code>doctor</code>, <code>ci check</code>, quét skills): <code>BENCHMARK.md</code> vẫn chỉ có bản đo ngày 20/10, và các dòng đó trong bảng trên là số liệu của bản đo cũ.</p>
+</div>
+</section>
 
       <!-- Section 7: Security Verification -->
       <section class="wp-section" id="security">
@@ -414,7 +345,19 @@
           <p>Quá trình thử nghiệm đã phát hiện một lỗi chức năng (<code>list_processes</code> bị lỗi trên macOS) và một <strong>lỗ hổng nghiêm trọng</strong>: hàm <code>check_command</code> cũ chỉ lọc các chuỗi lệnh phá hủy trực tiếp, cho phép các cấu trúc pipe-to-shell (như <code>curl ... | bash</code>), chuỗi giải mã base64 và lệnh <code>chmod 777</code> lọt qua dù đã bị nghiêm cấm trong luật dự án.</p>
           <p>Bản vá cập nhật tiến hành phân tích cú pháp lệnh theo chuẩn POSIX shell (đánh giá dấu ngoặc kép, substitution, heredocs, pipelines và nhóm subshell) trước khi so khớp quy tắc, được xác thực bởi <strong>1.642 unit test vượt qua</strong>. Bản vá đã trải qua 4 chu kỳ kiểm toán đối kháng độc lập bởi các subagent AI (tổng cộng 6 lượt rà soát). <strong>Bài học rút ra:</strong> Danh sách đen theo chuỗi lệnh không bao giờ có thể bao quát hết; bộ lọc mẫu chỉ là lớp phòng thủ bổ trợ, còn sự an toàn tuyệt đối nằm ở <em>cổng phê duyệt của con người</em> và <em>phạm vi quyền hạn được cấp</em>.</p>
         </div>
-      </section>
+      <div class="wp-prose">
+<p><strong>Từ 26/10 đến 14/11/2026</strong>, các thay đổi liên quan đến an toàn (theo lịch sử PR và <code>CHANGELOG.md</code>):</p>
+<ul>
+<li><code>yana-rt authority verify</code> kiểm tra mọi lần thực thi đều truy về một quyết định cho phép (#534). <code>yana-rt status</code> cho một ảnh chụp chỉ-đọc dùng chung cho mọi bề mặt, kèm công cụ MCP chỉ-đọc tương ứng (#533, #535).</li>
+<li>MCP: danh sách công cụ được phép (<code>allowed_tools</code>), ghim định nghĩa công cụ và gợi ý an toàn cho từng công cụ (#532). Máy chủ nay có 16 công cụ; một test khẳng định đúng số đó để công cụ mới buộc phải được cân nhắc.</li>
+<li>Bản 1.5.2: <code>list_processes</code> chạy được trên macOS, có test MCP đầu-cuối, 13 khuyến cáo RUSTSEC làm CI đỏ được xử lý bằng cập nhật phụ thuộc; sau đó thêm bản vá <code>quinn-udp</code> cho RUSTSEC-2026-0538 (#562).</li>
+<li>Khóa <code>flock-v1</code> bật theo yêu cầu trên bản checkout mới (#541); pdfium được ghim SHA-256 trong workflow phát hành (#542); <code>verify_action_pins.py</code> so từng SHA của GitHub Action với thẻ tương ứng.</li>
+<li>CI chạy hằng ngày trên main để lệch toolchain lộ ra trước khi có pull request (#557) và có kiểm tra sức khỏe hằng tuần (#566).</li>
+<li>Ngày 14/11/2026, API GitHub báo <strong>0 cảnh báo Dependabot còn mở</strong> trên cả ba kho (kiểm tra trực tiếp).</li>
+</ul>
+<p>Kho hiện có <strong>1.852 hàm kiểm thử Rust</strong> (đếm bằng <code>grep</code> thuộc tính <code>#[test]</code> trong <code>src</code> và <code>tests</code>). Đây là số đếm, không phải kết quả chạy: báo cáo này chưa chạy lại toàn bộ bộ test.</p>
+</div>
+</section>
 
       <!-- Section 8: Boundaries & Limitations -->
       <section class="wp-section" id="limitations">
@@ -427,23 +370,25 @@
             <li><strong>Độ phủ của Pattern Guard:</strong> Bộ lọc lệnh dựa trên phân tích chuỗi cú pháp, không phải hypervisor sandbox. Bản bash script dự phòng chưa đạt được độ tương đồng đầy đủ trong việc chặn pipe-to-shell so với Rust runtime.</li>
             <li><strong>Chênh lệch can thiệp giữa các Host:</strong> Cursor không can thiệp vào các cuộc gọi MCP. Antigravity chặn lệnh shell nhưng có thể bị bỏ qua nếu người dùng chạy với cờ <code>--dangerously-skip-permissions</code>.</li>
             <li><strong>Ký chứng thực nền tảng (Notarization):</strong> Bản phát hành macOS hiện dựa trên chữ ký ad-hoc của nhà phát triển, do đó Gatekeeper sẽ hiện cảnh báo bảo mật trong lần khởi chạy đầu tiên trước khi hoàn tất đăng ký tài khoản Apple Developer.</li>
-          </ul>
+          <li><strong>Khoảng trống <code>chmod 777</code>:</strong> Lần chạy lại ngày 14/11 cho thấy <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định; chỉ bộ bọc <code>core/scripts/safe-run.sh</code> chặn nó, và bộ bọc này chưa được gắn tự động. Bản đầu của báo cáo đã ghi lệnh này là bị chặn.</li>
+<li><strong>Studio chưa đạt đầy đủ tính năng:</strong> Chưa có registry thiết bị, màn hình phiên agent, ghép cặp di động, thực thi qua SSH hoặc Docker, giao diện cấp lease quyền và tự cập nhật có ký. Ngoài ứng dụng macOS Yana 1.0.0, chưa có bản phát hành Studio hay IDE riêng từ kho Yana-studio.</li>
+<li><strong>Việc tách kho vừa hoàn tất:</strong> Website, web app và ứng dụng desktop chuyển sang hai kho riêng trong 11–13/11/2026, nên liên kết và tài liệu cũ nhắc tới <code>tools/yana-web</code> hay <code>tools/yana-studio</code> trỏ vào mã đã di chuyển.</li>
+<li><strong>Số đo chưa đầy đủ:</strong> Các so sánh với Python chưa được lặp lại cho 1.5.2, và số hàm kiểm thử là số đếm, không phải kết quả chạy.</li>
+</ul>
         </div>
       </section>
 
       <!-- Section 9: Engineering Trajectory -->
       <section class="wp-section" id="timeline">
-        <h2 class="wp-sec-title"><span class="wp-sec-num">9.</span> Quỹ đạo Kỹ thuật & Mốc thời gian</h2>
-        <div class="wp-prose">
-          <p>Kho lưu trữ bắt đầu từ một commit trống vào ngày <strong>17/05/2026</strong>. Đến ngày 26/10/2026, lịch sử Git đã ghi nhận <strong>2.488 commits</strong>, <strong>426 pull requests đã gộp</strong>, <strong>41 bản phát hành phần mềm</strong> và <strong>72 thẻ phiên bản (tags)</strong>. Hình 6 cho thấy nhịp commit theo từng tháng; tháng 6 đạt đỉnh với 740 commits trong đợt nhập hàng loạt skill và xây dựng website.</p>
-        </div>
-
-        <figure class="wp-figure">
-          <img src="assets/fig-commits-chart.png" alt="Hình 6. Số commit theo tháng, 17/05 đến 26/10/2026" loading="lazy">
-          <figcaption class="wp-figure-caption"><strong>Hình 6.</strong> Số commit theo tháng từ 17/05 đến 26/10/2026. Nguồn: Lịch sử git chính thức của kho Yana-AI.</figcaption>
-        </figure>
-
-        <div class="wp-timeline">
+<h2 class="wp-sec-title"><span class="wp-sec-num">9.</span> Quỹ đạo Kỹ thuật & Mốc thời gian</h2>
+<div class="wp-prose">
+<p>Kho lưu trữ bắt đầu từ một commit trống vào ngày <strong>17/05/2026</strong>. Đến ngày 14/11/2026, lịch sử nhánh main của Yana-AI ghi nhận <strong>2.627 commits</strong>, <strong>494 pull requests đã gộp</strong> và <strong>75 thẻ phiên bản</strong>; trang Releases của Yana-AI hiển thị <strong>26 bản phát hành</strong>, và kho Yana-studio có thêm bản Yana 1.0.0. Hình 5 cho thấy nhịp commit theo tháng; tháng 6 đạt đỉnh 740 commits trong đợt nhập hàng loạt skill và dựng website. Bản đầu của báo cáo ghi 41 bản phát hành; số đếm hiện tại thấp hơn và chúng tôi chưa xác định được nguyên nhân chênh lệch.</p>
+</div>
+<figure class="wp-figure">
+<img src="assets/fig-commits-2026-11-vi.svg" alt="Hình 5. Số commit theo tháng, 17/05 đến 14/11/2026" loading="lazy">
+<figcaption class="wp-figure-caption"><strong>Hình 5.</strong> Số commit theo tháng từ 17/05 đến 14/11/2026 (tháng 11 mới tính 1–14/11). Nguồn: lịch sử git nhánh main của kho Yana-AI.</figcaption>
+</figure>
+<div class="wp-timeline">
           <div class="wp-timeline-item">
             <div class="wp-timeline-phase">Tháng 5, 2026<small>Nền móng (17–31/05)</small></div>
             <div class="wp-timeline-content">Cổng sự thật (Truth Gate) ngăn agent tuyên bố hoàn thành sai; bộ nhớ hai tầng (L1 lâu dài, L2 phiên); sổ cái nối băm; bộ rào theo OWASP LLM Top 10; hơn 70 luật phòng thủ; tích hợp MCP; chuyển đổi runtime sang Rust; giấy phép Apache 2.0.</div>
@@ -468,8 +413,12 @@
             <div class="wp-timeline-phase">Tháng 10, 2026<small>Hợp nhất & Bàn giao</small></div>
             <div class="wp-timeline-content">MCP client bản địa và trust-store; LSP client chỉ đọc; chế độ lập kế hoạch (Plan mode) với xem trước diff; bộ xử lý tài liệu văn phòng; phát hành Yana Studio IDE 1.7 (16/10); tích hợp Antigravity hook.</div>
           </div>
-        </div>
-      </section>
+        <div class="wp-timeline-item">
+<div class="wp-timeline-phase">Tháng 11, 2026<small>Yana 1.0 &amp; Tách kho (1–14/11)</small></div>
+<div class="wp-timeline-content">yana-rt và yana-ai 1.5.2 (changelog ngày 03/11; bản <code>rt-v1.5.2</code> đăng trên GitHub ngày 12/11): <code>harness audit</code>, chat có xem trước phê duyệt và chế độ lập kế hoạch, gợi ý bật Giám Thị trong <code>doctor</code>. <code>authority verify</code>, <code>status</code> và nâng cấp bảo mật MCP (12/11). <strong>Yana 1.0.0</strong> cho macOS, ứng dụng gốc và Studio trong một bản tải, phát hành 11/11. Hệ sinh thái tách thành ba kho trong tổ chức <code>Horonomos-laps</code> (11–13/11): website và web app sang yana-web, ứng dụng macOS, Studio, IDE sang Yana-studio; Yana Desktop (Electron) được gỡ khỏi Yana-AI ngày 13/11. Website được thiết kế lại trên yana-web (logo mới, bốn video demo dựng lại, trang MacBook 3D).</div>
+</div>
+</div>
+</section>
 
       <!-- Section 10: Founder's Note -->
       <section class="wp-section" id="founders-note">
@@ -496,12 +445,22 @@
       <!-- References Section -->
       <section class="wp-section" id="references">
         <h2 class="wp-sec-title"><span class="wp-sec-num">11.</span> Tài liệu tham khảo</h2>
-        <ol class="wp-references">
+        <div class="wp-prose">
+<p><strong>Ghi chú hiệu đính so với bản 26/10/2026:</strong></p>
+<ul>
+<li>Số agent: bản đầu ghi 60 (số mục cấp một trong <code>core/agents</code>); số đúng theo <code>check_counts.py</code> là 100.</li>
+<li>Quét thư mục skills: 15.5× (bản đầu ghi 15.4×); Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
+<li>Bảng lọc lệnh: ghi lại lớp nào chặn từng lệnh theo lần chạy 14/11; <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định.</li>
+<li>Số công cụ MCP: 16 (bản đầu ghi 14, là số tại thời điểm fuzzing).</li>
+<li>Số bản phát hành: xem mục 9; số đếm hiện tại khác bản đầu và chưa xác định được nguyên nhân.</li>
+</ul>
+</div>
+<ol class="wp-references">
           <li>OWASP Foundation. <em>Top 10 for Large Language Model Applications</em>, <a href="https://owasp.org" target="_blank" rel="noopener">owasp.org</a>.</li>
           <li>Google. <em>Trillian: A Transparent, Highly Scalable and Cryptographically Verifiable Data Store</em>, <a href="https://github.com/google/trillian" target="_blank" rel="noopener">github.com/google/trillian</a>.</li>
           <li>Anthropic. <em>Model Context Protocol Specification</em>, <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">modelcontextprotocol.io</a>.</li>
           <li>Microsoft. <em>Visual Studio Code, Open Source (Code-OSS)</em>, <a href="https://github.com/microsoft/vscode" target="_blank" rel="noopener">github.com/microsoft/vscode</a>.</li>
-          <li>Yana AI Repository Specifications (<code>VISION.md</code> ngày 07/06/2026; <code>PHILOSOPHY.md</code>; <code>JOURNEY.md</code>; <code>HISTORY.md</code>; <code>BENCHMARK.md</code>; <code>CURRENT-MILESTONE.md</code>; <code>docs/reference/known-limitations.md</code>), <a href="https://github.com/Horonomos-laps/Yana-AI" target="_blank" rel="noopener">github.com/Horonomos-laps/Yana-AI</a>.</li>
+          <li>Yana AI Repository Specifications (<code>VISION.md</code> ngày 07/06/2026; <code>PHILOSOPHY.md</code>; <code>JOURNEY.md</code>; <code>HISTORY.md</code>; <code>BENCHMARK.md</code>; <code>CURRENT-MILESTONE.md</code>; <code>docs/reference/known-limitations.md</code>; <code>CHANGELOG.md</code>; <code>VERSIONING.md</code>), <a href="https://github.com/Horonomos-laps/Yana-AI" target="_blank" rel="noopener">github.com/Horonomos-laps/Yana-AI</a>.</li>
         </ol>
       </section>
 

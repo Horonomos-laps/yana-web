@@ -279,25 +279,41 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
 <div class="wp-prose">
-<p>Đo lại hoàn toàn ngày 14/11/2026 trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, bản release của <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>) so với script Python tương ứng (<code>python3 -I</code>). Đo bằng <code>time.perf_counter()</code> quanh từng tiến trình; số lần chạy ghi trong bảng, các lệnh nặng có một lần chạy khởi động trước.</p>
+<p>Đo lại hoàn toàn ngày 15/11/2026 trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3. Lần này mọi phép so sánh đều <strong>chạy xen kẽ</strong> (Rust, Python, Rust, Python…) với một lần chạy khởi động trước, rồi lấy trung vị, để trạng thái máy tại từng thời điểm ảnh hưởng đều lên cả hai bên. Bản dựng đo là <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>), script Python chạy bằng <code>python3 -I</code>.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
 <thead><tr><th>Phép đo</th><th>Rust (yana-rt)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
 <tbody>
-<tr><td>Khởi động nguội</td><td><strong>4.93 ms</strong></td><td>—</td><td>Trung bình 100 lần</td></tr>
-<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>207 ms</strong></td><td>234 ms</td><td><strong>Nhanh hơn 1.1×</strong> (10 lần; trung vị 179 so với 213 ms)</td></tr>
-<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>6.4 ms</strong></td><td>35.7 ms</td><td><strong>Nhanh hơn 5.6×</strong> (20 lần)</td></tr>
-<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.70 s</strong></td><td>8.26 s</td><td><strong>Nhanh hơn 11.8×</strong> (3 lần; Rust duyệt 1.791 tệp, Python 1.795 tệp)</td></tr>
-<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.31 s</strong></td><td>5.99 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
-<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>6.35 ms</strong></td><td>—</td><td>Một lệnh được phép, trung bình 50 lần</td></tr>
+<tr><td>Khởi động nguội</td><td><strong>4.21 ms</strong></td><td>—</td><td>Trung vị 60 lần</td></tr>
+<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>139 ms</strong></td><td>195 ms</td><td><strong>Nhanh hơn 1.4×</strong> (12 lần)</td></tr>
+<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>5.7 ms</strong></td><td>31.0 ms</td><td><strong>Nhanh hơn 5.4×</strong> (20 lần)</td></tr>
+<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.56 s</strong></td><td>8.21 s</td><td><strong>Nhanh hơn 14.5×</strong> (5 lần; Rust duyệt 1.791 tệp, Python 1.795 tệp)</td></tr>
+<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.26 s</strong></td><td>5.87 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
+<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>5.27 ms</strong></td><td>—</td><td>Một lệnh được phép, trung vị 40 lần</td></tr>
 <tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.5 MiB</strong></td><td>28.3 MiB</td><td>Quét toàn kho: 20.7 so với 31.3 MiB</td></tr>
-<tr><td>Dung lượng binary</td><td><strong>22.9 MiB</strong></td><td>—</td><td>23.996.800 byte, binary tự chứa</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>So với bản đo 20/10/2026 (1.5.1):</strong> khởi động 4.16 → 4.93 ms, guard 4.9 → 6.35 ms, binary 18.2 → 22.9 MiB, <code>ci check</code> 5.8 → 6.4 ms, quét skills 0.55 → 0.70 s (tỷ lệ 15.5× → 11.8×). Đáng chú ý nhất là <code>doctor</code>: Rust nhanh hơn Python 2.9× ở bản cũ, nay chỉ còn 1.1×, vì bản Rust 1.5.2 chạy thêm nhiều bước kiểm tra hơn. Mọi thứ đều chậm và nặng hơn một chút so với 1.5.1; chúng tôi ghi nhận như vậy và chưa tối ưu lại. Phép đo này vẫn chỉ là một máy, vài lần chạy, nên số liệu chỉ có giá trị tương đối.</p>
+<p><strong>Ba bản dựng đo cạnh nhau</strong> (xen kẽ, trung vị, ms) để xem 1.5.2 có chậm đi so với 1.5.1 không. Cột giữa là 1.5.2 dựng chỉ với tính năng <code>cli</code>, tách riêng ảnh hưởng của máy chủ MCP.</p>
+</div>
+<div class="wp-table-wrap">
+<table class="wp-table">
+<thead><tr><th>Phép đo</th><th>1.5.1</th><th>1.5.2 (chỉ cli)</th><th>1.5.2 (mặc định)</th></tr></thead>
+<tbody>
+<tr><td>Khởi động</td><td>4.26</td><td>4.27</td><td>4.21</td></tr>
+<tr><td><code>doctor</code></td><td>142.7</td><td>142.6</td><td>144.2</td></tr>
+<tr><td><code>ci check</code></td><td>5.33</td><td>5.41</td><td>5.57</td></tr>
+<tr><td>Quét <code>core/skills</code></td><td>538</td><td>567</td><td>572</td></tr>
+<tr><td>Guard lệnh phá hủy</td><td>5.25</td><td>5.26</td><td>5.27</td></tr>
+<tr><td>Dung lượng binary</td><td>18.2 MiB (19.055.520 byte)</td><td>18.8 MiB (19.679.360 byte)</td><td>22.9 MiB (23.996.800 byte)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="wp-prose">
+<p><strong>Kết luận và giải thích.</strong> Khởi động, <code>doctor</code>, <code>ci check</code> và guard <em>không chậm đi</em> giữa 1.5.1 và 1.5.2 (chênh lệch nằm trong 1 đến 4%). Quét skills chậm hơn khoảng 5 đến 6% ở 1.5.2, có thể do nhiều mã hơn trong bộ quét; chúng tôi chưa tách nguyên nhân. Thay đổi lớn nhất là <strong>dung lượng binary</strong>: bản 1.5.2 dựng mặc định nặng hơn 4.7 MiB, trong đó khoảng 4.1 MiB đến từ việc máy chủ và client MCP (kéo theo thư viện bất đồng bộ <code>tokio</code>) được đưa vào bản dựng mặc định từ tháng 10, còn mã mới của 1.5.2 chỉ thêm khoảng 0.6 MiB. Nghĩa là việc cải tổ hệ thống làm binary lớn hơn nhưng không làm các đường nóng chậm đi.</p>
+<p><strong>Vì sao lần đo đầu cho kết quả khác.</strong> Lần đo đầu ngày 14/11 chạy các phép đo nối tiếp nhau trong lúc máy đang chạy thêm nhiều ứng dụng, cho <code>doctor</code> 207 ms và khởi động 4.93 ms; khi đo xen kẽ, các con số này trở về 139 và 4.21 ms. Tỷ lệ <code>doctor</code> so với Python (1.4× thay vì 2.9× ở bản đo 20/10) thay đổi chủ yếu vì phía Python nhanh hơn (195 ms so với 415 ms); bản đo tháng 10 lấy trung bình 3 lần không có lần khởi động trước nên có thể dính lần chạy lạnh, nhưng chúng tôi không thể xác nhận điều đó. Đây vẫn là một máy, số lần chạy ghi trong bảng.</p>
 </div>
 </section>
 
@@ -413,7 +429,7 @@
 <p><strong>Ghi chú hiệu đính so với bản 26/10/2026:</strong></p>
 <ul>
 <li>Số agent: bản đầu ghi 60 (số mục cấp một trong <code>core/agents</code>); số đúng theo <code>check_counts.py</code> là 100.</li>
-<li>Mục 6 được đo lại toàn bộ ngày 14/11 với 1.5.2: quét skills 11.8× (bản đầu ghi 15.4×; <code>BENCHMARK.md</code> ngày 20/10 ghi 15.5×), <code>doctor</code> chỉ còn nhanh hơn 1.1× (bản đầu ghi 2.9×). Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
+<li>Mục 6 được đo lại toàn bộ ngày 15/11 với phương pháp xen kẽ: quét skills 14.5× (bản đầu ghi 15.4×), <code>doctor</code> 1.4× (bản đầu ghi 2.9×), binary 22.9 MiB (bản đầu ghi 18.2 MiB). Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
 <li>Bảng lọc lệnh: ghi lại lớp nào chặn từng lệnh theo lần chạy 14/11; <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định.</li>
 <li>Số công cụ MCP: 16 (bản đầu ghi 14, là số tại thời điểm fuzzing).</li>
 <li>Số bản phát hành: xem mục 9; số đếm hiện tại khác bản đầu và chưa xác định được nguyên nhân.</li>

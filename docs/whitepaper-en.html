@@ -280,25 +280,41 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Empirical Evaluation and Benchmarks</h2>
 <div class="wp-prose">
-<p>Fully re-measured on November 14, 2026 on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, release build of <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>) against the corresponding Python scripts (<code>python3 -I</code>). Timed with <code>time.perf_counter()</code> around each process; run counts are in the table, and the heavier commands had one warm-up run first.</p>
+<p>Fully re-measured on November 15, 2026 on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3. This time every comparison is <strong>interleaved</strong> (Rust, Python, Rust, Python, …) after one warm-up run, and the median is taken, so whatever state the machine is in affects both sides equally. The measured build is <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>); the Python scripts run with <code>python3 -I</code>.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
 <thead><tr><th>Benchmark Operation</th><th>Rust Runtime (yana-rt)</th><th>Python Script</th><th>Performance Delta</th></tr></thead>
 <tbody>
-<tr><td>Cold Binary Startup</td><td><strong>4.93 ms</strong></td><td>—</td><td>Average across 100 runs</td></tr>
-<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>207 ms</strong></td><td>234 ms</td><td><strong>1.1× faster</strong> (10 runs; median 179 vs 213 ms)</td></tr>
-<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>6.4 ms</strong></td><td>35.7 ms</td><td><strong>5.6× faster</strong> (20 runs)</td></tr>
-<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.70 s</strong></td><td>8.26 s</td><td><strong>11.8× faster</strong> (3 runs; Rust scanned 1,791 files, Python 1,795)</td></tr>
-<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.31 s</strong></td><td>5.99 s</td><td>Not comparable: the two default scopes differ</td></tr>
-<tr><td>Destructive Command Guard</td><td><strong>6.35 ms</strong></td><td>—</td><td>One allowed command, average of 50 runs</td></tr>
+<tr><td>Cold Binary Startup</td><td><strong>4.21 ms</strong></td><td>—</td><td>Median of 60 runs</td></tr>
+<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>139 ms</strong></td><td>195 ms</td><td><strong>1.4× faster</strong> (12 runs)</td></tr>
+<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>5.7 ms</strong></td><td>31.0 ms</td><td><strong>5.4× faster</strong> (20 runs)</td></tr>
+<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.56 s</strong></td><td>8.21 s</td><td><strong>14.5× faster</strong> (5 runs; Rust scanned 1,791 files, Python 1,795)</td></tr>
+<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.26 s</strong></td><td>5.87 s</td><td>Not comparable: the two default scopes differ</td></tr>
+<tr><td>Destructive Command Guard</td><td><strong>5.27 ms</strong></td><td>—</td><td>One allowed command, median of 40 runs</td></tr>
 <tr><td>Peak Memory, Skills Scan</td><td><strong>16.5 MiB</strong></td><td>28.3 MiB</td><td>Full-repo scan: 20.7 vs 31.3 MiB</td></tr>
-<tr><td>Compiled Binary Size</td><td><strong>22.9 MiB</strong></td><td>—</td><td>23,996,800 bytes, self-contained</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>Against the October 20, 2026 measurement (1.5.1):</strong> startup 4.16 → 4.93 ms, guard 4.9 → 6.35 ms, binary 18.2 → 22.9 MiB, <code>ci check</code> 5.8 → 6.4 ms, skills scan 0.55 → 0.70 s (ratio 15.5× → 11.8×). The largest change is <code>doctor</code>: Rust was 2.9× faster than Python in the earlier run and is now only 1.1× faster, because the 1.5.2 Rust version runs more checks. Everything is slightly slower and larger than in 1.5.1; we record that as is and have not re-optimized. This is still a single machine and a few runs, so the numbers are only relative.</p>
+<p><strong>Three builds measured side by side</strong> (interleaved, medians, ms) to see whether 1.5.2 got slower than 1.5.1. The middle column is 1.5.2 built with only the <code>cli</code> feature, isolating the effect of the MCP server.</p>
+</div>
+<div class="wp-table-wrap">
+<table class="wp-table">
+<thead><tr><th>Operation</th><th>1.5.1</th><th>1.5.2 (cli only)</th><th>1.5.2 (default)</th></tr></thead>
+<tbody>
+<tr><td>Startup</td><td>4.26</td><td>4.27</td><td>4.21</td></tr>
+<tr><td><code>doctor</code></td><td>142.7</td><td>142.6</td><td>144.2</td></tr>
+<tr><td><code>ci check</code></td><td>5.33</td><td>5.41</td><td>5.57</td></tr>
+<tr><td><code>core/skills</code> scan</td><td>538</td><td>567</td><td>572</td></tr>
+<tr><td>Destructive guard</td><td>5.25</td><td>5.26</td><td>5.27</td></tr>
+<tr><td>Binary size</td><td>18.2 MiB (19,055,520 bytes)</td><td>18.8 MiB (19,679,360 bytes)</td><td>22.9 MiB (23,996,800 bytes)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="wp-prose">
+<p><strong>Conclusion and explanation.</strong> Startup, <code>doctor</code>, <code>ci check</code>, and the guard did <em>not</em> get slower between 1.5.1 and 1.5.2 (differences are within 1 to 4%). The skills scan is about 5 to 6% slower in 1.5.2, possibly from more code in the scanner; we have not isolated the cause. The largest change is <strong>binary size</strong>: the default 1.5.2 build is 4.7 MiB larger, of which about 4.1 MiB comes from the MCP server and client (which pull in the async runtime <code>tokio</code>) becoming part of the default build in October, while the new 1.5.2 code itself adds only about 0.6 MiB. In other words, the redesign made the binary larger but did not slow the hot paths.</p>
+<p><strong>Why the first measurement differed.</strong> The first run on November 14 ran the measurements back to back while the machine was also running several other applications, and gave 207 ms for <code>doctor</code> and 4.93 ms for startup; interleaved, those return to 139 and 4.21 ms. The <code>doctor</code> ratio against Python (1.4× instead of 2.9× in the October 20 measurement) changed mainly because the Python side got faster (195 ms against 415 ms); the October run averaged 3 runs without a warm-up and may have included a cold run, but we cannot confirm that. This is still one machine, with run counts in the tables.</p>
 </div>
 </section>
 
@@ -414,7 +430,7 @@
 <p><strong>Corrections relative to the October 26, 2026 edition:</strong></p>
 <ul>
 <li>Agent count: the first edition said 60 (the number of top-level entries in <code>core/agents</code>); the correct figure per <code>check_counts.py</code> is 100.</li>
-<li>Section 6 was fully re-measured on November 14 with 1.5.2: skills scan 11.8× (the first edition said 15.4×; the October 20 <code>BENCHMARK.md</code> says 15.5×), and <code>doctor</code> is now only 1.1× faster (the first edition said 2.9×). Rust scanned 1,791 files and Python 1,795 files, not the entire skill set.</li>
+<li>Section 6 was fully re-measured on November 15 with an interleaved method: skills scan 14.5× (the first edition said 15.4×), <code>doctor</code> 1.4× (the first edition said 2.9×), binary 22.9 MiB (the first edition said 18.2 MiB). Rust scanned 1,791 files and Python 1,795 files, not the entire skill set.</li>
 <li>Command guard table: now records which layer blocked each command, from the November 14 run; <code>chmod 777</code> is not blocked in the default hook chain.</li>
 <li>MCP tool count: 16 (the first edition said 14, the count at the time of fuzzing).</li>
 <li>Release count: see Section 9; the current count differs from the first edition and the cause is not established.</li>

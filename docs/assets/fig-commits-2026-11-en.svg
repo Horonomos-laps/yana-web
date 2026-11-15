@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" role="img" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+<title>Figure 5. Commits per month, 17 May to 14 November 2026</title>
+<defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#eef0ff"/><line x1="0" y1="0" x2="0" y2="8" stroke="#8b5cf6" stroke-width="3"/></pattern></defs>
+<line x1="56" y1="290.0" x2="744" y2="290.0" stroke="#c9cff0" stroke-width="1"/>
+<text x="48" y="294.0" text-anchor="end" font-size="11" fill="#6b7399">0</text>
+<line x1="56" y1="226.5" x2="744" y2="226.5" stroke="#c9cff0" stroke-width="1"/>
+<text x="48" y="230.5" text-anchor="end" font-size="11" fill="#6b7399">200</text>
+<line x1="56" y1="163.0" x2="744" y2="163.0" stroke="#c9cff0" stroke-width="1"/>
+<text x="48" y="167.0" text-anchor="end" font-size="11" fill="#6b7399">400</text>
+<line x1="56" y1="99.5" x2="744" y2="99.5" stroke="#c9cff0" stroke-width="1"/>
+<text x="48" y="103.5" text-anchor="end" font-size="11" fill="#6b7399">600</text>
+<line x1="56" y1="36.0" x2="744" y2="36.0" stroke="#c9cff0" stroke-width="1"/>
+<text x="48" y="40.0" text-anchor="end" font-size="11" fill="#6b7399">800</text>
+<rect x="73.7" y="136.6" width="62.9" height="153.4" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="105.1" y="129.6" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">483</text>
+<text x="105.1" y="310" text-anchor="middle" font-size="12" fill="#5d6591">05</text>
+<rect x="172.0" y="55.0" width="62.9" height="235.0" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="203.4" y="48.0" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">740</text>
+<text x="203.4" y="310" text-anchor="middle" font-size="12" fill="#5d6591">06</text>
+<rect x="270.3" y="211.9" width="62.9" height="78.1" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="301.7" y="204.9" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">246</text>
+<text x="301.7" y="310" text-anchor="middle" font-size="12" fill="#5d6591">07</text>
+<rect x="368.5" y="151.3" width="62.9" height="138.7" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="400.0" y="144.3" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">437</text>
+<text x="400.0" y="310" text-anchor="middle" font-size="12" fill="#5d6591">08</text>
+<rect x="466.8" y="192.5" width="62.9" height="97.5" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="498.3" y="185.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">307</text>
+<text x="498.3" y="310" text-anchor="middle" font-size="12" fill="#5d6591">09</text>
+<rect x="565.1" y="179.8" width="62.9" height="110.2" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
+<text x="596.6" y="172.8" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">347</text>
+<text x="596.6" y="310" text-anchor="middle" font-size="12" fill="#5d6591">10</text>
+<rect x="663.4" y="268.7" width="62.9" height="21.3" rx="6" fill="url(#hatch)" stroke="#8b5cf6" stroke-width="1.6"/>
+<text x="694.9" y="261.7" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">67</text>
+<text x="694.9" y="310" text-anchor="middle" font-size="12" fill="#5d6591">11*</text>
+<text x="56" y="334" font-size="11.5" fill="#6b7399">* 1–14 Nov · commits · Yana-AI main · 2026</text>
+</svg>

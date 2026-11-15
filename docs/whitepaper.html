@@ -44,7 +44,7 @@
             </svg>
             Tải Whitepaper (PDF)
           </a>
-          <span style="font-size:0.85rem;color:var(--wp-text-dim);">Bản cập nhật 11/2026 · 25 trang (2,3 MB, tiếng Anh)</span>
+          <span style="font-size:0.85rem;color:var(--wp-text-dim);">Bản cập nhật 11/2026 · 25 trang (2,4 MB, tiếng Anh)</span>
         </div>
         <div class="wp-lang-nav">
           <a href="whitepaper.html" class="is-active">Tiếng Việt</a>
@@ -277,63 +277,27 @@
 
       <!-- Section 6: Benchmarks -->
       <section class="wp-section" id="benchmarks">
-        <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
-        <div class="wp-prose">
-          <p>Bảng sau là bản đo ngày 20/10/2026 (báo cáo đầu), dữ liệu đo đạc thực nghiệm trên máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong> chạy bản release của <code>yana-rt 1.5.1</code> so sánh với script Python nguyên bản (theo tài liệu <code>BENCHMARK.md</code>):</p>
-        </div>
-
-        <div class="wp-table-wrap">
-          <table class="wp-table">
-            <thead>
-              <tr>
-                <th>Thao tác Benchmark</th>
-                <th>Rust Runtime (yana-rt)</th>
-                <th>Script Python cũ</th>
-                <th>Chênh lệch hiệu năng</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Khởi động Binary nguội (Cold Startup)</td>
-                <td><strong>4.16 ms</strong></td>
-                <td>—</td>
-                <td>Trung bình qua 100 lần chạy</td>
-              </tr>
-              <tr>
-                <td>Chẩn đoán hệ thống (<code>doctor</code>)</td>
-                <td><strong>143 ms</strong></td>
-                <td>415 ms</td>
-                <td><strong>Nhanh hơn 2.9×</strong> (cùng 16 bước kiểm tra)</td>
-              </tr>
-              <tr>
-                <td>Kiểm tra CI Quản trị (<code>ci check</code>)</td>
-                <td><strong>5.8 ms</strong></td>
-                <td>33 ms</td>
-                <td><strong>Nhanh hơn 5.7×</strong> (cùng 5 luật kiểm tra)</td>
-              </tr>
-              <tr>
-                <td>Quét thư mục Skills (<code>core/skills</code>)</td>
-                <td><strong>0.55 s</strong></td>
-                <td>8.47 s</td>
-                <td><strong>Nhanh hơn 15.5×</strong> (Rust duyệt 1.791 tệp, Python 1.795 tệp)</td>
-              </tr>
-              <tr>
-                <td>Lớp bảo vệ lệnh phá hủy (Guard Latency)</td>
-                <td><strong>4.9 ms</strong></td>
-                <td>—</td>
-                <td>Độ trễ trên mỗi lần kích hoạt hook</td>
-              </tr>
-              <tr>
-                <td>Dung lượng Binary biên dịch</td>
-                <td><strong>18.2 MiB</strong></td>
-                <td>—</td>
-                <td>Binary độc lập tự chứa hoàn toàn</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      <div class="wp-prose">
-<p><strong>Đo lại ngày 14/11/2026</strong> với <code>yana-rt</code> 1.5.2 (bản release, cùng máy M4 16 GB, macOS 27.3, đo bằng <code>time.perf_counter()</code> quanh từng tiến trình): khởi động nguội trung bình <strong>4.89 ms</strong> (100 lần chạy, so với 4.16 ms ở bản đo trước), lớp bảo vệ lệnh phá hủy cho một lệnh được phép <strong>5.93 ms</strong> (50 lần chạy, trước đó 4.9 ms), dung lượng binary <strong>22.9 MiB</strong> (23.996.800 byte, trước đó 18.2 MiB). Binary lớn hơn và chậm hơn một chút so với 1.5.1; bản 1.5.2 thêm máy chủ MCP nhiều công cụ hơn và các lệnh mới. Chúng tôi <em>không</em> đo lại các lệnh so sánh với Python (<code>doctor</code>, <code>ci check</code>, quét skills): <code>BENCHMARK.md</code> vẫn chỉ có bản đo ngày 20/10, và các dòng đó trong bảng trên là số liệu của bản đo cũ.</p>
+<h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
+<div class="wp-prose">
+<p>Đo lại hoàn toàn ngày 14/11/2026 trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, bản release của <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>) so với script Python tương ứng (<code>python3 -I</code>). Đo bằng <code>time.perf_counter()</code> quanh từng tiến trình; số lần chạy ghi trong bảng, các lệnh nặng có một lần chạy khởi động trước.</p>
+</div>
+<div class="wp-table-wrap">
+<table class="wp-table">
+<thead><tr><th>Phép đo</th><th>Rust (yana-rt)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
+<tbody>
+<tr><td>Khởi động nguội</td><td><strong>4.93 ms</strong></td><td>—</td><td>Trung bình 100 lần</td></tr>
+<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>207 ms</strong></td><td>234 ms</td><td><strong>Nhanh hơn 1.1×</strong> (10 lần; trung vị 179 so với 213 ms)</td></tr>
+<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>6.4 ms</strong></td><td>35.7 ms</td><td><strong>Nhanh hơn 5.6×</strong> (20 lần)</td></tr>
+<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.70 s</strong></td><td>8.26 s</td><td><strong>Nhanh hơn 11.8×</strong> (3 lần; Rust duyệt 1.791 tệp, Python 1.795 tệp)</td></tr>
+<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.31 s</strong></td><td>5.99 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
+<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>6.35 ms</strong></td><td>—</td><td>Một lệnh được phép, trung bình 50 lần</td></tr>
+<tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.5 MiB</strong></td><td>28.3 MiB</td><td>Quét toàn kho: 20.7 so với 31.3 MiB</td></tr>
+<tr><td>Dung lượng binary</td><td><strong>22.9 MiB</strong></td><td>—</td><td>23.996.800 byte, binary tự chứa</td></tr>
+</tbody>
+</table>
+</div>
+<div class="wp-prose">
+<p><strong>So với bản đo 20/10/2026 (1.5.1):</strong> khởi động 4.16 → 4.93 ms, guard 4.9 → 6.35 ms, binary 18.2 → 22.9 MiB, <code>ci check</code> 5.8 → 6.4 ms, quét skills 0.55 → 0.70 s (tỷ lệ 15.5× → 11.8×). Đáng chú ý nhất là <code>doctor</code>: Rust nhanh hơn Python 2.9× ở bản cũ, nay chỉ còn 1.1×, vì bản Rust 1.5.2 chạy thêm nhiều bước kiểm tra hơn. Mọi thứ đều chậm và nặng hơn một chút so với 1.5.1; chúng tôi ghi nhận như vậy và chưa tối ưu lại. Phép đo này vẫn chỉ là một máy, vài lần chạy, nên số liệu chỉ có giá trị tương đối.</p>
 </div>
 </section>
 
@@ -373,7 +337,7 @@
           <li><strong>Khoảng trống <code>chmod 777</code>:</strong> Lần chạy lại ngày 14/11 cho thấy <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định; chỉ bộ bọc <code>core/scripts/safe-run.sh</code> chặn nó, và bộ bọc này chưa được gắn tự động. Bản đầu của báo cáo đã ghi lệnh này là bị chặn.</li>
 <li><strong>Studio chưa đạt đầy đủ tính năng:</strong> Chưa có registry thiết bị, màn hình phiên agent, ghép cặp di động, thực thi qua SSH hoặc Docker, giao diện cấp lease quyền và tự cập nhật có ký. Ngoài ứng dụng macOS Yana 1.0.0, chưa có bản phát hành Studio hay IDE riêng từ kho Yana-studio.</li>
 <li><strong>Việc tách kho vừa hoàn tất:</strong> Website, web app và ứng dụng desktop chuyển sang hai kho riêng trong 11–13/11/2026, nên liên kết và tài liệu cũ nhắc tới <code>tools/yana-web</code> hay <code>tools/yana-studio</code> trỏ vào mã đã di chuyển.</li>
-<li><strong>Số đo chưa đầy đủ:</strong> Các so sánh với Python chưa được lặp lại cho 1.5.2, và số hàm kiểm thử là số đếm, không phải kết quả chạy.</li>
+<li><strong>Số đo còn hạn chế:</strong> Benchmark chỉ chạy trên một máy với vài lần lặp, và số hàm kiểm thử là số đếm, không phải kết quả chạy.</li>
 </ul>
         </div>
       </section>
@@ -449,7 +413,7 @@
 <p><strong>Ghi chú hiệu đính so với bản 26/10/2026:</strong></p>
 <ul>
 <li>Số agent: bản đầu ghi 60 (số mục cấp một trong <code>core/agents</code>); số đúng theo <code>check_counts.py</code> là 100.</li>
-<li>Quét thư mục skills: 15.5× (bản đầu ghi 15.4×); Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
+<li>Mục 6 được đo lại toàn bộ ngày 14/11 với 1.5.2: quét skills 11.8× (bản đầu ghi 15.4×; <code>BENCHMARK.md</code> ngày 20/10 ghi 15.5×), <code>doctor</code> chỉ còn nhanh hơn 1.1× (bản đầu ghi 2.9×). Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
 <li>Bảng lọc lệnh: ghi lại lớp nào chặn từng lệnh theo lần chạy 14/11; <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định.</li>
 <li>Số công cụ MCP: 16 (bản đầu ghi 14, là số tại thời điểm fuzzing).</li>
 <li>Số bản phát hành: xem mục 9; số đếm hiện tại khác bản đầu và chưa xác định được nguyên nhân.</li>

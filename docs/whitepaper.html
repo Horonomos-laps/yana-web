@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Báo cáo Kỹ thuật Yana AI · Technical Whitepaper 2026 (cập nhật 11/2026)</title>
-  <meta name="description" content="Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy. Báo cáo kiến trúc kỹ thuật và kết quả phát triển qua 2.627 commit (cập nhật 14/11/2026).">
+  <meta name="description" content="Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy. Báo cáo kiến trúc kỹ thuật và kết quả phát triển qua 2.633 commit (cập nhật 16/11/2026).">
   <link rel="canonical" href="https://yana.vutam.link/whitepaper.html">
   <link rel="alternate" hreflang="vi" href="https://yana.vutam.link/whitepaper.html">
   <link rel="alternate" hreflang="en" href="https://yana.vutam.link/whitepaper-en.html">
@@ -57,7 +57,7 @@
         <div class="wp-badge-row">
           <span class="wp-badge wp-badge--primary">BÁO CÁO DỰ ÁN · BẢN CẬP NHẬT 11/2026</span>
           <span class="wp-badge wp-badge--accent">CONTROL · VERIFY · PROTECT</span>
-          <span class="wp-badge wp-badge--tag">Yana 1.0 · yana-rt 1.5.2</span>
+          <span class="wp-badge wp-badge--tag">Yana 1.0 · yana-rt 1.5.4</span>
         </div>
         <h1 class="wp-title">Yana AI: Lớp điều khiển cục bộ giữa mô hình AI và quyền thực thi trên máy</h1>
         <p class="wp-subtitle">Gần sáu tháng xây dựng: từ một kho mã trống đến Yana 1.0 và hệ sinh thái ba kho mã</p>
@@ -73,7 +73,7 @@
           </div>
           <div class="wp-meta-item">
             <dt>Ngày công bố & Giấy phép</dt>
-            <dd>14 tháng 11, 2026 · Apache 2.0 (bản đầu: 26/10/2026)</dd>
+            <dd>16 tháng 11, 2026 · Apache 2.0 (bản đầu: 26/10/2026)</dd>
           </div>
           <div class="wp-meta-item">
             <dt>Mã nguồn & Cổng thông tin</dt>
@@ -86,7 +86,7 @@
       <section class="wp-abstract">
 <div class="wp-abstract-title">Tóm tắt (Abstract)</div>
 <p>Các agent lập trình hiện nay có thể xóa thư mục, đẩy mã lên kho chung hoặc đọc khóa API chỉ bằng một dòng lệnh, còn lời dặn <em>"hãy cẩn thận"</em> trong prompt không đủ để ngăn điều đó. Yana AI tách hai việc: <strong>kỹ năng (skills)</strong> dạy agent cách làm, còn <strong>quyền hành động (capabilities)</strong> chỉ đến từ một lớp riêng chạy trực tiếp trên máy người dùng. Mô hình đề xuất, Yana quyết định, con người luôn giữ quyền dừng.</p>
-<p>Đây là bản cập nhật ngày 14/11/2026 của báo cáo công bố ngày 26/10/2026. Báo cáo trình bày thiết kế, hiện thực và quá trình phát triển trong <strong>2.627 commit</strong> (từ 17/05 đến 14/11/2026), các số đo hiệu năng, cách chúng tôi kiểm chứng tính an toàn, và những giới hạn còn lại. Hệ sinh thái nay gồm ba kho mã: <strong>Yana-AI</strong> (runtime Rust <code>yana-rt</code>, lớp quản trị, CLI), <strong>Yana-studio</strong> (ứng dụng macOS Yana 1.0, Studio và IDE) và <strong>yana-web</strong> (website và web app). Studio gửi mọi yêu cầu mô hình qua một runtime duy nhất (<code>yana-rt</code> 1.5.2) với 19 nhà cung cấp.</p>
+<p>Đây là bản cập nhật ngày 16/11/2026 của báo cáo công bố ngày 26/10/2026. Báo cáo trình bày thiết kế, hiện thực và quá trình phát triển trong <strong>2.633 commit</strong> (từ 17/05 đến 16/11/2026), các số đo hiệu năng, cách chúng tôi kiểm chứng tính an toàn, và những giới hạn còn lại. Hệ sinh thái nay gồm ba kho mã: <strong>Yana-AI</strong> (runtime Rust <code>yana-rt</code>, lớp quản trị, CLI), <strong>Yana-studio</strong> (ứng dụng macOS Yana 1.0, Studio và IDE) và <strong>yana-web</strong> (website và web app). Studio gửi mọi yêu cầu mô hình qua một runtime duy nhất (<code>yana-rt</code>, bản mới nhất 1.5.4) với 19 nhà cung cấp.</p>
 <div class="wp-keywords">
 <strong>Từ khóa:</strong> An toàn agent AI, kiểm soát quyền (capability governance), nhật ký nối băm (hash-chained audit logs), Model Context Protocol (MCP), Rust, Code-OSS.
 </div>
@@ -279,24 +279,26 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
 <div class="wp-prose">
-<p>Đo lại hoàn toàn ngày 15/11/2026 trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3. Lần này mọi phép so sánh đều <strong>chạy xen kẽ</strong> (Rust, Python, Rust, Python…) với một lần chạy khởi động trước, rồi lấy trung vị, để trạng thái máy tại từng thời điểm ảnh hưởng đều lên cả hai bên. Bản dựng đo là <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>), script Python chạy bằng <code>python3 -I</code>.</p>
+<p>Đo lại ngày 16/11/2026 cho bản mới nhất <code>yana-rt 1.5.4</code> (commit phát hành <code>c8c29fb2</code>, bản dựng mặc định, 22.9 MiB) trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, theo đúng phương pháp của lần đo 15/11: mọi phép so sánh <strong>chạy xen kẽ</strong> (Rust, Python, Rust, Python…) sau một lần chạy khởi động, rồi lấy trung vị; script Python chạy bằng <code>python3 -I</code>. Máy không rảnh hoàn toàn: tải trung bình 5.0 đến 5.2 trong suốt lúc đo, nên các số tuyệt đối có thể cao hơn so với khi máy rảnh. Tỷ lệ Rust so với Python ít bị ảnh hưởng hơn vì hai bên chạy xen kẽ.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
-<thead><tr><th>Phép đo</th><th>Rust (yana-rt)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
+<thead><tr><th>Phép đo</th><th>Rust (yana-rt 1.5.4)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
 <tbody>
-<tr><td>Khởi động nguội</td><td><strong>4.21 ms</strong></td><td>—</td><td>Trung vị 60 lần</td></tr>
-<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>139 ms</strong></td><td>195 ms</td><td><strong>Nhanh hơn 1.4×</strong> (12 lần)</td></tr>
-<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>5.7 ms</strong></td><td>31.0 ms</td><td><strong>Nhanh hơn 5.4×</strong> (20 lần)</td></tr>
-<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.56 s</strong></td><td>8.21 s</td><td><strong>Nhanh hơn 14.5×</strong> (5 lần; Rust duyệt 1.791 tệp, Python 1.795 tệp)</td></tr>
-<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.26 s</strong></td><td>5.87 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
-<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>5.27 ms</strong></td><td>—</td><td>Một lệnh được phép, trung vị 40 lần</td></tr>
-<tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.5 MiB</strong></td><td>28.3 MiB</td><td>Quét toàn kho: 20.7 so với 31.3 MiB</td></tr>
+<tr><td>Khởi động nguội</td><td><strong>6.17 ms</strong></td><td>—</td><td>Trung vị 60 lần</td></tr>
+<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>152 ms</strong></td><td>209 ms</td><td><strong>Nhanh hơn 1.4×</strong> (12 lần)</td></tr>
+<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>34.1 ms</td><td><strong>Nhanh hơn 4.8×</strong> (20 lần; cả hai cùng 6 cảnh báo)</td></tr>
+<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.58 s</strong></td><td>8.60 s</td><td><strong>Nhanh hơn 14.8×</strong> (5 lần; Rust duyệt 1.794 tệp, Python 1.825 tệp)</td></tr>
+<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.29 s</strong></td><td>6.89 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
+<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>5.91 ms</strong></td><td>—</td><td>Một lệnh được phép, trung vị 40 lần</td></tr>
+<tr><td>Hook ngân sách token (<code>guard token-budget</code>)</td><td><strong>5.64 ms</strong></td><td>—</td><td>Lần gọi đầu trong một dự án đã bật <code>flock-v1</code>, trung vị 40 lần. Lần đo tháng 10 không đo được vì lỗi thiếu tệp đánh dấu</td></tr>
+<tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.3 MiB</strong></td><td>25.4 MiB</td><td>Quét toàn kho: 20.7 so với 32.1 MiB</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>Ba bản dựng đo cạnh nhau</strong> (xen kẽ, trung vị, ms) để xem 1.5.2 có chậm đi so với 1.5.1 không. Cột giữa là 1.5.2 dựng chỉ với tính năng <code>cli</code>, tách riêng ảnh hưởng của máy chủ MCP.</p>
+<p><strong>So với lần đo 15/11 (1.5.2):</strong> tỷ lệ nhanh hơn gần như không đổi (<code>doctor</code> 1.4× và 1.4×, quét skills 14.8× và 14.5×, <code>ci check</code> 4.8× và 5.4×) và binary vẫn 22.9 MiB. Các số tuyệt đối của Rust cao hơn 3 đến 47% (quét skills 0.58 so với 0.56 s, khởi động 6.17 so với 4.21 ms), phù hợp với việc máy đang bận hơn lần trước. Chúng tôi chưa đo lại lúc máy rảnh nên chưa tách được phần do máy và phần do mã.</p>
+<p><strong>Số đo lịch sử ngày 15/11/2026, giữ nguyên.</strong> Ba bản dựng đo cạnh nhau (xen kẽ, trung vị, ms) để xem 1.5.2 có chậm đi so với 1.5.1 không. Cột giữa là 1.5.2 dựng chỉ với tính năng <code>cli</code>, tách riêng ảnh hưởng của máy chủ MCP.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
@@ -326,16 +328,17 @@
           <p>Bản vá cập nhật tiến hành phân tích cú pháp lệnh theo chuẩn POSIX shell (đánh giá dấu ngoặc kép, substitution, heredocs, pipelines và nhóm subshell) trước khi so khớp quy tắc, được xác thực bởi <strong>1.642 unit test vượt qua</strong>. Bản vá đã trải qua 4 chu kỳ kiểm toán đối kháng độc lập bởi các subagent AI (tổng cộng 6 lượt rà soát). <strong>Bài học rút ra:</strong> Danh sách đen theo chuỗi lệnh không bao giờ có thể bao quát hết; bộ lọc mẫu chỉ là lớp phòng thủ bổ trợ, còn sự an toàn tuyệt đối nằm ở <em>cổng phê duyệt của con người</em> và <em>phạm vi quyền hạn được cấp</em>.</p>
         </div>
       <div class="wp-prose">
-<p><strong>Từ 26/10 đến 14/11/2026</strong>, các thay đổi liên quan đến an toàn (theo lịch sử PR và <code>CHANGELOG.md</code>):</p>
+<p><strong>Từ 26/10 đến 16/11/2026</strong>, các thay đổi liên quan đến an toàn (theo lịch sử PR và <code>CHANGELOG.md</code>):</p>
 <ul>
 <li><code>yana-rt authority verify</code> kiểm tra mọi lần thực thi đều truy về một quyết định cho phép (#534). <code>yana-rt status</code> cho một ảnh chụp chỉ-đọc dùng chung cho mọi bề mặt, kèm công cụ MCP chỉ-đọc tương ứng (#533, #535).</li>
 <li>MCP: danh sách công cụ được phép (<code>allowed_tools</code>), ghim định nghĩa công cụ và gợi ý an toàn cho từng công cụ (#532). Máy chủ nay có 16 công cụ; một test khẳng định đúng số đó để công cụ mới buộc phải được cân nhắc.</li>
 <li>Bản 1.5.2: <code>list_processes</code> chạy được trên macOS, có test MCP đầu-cuối, 13 khuyến cáo RUSTSEC làm CI đỏ được xử lý bằng cập nhật phụ thuộc; sau đó thêm bản vá <code>quinn-udp</code> cho RUSTSEC-2026-0538 (#562).</li>
 <li>Khóa <code>flock-v1</code> bật theo yêu cầu trên bản checkout mới (#541); pdfium được ghim SHA-256 trong workflow phát hành (#542); <code>verify_action_pins.py</code> so từng SHA của GitHub Action với thẻ tương ứng.</li>
+<li><strong>Bản 1.5.4 (16/11), sửa lỗi khóa phiên vĩnh viễn (#569).</strong> Trên một bản clone mới (ví dụ một phiên chạy trên cloud) không có <code>yana-rt</code> trong PATH, hook ngân sách token từ chối <em>mọi</em> lần gọi công cụ vì thiếu tệp đánh dấu <code>flock-v1</code>, kể cả lệnh có thể tạo tệp đó, nên phiên bị khóa đến khi bỏ đi. Bản #541 chỉ thêm lựa chọn bật thủ công và lời gợi ý, chưa gỡ việc chặn. Nay hook làm giống đường Rust: bỏ qua bước kiểm ngân sách của lần gọi đó và chỉ cảnh báo, còn cổng bảo trì và tệp đánh dấu sai vẫn chặn. Bản 1.5.3 được chuẩn bị và kiểm thử nhưng <strong>không phát hành</strong> vì chính lần kiểm thử đó phát hiện lỗi này.</li>
 <li>CI chạy hằng ngày trên main để lệch toolchain lộ ra trước khi có pull request (#557) và có kiểm tra sức khỏe hằng tuần (#566).</li>
 <li>Ngày 14/11/2026, API GitHub báo <strong>0 cảnh báo Dependabot còn mở</strong> trên cả ba kho (kiểm tra trực tiếp).</li>
 </ul>
-<p>Kho hiện có <strong>1.852 hàm kiểm thử Rust</strong> (đếm bằng <code>grep</code> thuộc tính <code>#[test]</code> trong <code>src</code> và <code>tests</code>). Đây là số đếm, không phải kết quả chạy: báo cáo này chưa chạy lại toàn bộ bộ test.</p>
+<p>Kho hiện có <strong>1.852 hàm kiểm thử Rust</strong> (đếm bằng <code>grep</code> thuộc tính <code>#[test]</code> trong <code>src</code> và <code>tests</code>). Trước khi phát hành 1.5.4, chúng tôi đã chạy trên máy đo: <code>cargo test --bin yana-rt</code> <strong>1.702 đạt</strong> (1 bỏ qua), bộ tích hợp <code>integration_runtime</code> <strong>67 đạt</strong>, test hook 384 đạt, test Python 1.031 đạt; CI của nhánh main cũng xanh trên đúng commit phát hành. Các đích test Rust khác không được chạy riêng trong lần này, nên con số 1.852 vẫn là số đếm.</p>
 </div>
 </section>
 
@@ -353,7 +356,7 @@
           <li><strong>Khoảng trống <code>chmod 777</code>:</strong> Lần chạy lại ngày 14/11 cho thấy <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định; chỉ bộ bọc <code>core/scripts/safe-run.sh</code> chặn nó, và bộ bọc này chưa được gắn tự động. Bản đầu của báo cáo đã ghi lệnh này là bị chặn.</li>
 <li><strong>Studio chưa đạt đầy đủ tính năng:</strong> Chưa có registry thiết bị, màn hình phiên agent, ghép cặp di động, thực thi qua SSH hoặc Docker, giao diện cấp lease quyền và tự cập nhật có ký. Ngoài ứng dụng macOS Yana 1.0.0, chưa có bản phát hành Studio hay IDE riêng từ kho Yana-studio.</li>
 <li><strong>Việc tách kho vừa hoàn tất:</strong> Website, web app và ứng dụng desktop chuyển sang hai kho riêng trong 11–13/11/2026, nên liên kết và tài liệu cũ nhắc tới <code>tools/yana-web</code> hay <code>tools/yana-studio</code> trỏ vào mã đã di chuyển.</li>
-<li><strong>Số đo còn hạn chế:</strong> Benchmark chỉ chạy trên một máy với vài lần lặp, và số hàm kiểm thử là số đếm, không phải kết quả chạy.</li>
+<li><strong>Số đo còn hạn chế:</strong> Benchmark chỉ chạy trên một máy với vài lần lặp, khi máy không rảnh hoàn toàn (tải được ghi trong mục 6). Kết quả chạy test ở mục 7 chỉ gồm các bộ test đã nêu, không phải mọi đích test.</li>
 </ul>
         </div>
       </section>
@@ -362,7 +365,7 @@
       <section class="wp-section" id="timeline">
 <h2 class="wp-sec-title"><span class="wp-sec-num">9.</span> Quỹ đạo Kỹ thuật & Mốc thời gian</h2>
 <div class="wp-prose">
-<p>Kho lưu trữ bắt đầu từ một commit trống vào ngày <strong>17/05/2026</strong>. Đến ngày 14/11/2026, lịch sử nhánh main của Yana-AI ghi nhận <strong>2.627 commits</strong>, <strong>495 pull request đã gộp</strong> (550 đã mở, tính đến 15/11) và <strong>75 thẻ phiên bản</strong>; trang Releases của Yana-AI hiển thị <strong>26 bản phát hành</strong>, và kho Yana-studio có thêm bản Yana 1.0.0. Hình 5 cho thấy nhịp commit theo tháng; tháng 6 đạt đỉnh 740 commits trong đợt nhập hàng loạt skill và dựng website. Bản đầu của báo cáo ghi 41 bản phát hành; số đếm hiện tại thấp hơn và chúng tôi chưa xác định được nguyên nhân chênh lệch.</p>
+<p>Kho lưu trữ bắt đầu từ một commit trống vào ngày <strong>17/05/2026</strong>. Đến ngày 14/11/2026, lịch sử nhánh main của Yana-AI ghi nhận <strong>2.627 commits</strong>, <strong>495 pull request đã gộp</strong> (550 đã mở, tính đến 15/11) và <strong>75 thẻ phiên bản</strong>; trang Releases của Yana-AI hiển thị <strong>26 bản phát hành</strong>, và kho Yana-studio có thêm bản Yana 1.0.0. Hình 5 cho thấy nhịp commit theo tháng; tháng 6 đạt đỉnh 740 commits trong đợt nhập hàng loạt skill và dựng website. Bản đầu của báo cáo ghi 41 bản phát hành; số đếm hiện tại thấp hơn và chúng tôi chưa xác định được nguyên nhân chênh lệch. Đến 16/11, sau bản 1.5.4: <strong>2.633 commit</strong>, <strong>496 pull request đã gộp</strong> (551 đã mở), <strong>77 thẻ</strong> và <strong>27 bản phát hành</strong> trên trang Releases của Yana-AI.</p>
 </div>
 <figure class="wp-figure">
 <img src="assets/fig-commits-2026-11-vi.svg" alt="Hình 5. Số commit theo tháng, 17/05 đến 14/11/2026" loading="lazy">
@@ -394,8 +397,8 @@
             <div class="wp-timeline-content">MCP client bản địa và trust-store; LSP client chỉ đọc; chế độ lập kế hoạch (Plan mode) với xem trước diff; bộ xử lý tài liệu văn phòng; phát hành Yana Studio IDE 1.7 (16/10); tích hợp Antigravity hook.</div>
           </div>
         <div class="wp-timeline-item">
-<div class="wp-timeline-phase">Tháng 11, 2026<small>Yana 1.0 &amp; Tách kho (1–14/11)</small></div>
-<div class="wp-timeline-content">yana-rt và yana-ai 1.5.2 (changelog ngày 03/11; bản <code>rt-v1.5.2</code> đăng trên GitHub ngày 12/11): <code>harness audit</code>, chat có xem trước phê duyệt và chế độ lập kế hoạch, gợi ý bật Giám Thị trong <code>doctor</code>. <code>authority verify</code>, <code>status</code> và nâng cấp bảo mật MCP (12/11). <strong>Yana 1.0.0</strong> cho macOS, ứng dụng gốc và Studio trong một bản tải, phát hành 11/11. Hệ sinh thái tách thành ba kho trong tổ chức <code>Horonomos-laps</code> (11–13/11): website và web app sang yana-web, ứng dụng macOS, Studio, IDE sang Yana-studio; Yana Desktop (Electron) được gỡ khỏi Yana-AI ngày 13/11. Website được thiết kế lại trên yana-web (logo mới, bốn video demo dựng lại, trang MacBook 3D).</div>
+<div class="wp-timeline-phase">Tháng 11, 2026<small>Yana 1.0 &amp; Tách kho (1–16/11)</small></div>
+<div class="wp-timeline-content">yana-rt và yana-ai 1.5.2 (changelog ngày 03/11; bản <code>rt-v1.5.2</code> đăng trên GitHub ngày 12/11): <code>harness audit</code>, chat có xem trước phê duyệt và chế độ lập kế hoạch, gợi ý bật Giám Thị trong <code>doctor</code>. <code>authority verify</code>, <code>status</code> và nâng cấp bảo mật MCP (12/11). <strong>Yana 1.0.0</strong> cho macOS, ứng dụng gốc và Studio trong một bản tải, phát hành 11/11. Hệ sinh thái tách thành ba kho trong tổ chức <code>Horonomos-laps</code> (11–13/11): website và web app sang yana-web, ứng dụng macOS, Studio, IDE sang Yana-studio; Yana Desktop (Electron) được gỡ khỏi Yana-AI ngày 13/11. Website được thiết kế lại trên yana-web (logo mới, bốn video demo dựng lại, trang MacBook 3D). Ngày 16/11: <strong>yana-rt và yana-ai 1.5.4</strong> lên crates.io và PyPI, kèm bản GitHub Release, gồm bản sửa lỗi khóa phiên trên bản clone mới; bản 1.5.3 bị hủy trước khi phát hành.</div>
 </div>
 </div>
 </section>
@@ -429,6 +432,7 @@
 <p><strong>Ghi chú hiệu đính so với bản 26/10/2026:</strong></p>
 <ul>
 <li>Số agent: bản đầu ghi 60 (số mục cấp một trong <code>core/agents</code>); số đúng theo <code>check_counts.py</code> là 100.</li>
+<li>Mục 6 đo lại ngày 16/11 cho <code>yana-rt</code> 1.5.4 (bảng chính), cùng phương pháp xen kẽ; số đo 15/11 cho 1.5.1 và 1.5.2 được giữ nguyên bên dưới.</li>
 <li>Mục 6 được đo lại toàn bộ ngày 15/11 với phương pháp xen kẽ: quét skills 14.5× (bản đầu ghi 15.4×), <code>doctor</code> 1.4× (bản đầu ghi 2.9×), binary 22.9 MiB (bản đầu ghi 18.2 MiB). Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
 <li>Bảng lọc lệnh: ghi lại lớp nào chặn từng lệnh theo lần chạy 14/11; <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định.</li>
 <li>Số công cụ MCP: 16 (bản đầu ghi 14, là số tại thời điểm fuzzing).</li>

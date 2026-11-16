@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Yana AI Technical Whitepaper · November 2026 update</title>
-  <meta name="description" content="Yana AI: A Local Governance Layer Between AI Models and System Execution. Engineering report and system architecture across 2,627 commits (updated November 14, 2026).">
+  <meta name="description" content="Yana AI: A Local Governance Layer Between AI Models and System Execution. Engineering report and system architecture across 2,633 commits (updated November 16, 2026).">
   <link rel="canonical" href="https://yana.vutam.link/whitepaper-en.html">
   <link rel="alternate" hreflang="vi" href="https://yana.vutam.link/whitepaper.html">
   <link rel="alternate" hreflang="en" href="https://yana.vutam.link/whitepaper-en.html">
@@ -57,7 +57,7 @@
         <div class="wp-badge-row">
           <span class="wp-badge wp-badge--primary">ENGINEERING REPORT · NOVEMBER 2026 UPDATE</span>
           <span class="wp-badge wp-badge--accent">CONTROL · VERIFY · PROTECT</span>
-          <span class="wp-badge wp-badge--tag">Yana 1.0 · yana-rt 1.5.2</span>
+          <span class="wp-badge wp-badge--tag">Yana 1.0 · yana-rt 1.5.4</span>
         </div>
         <h1 class="wp-title">Yana AI: A Local Governance Layer Between AI Models and System Execution</h1>
         <p class="wp-subtitle">Almost Six Months of Engineering: From an Empty Repository to Yana 1.0 and a Three-Repository Ecosystem</p>
@@ -69,7 +69,7 @@
           </div>
           <div class="wp-meta-item">
             <dt>Date & License</dt>
-            <dd>November 14, 2026 · Apache 2.0 (first edition: Oct 26, 2026)</dd>
+            <dd>November 16, 2026 · Apache 2.0 (first edition: Oct 26, 2026)</dd>
           </div>
           <div class="wp-meta-item">
             <dt>Repository</dt>
@@ -86,7 +86,7 @@
       <section class="wp-abstract">
 <div class="wp-abstract-title">Abstract</div>
 <p>Modern autonomous coding agents can delete directories, force-push unvetted code to shared repositories, or exfiltrate private API keys with a single command. Natural language prompts advising an agent to <em>"be careful"</em> are inherently advisory and fundamentally insufficient to prevent catastrophic side effects. Yana AI decouples two distinct concepts: <strong>skills</strong> teach agents how to accomplish tasks, whereas <strong>capabilities</strong> grant concrete execution permissions through an isolated, host-native governance layer running entirely on the user's machine. The model proposes, Yana arbitrates, and the human operator always maintains unilateral veto authority.</p>
-<p>This is the November 14, 2026 update of the report first published on October 26, 2026. It presents the system architecture, implementation details, and engineering trajectory across <strong>2,627 commits</strong> (May 17 – November 14, 2026), alongside performance measurements, safety verification methodology, and documented design boundaries. The ecosystem now spans three repositories: <strong>Yana-AI</strong> (the Rust runtime <code>yana-rt</code>, governance layer, CLI), <strong>Yana-studio</strong> (the Yana 1.0 macOS app, Studio, and IDE), and <strong>yana-web</strong> (website and web app). Studio sends every model request through a single runtime (<code>yana-rt</code> 1.5.2) covering 19 providers.</p>
+<p>This is the November 16, 2026 update of the report first published on October 26, 2026. It presents the system architecture, implementation details, and engineering trajectory across <strong>2,633 commits</strong> (May 17 – November 16, 2026), alongside performance measurements, safety verification methodology, and documented design boundaries. The ecosystem now spans three repositories: <strong>Yana-AI</strong> (the Rust runtime <code>yana-rt</code>, governance layer, CLI), <strong>Yana-studio</strong> (the Yana 1.0 macOS app, Studio, and IDE), and <strong>yana-web</strong> (website and web app). Studio sends every model request through a single runtime (<code>yana-rt</code>, latest release 1.5.4) covering 19 providers.</p>
 <div class="wp-keywords">
 <strong>Keywords:</strong> AI agent safety, capability governance, hash-chained audit logs, Model Context Protocol (MCP), Rust, Code-OSS.
 </div>
@@ -280,24 +280,26 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Empirical Evaluation and Benchmarks</h2>
 <div class="wp-prose">
-<p>Fully re-measured on November 15, 2026 on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3. This time every comparison is <strong>interleaved</strong> (Rust, Python, Rust, Python, …) after one warm-up run, and the median is taken, so whatever state the machine is in affects both sides equally. The measured build is <code>yana-rt 1.5.2</code> (commit <code>62a0a0fa</code>); the Python scripts run with <code>python3 -I</code>.</p>
+<p>Re-measured on November 16, 2026 for the latest release, <code>yana-rt 1.5.4</code> (release commit <code>c8c29fb2</code>, default build, 22.9 MiB), on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, with the method of the November 15 run: every comparison is <strong>interleaved</strong> (Rust, Python, Rust, Python, …) after one warm-up run, and the median is taken; the Python scripts run with <code>python3 -I</code>. The machine was not idle: the load average stayed between 5.0 and 5.2 throughout, so absolute times may be higher than on an idle machine. The Rust-to-Python ratios are less affected because both sides were interleaved.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
-<thead><tr><th>Benchmark Operation</th><th>Rust Runtime (yana-rt)</th><th>Python Script</th><th>Performance Delta</th></tr></thead>
+<thead><tr><th>Benchmark Operation</th><th>Rust Runtime (yana-rt 1.5.4)</th><th>Python Script</th><th>Performance Delta</th></tr></thead>
 <tbody>
-<tr><td>Cold Binary Startup</td><td><strong>4.21 ms</strong></td><td>—</td><td>Median of 60 runs</td></tr>
-<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>139 ms</strong></td><td>195 ms</td><td><strong>1.4× faster</strong> (12 runs)</td></tr>
-<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>5.7 ms</strong></td><td>31.0 ms</td><td><strong>5.4× faster</strong> (20 runs)</td></tr>
-<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.56 s</strong></td><td>8.21 s</td><td><strong>14.5× faster</strong> (5 runs; Rust scanned 1,791 files, Python 1,795)</td></tr>
-<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.26 s</strong></td><td>5.87 s</td><td>Not comparable: the two default scopes differ</td></tr>
-<tr><td>Destructive Command Guard</td><td><strong>5.27 ms</strong></td><td>—</td><td>One allowed command, median of 40 runs</td></tr>
-<tr><td>Peak Memory, Skills Scan</td><td><strong>16.5 MiB</strong></td><td>28.3 MiB</td><td>Full-repo scan: 20.7 vs 31.3 MiB</td></tr>
+<tr><td>Cold Binary Startup</td><td><strong>6.17 ms</strong></td><td>—</td><td>Median of 60 runs</td></tr>
+<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>152 ms</strong></td><td>209 ms</td><td><strong>1.4× faster</strong> (12 runs)</td></tr>
+<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>34.1 ms</td><td><strong>4.8× faster</strong> (20 runs; both report 6 warnings)</td></tr>
+<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.58 s</strong></td><td>8.60 s</td><td><strong>14.8× faster</strong> (5 runs; Rust scanned 1,794 files, Python 1,825)</td></tr>
+<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.29 s</strong></td><td>6.89 s</td><td>Not comparable: the two default scopes differ</td></tr>
+<tr><td>Destructive Command Guard</td><td><strong>5.91 ms</strong></td><td>—</td><td>One allowed command, median of 40 runs</td></tr>
+<tr><td>Token Budget Hook (<code>guard token-budget</code>)</td><td><strong>5.64 ms</strong></td><td>—</td><td>First call in a project with <code>flock-v1</code> active, median of 40 runs. The October run could not time it because of the missing-marker error</td></tr>
+<tr><td>Peak Memory, Skills Scan</td><td><strong>16.3 MiB</strong></td><td>25.4 MiB</td><td>Full-repo scan: 20.7 vs 32.1 MiB</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>Three builds measured side by side</strong> (interleaved, medians, ms) to see whether 1.5.2 got slower than 1.5.1. The middle column is 1.5.2 built with only the <code>cli</code> feature, isolating the effect of the MCP server.</p>
+<p><strong>Compared with the November 15 run (1.5.2):</strong> the speed-up ratios are almost unchanged (<code>doctor</code> 1.4× and 1.4×, skills scan 14.8× and 14.5×, <code>ci check</code> 4.8× and 5.4×), and the binary is still 22.9 MiB. Rust absolute times are 3 to 47% higher (skills scan 0.58 vs 0.56 s, startup 6.17 vs 4.21 ms), consistent with a busier machine. We have not re-run on an idle machine, so we cannot yet separate the machine's share from the code's.</p>
+<p><strong>Historical measurements from November 15, 2026, kept as recorded.</strong> Three builds measured side by side (interleaved, medians, ms) to see whether 1.5.2 got slower than 1.5.1. The middle column is 1.5.2 built with only the <code>cli</code> feature, isolating the effect of the MCP server.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
@@ -327,16 +329,17 @@
           <p>An updated patch parses commands according to POSIX shell grammar (evaluating quotes, command substitution, heredocs, pipes, and subshell groups) prior to rule matching, validated by <strong>1,642 passing unit tests</strong>. The patch underwent four independent adversarial audit cycles executed by AI subagents (six review passes total). <strong>Key takeaway:</strong> String-based command blacklists are inherently non-exhaustive; pattern guards must be treated as defense-in-depth, while absolute protection rests upon the <em>human approval gate</em> and <em>granular capability bounds</em>.</p>
         </div>
       <div class="wp-prose">
-<p><strong>From October 26 to November 14, 2026</strong>, the safety-relevant changes (from pull request history and <code>CHANGELOG.md</code>):</p>
+<p><strong>From October 26 to November 16, 2026</strong>, the safety-relevant changes (from pull request history and <code>CHANGELOG.md</code>):</p>
 <ul>
 <li><code>yana-rt authority verify</code> checks that every execution traces back to an allow decision (#534). <code>yana-rt status</code> gives one read-only snapshot shared by every surface, with a matching read-only MCP tool (#533, #535).</li>
 <li>MCP: an allowed-tools list (<code>allowed_tools</code>), pinned tool definitions, and per-tool safety hints (#532). The server now exposes 16 tools; a test asserts that exact number so a new tool has to be considered deliberately.</li>
 <li>Version 1.5.2: <code>list_processes</code> works on macOS, an end-to-end MCP test was added, and 13 RUSTSEC advisories that turned CI red were cleared by dependency updates; a <code>quinn-udp</code> patch for RUSTSEC-2026-0538 followed (#562).</li>
 <li>The <code>flock-v1</code> lock is available on request on a fresh checkout (#541); pdfium is pinned by SHA-256 in the release workflow (#542); <code>verify_action_pins.py</code> compares each GitHub Action SHA with its tag.</li>
+<li><strong>Version 1.5.4 (Nov 16) fixes a permanent session lockout (#569).</strong> On a fresh clone (a cloud session, for example) without <code>yana-rt</code> on PATH, the token budget hook refused <em>every</em> tool call because the <code>flock-v1</code> marker was missing, including a call that could create it, so the session stayed locked until it was abandoned. #541 only added an opt-in and a hint and did not remove the block. The hook now matches the Rust path: it skips that call's budget check and only warns, while the maintenance gate and a mismatched marker still block. Version 1.5.3 was prepared and tested but <strong>not released</strong>, because that testing found this bug.</li>
 <li>CI runs daily on main so toolchain drift shows up before a pull request does (#557), plus a weekly health check (#566).</li>
 <li>On November 14, 2026 the GitHub API reported <strong>0 open Dependabot alerts</strong> on all three repositories (checked live).</li>
 </ul>
-<p>The repository now has <strong>1,852 Rust test functions</strong> (a <code>grep</code> count of <code>#[test]</code> attributes under <code>src</code> and <code>tests</code>). This is a count, not a run result: this report did not re-run the whole test suite.</p>
+<p>The repository now has <strong>1,852 Rust test functions</strong> (a <code>grep</code> count of <code>#[test]</code> attributes under <code>src</code> and <code>tests</code>). Before releasing 1.5.4 we ran, on the benchmark machine: <code>cargo test --bin yana-rt</code> <strong>1,702 passed</strong> (1 ignored), the <code>integration_runtime</code> suite <strong>67 passed</strong>, the hook tests 384 passed, and the Python tests 1,031 passed; main's CI was also green on the exact release commit. Other Rust test targets were not run separately this time, so 1,852 remains a count.</p>
 </div>
 </section>
 
@@ -354,7 +357,7 @@
           <li><strong>The <code>chmod 777</code> gap:</strong> The November 14 re-run showed <code>chmod 777</code> is not blocked in the default hook chain; only the <code>core/scripts/safe-run.sh</code> wrapper blocks it, and that wrapper is not wired in automatically. The first edition of this report listed the command as blocked.</li>
 <li><strong>Studio is not at full parity:</strong> There is no device registry, agent sessions screen, mobile pairing, SSH or Docker execution, permission-lease UI, or signed auto-update yet. Apart from the macOS Yana 1.0.0 app, there is no separate Studio or IDE release from the Yana-studio repository.</li>
 <li><strong>The repository split just finished:</strong> The website, web app, and desktop app moved to two separate repositories on November 11–13, 2026, so older links and documents that mention <code>tools/yana-web</code> or <code>tools/yana-studio</code> point at code that has moved.</li>
-<li><strong>Measurements are limited:</strong> The benchmarks ran on one machine with a few repetitions, and the test-function figure is a count, not a run result.</li>
+<li><strong>Measurements are limited:</strong> The benchmarks ran on one machine with a few repetitions, while the machine was not fully idle (the load is stated in Section 6). The test results in Section 7 cover only the suites named there, not every test target.</li>
 </ul>
         </div>
       </section>
@@ -363,7 +366,7 @@
       <section class="wp-section" id="timeline">
 <h2 class="wp-sec-title"><span class="wp-sec-num">9.</span> Engineering Trajectory & Timeline</h2>
 <div class="wp-prose">
-<p>The Git repository began with an empty commit on <strong>May 17, 2026</strong>. By November 14, 2026, the Yana-AI main history recorded <strong>2,627 commits</strong>, <strong>495 merged pull requests</strong> (550 opened, as of November 15), and <strong>75 tags</strong>; the Yana-AI Releases page lists <strong>26 releases</strong>, and the Yana-studio repository adds the Yana 1.0.0 release. Figure 5 shows commit velocity by month, peaking at 740 commits in June during the bulk ingestion of operational skills and the web portal launch. The first edition of this report stated 41 releases; the current count is lower and we have not established the cause of the difference.</p>
+<p>The Git repository began with an empty commit on <strong>May 17, 2026</strong>. By November 14, 2026, the Yana-AI main history recorded <strong>2,627 commits</strong>, <strong>495 merged pull requests</strong> (550 opened, as of November 15), and <strong>75 tags</strong>; the Yana-AI Releases page lists <strong>26 releases</strong>, and the Yana-studio repository adds the Yana 1.0.0 release. Figure 5 shows commit velocity by month, peaking at 740 commits in June during the bulk ingestion of operational skills and the web portal launch. The first edition of this report stated 41 releases; the current count is lower and we have not established the cause of the difference. As of November 16, after 1.5.4: <strong>2,633 commits</strong>, <strong>496 merged pull requests</strong> (551 opened), <strong>77 tags</strong>, and <strong>27 releases</strong> on the Yana-AI Releases page.</p>
 </div>
 <figure class="wp-figure">
 <img src="assets/fig-commits-2026-11-en.svg" alt="Figure 5. Commits per month, May 17 to November 14, 2026" loading="lazy">
@@ -395,8 +398,8 @@
             <div class="wp-timeline-content">Native MCP client and trust-store; read-only LSP client; plan mode with diff previews; universal office document suite; Yana Studio IDE 1.7 released (Oct 16); Antigravity hook integration.</div>
           </div>
         <div class="wp-timeline-item">
-<div class="wp-timeline-phase">November 2026<small>Yana 1.0 &amp; Repository Split (Nov 1–14)</small></div>
-<div class="wp-timeline-content">yana-rt and yana-ai 1.5.2 (changelog dated Nov 3; the <code>rt-v1.5.2</code> release was posted on GitHub on Nov 12): <code>harness audit</code>, chat with approval preview and plan mode, a <code>doctor</code> hint to enable Giám Thị. <code>authority verify</code>, <code>status</code>, and MCP security upgrades (Nov 12). <strong>Yana 1.0.0</strong> for macOS, the native app and Studio in one download, released Nov 11. The ecosystem split into three repositories under the <code>Horonomos-laps</code> organization (Nov 11–13): the website and web app moved to yana-web, the macOS app, Studio, and IDE to Yana-studio; Yana Desktop (Electron) was removed from Yana-AI on Nov 13. The website was redesigned on yana-web (new logo, four rebuilt demo videos, a 3D MacBook page).</div>
+<div class="wp-timeline-phase">November 2026<small>Yana 1.0 &amp; Repository Split (Nov 1–16)</small></div>
+<div class="wp-timeline-content">yana-rt and yana-ai 1.5.2 (changelog dated Nov 3; the <code>rt-v1.5.2</code> release was posted on GitHub on Nov 12): <code>harness audit</code>, chat with approval preview and plan mode, a <code>doctor</code> hint to enable Giám Thị. <code>authority verify</code>, <code>status</code>, and MCP security upgrades (Nov 12). <strong>Yana 1.0.0</strong> for macOS, the native app and Studio in one download, released Nov 11. The ecosystem split into three repositories under the <code>Horonomos-laps</code> organization (Nov 11–13): the website and web app moved to yana-web, the macOS app, Studio, and IDE to Yana-studio; Yana Desktop (Electron) was removed from Yana-AI on Nov 13. The website was redesigned on yana-web (new logo, four rebuilt demo videos, a 3D MacBook page). Nov 16: <strong>yana-rt and yana-ai 1.5.4</strong> on crates.io and PyPI, with a GitHub Release, including the fresh-clone session lockout fix; 1.5.3 was withdrawn before release.</div>
 </div>
 </div>
 </section>
@@ -430,6 +433,7 @@
 <p><strong>Corrections relative to the October 26, 2026 edition:</strong></p>
 <ul>
 <li>Agent count: the first edition said 60 (the number of top-level entries in <code>core/agents</code>); the correct figure per <code>check_counts.py</code> is 100.</li>
+<li>Section 6 was re-measured on November 16 for <code>yana-rt</code> 1.5.4 (main table) with the same interleaved method; the November 15 measurements for 1.5.1 and 1.5.2 are kept below it.</li>
 <li>Section 6 was fully re-measured on November 15 with an interleaved method: skills scan 14.5× (the first edition said 15.4×), <code>doctor</code> 1.4× (the first edition said 2.9×), binary 22.9 MiB (the first edition said 18.2 MiB). Rust scanned 1,791 files and Python 1,795 files, not the entire skill set.</li>
 <li>Command guard table: now records which layer blocked each command, from the November 14 run; <code>chmod 777</code> is not blocked in the default hook chain.</li>
 <li>MCP tool count: 16 (the first edition said 14, the count at the time of fuzzing).</li>

@@ -173,7 +173,7 @@
         </div>
 
         <figure class="wp-figure">
-          <img src="assets/fig-1-decision-flow.png" alt="Hình 1. Luồng quyết định cho mọi mô hình" loading="lazy">
+          <img src="assets/fig-1-decision-flow-vi.svg" alt="Hình 1. Luồng quyết định cho mọi mô hình" loading="lazy">
           <figcaption class="wp-figure-caption"><strong>Hình 1.</strong> Luồng quyết định cho mọi mô hình. Kỹ năng (Skill) dạy cách làm việc và không nằm trên đường thực thi; chỉ các cổng bảo vệ và nhật ký kiểm toán mới quyết định một hành động có được chạy hay không.</figcaption>
         </figure>
 
@@ -280,25 +280,25 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Đo lường hiệu năng thực nghiệm</h2>
 <div class="wp-prose">
-<p><em>Bản cập nhật 28/11 không đo lại mục này; mọi số dưới đây thuộc 1.5.4 trở về trước.</em> Đo lại ngày 16/11/2026 cho bản mới nhất lúc đó, <code>yana-rt 1.5.4</code> (commit phát hành <code>c8c29fb2</code>, bản dựng mặc định, 22.9 MiB) trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, theo đúng phương pháp của lần đo 15/11: mọi phép so sánh <strong>chạy xen kẽ</strong> (Rust, Python, Rust, Python…) sau một lần chạy khởi động, rồi lấy trung vị; script Python chạy bằng <code>python3 -I</code>. Máy không rảnh hoàn toàn: tải trung bình 5.0 đến 5.2 trong suốt lúc đo, nên các số tuyệt đối có thể cao hơn so với khi máy rảnh. Tỷ lệ Rust so với Python ít bị ảnh hưởng hơn vì hai bên chạy xen kẽ.</p>
+<p>Đo ngày 28/11/2026 cho bản mới nhất <code>yana-rt 1.5.6</code> (cài từ crates.io bằng <code>cargo install --locked</code>, tính năng mặc định, 23.3 MiB) trên cùng máy <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, mã nguồn tại commit <code>09efe4dc</code>, theo đúng phương pháp của hai lần trước: mọi phép so sánh <strong>chạy xen kẽ</strong> (Rust, Python, Rust, Python…) sau một lần chạy khởi động, rồi lấy trung vị; script Python chạy bằng <code>python3 -I</code> (3.14.7). Máy không rảnh hoàn toàn: tải trung bình 3.5 lúc bắt đầu và 4.6 lúc kết thúc.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
-<thead><tr><th>Phép đo</th><th>Rust (yana-rt 1.5.4)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
+<thead><tr><th>Phép đo</th><th>Rust (yana-rt 1.5.6)</th><th>Python</th><th>Chênh lệch</th></tr></thead>
 <tbody>
-<tr><td>Khởi động nguội</td><td><strong>6.17 ms</strong></td><td>—</td><td>Trung vị 60 lần</td></tr>
-<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>152 ms</strong></td><td>209 ms</td><td><strong>Nhanh hơn 1.4×</strong> (12 lần)</td></tr>
-<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>34.1 ms</td><td><strong>Nhanh hơn 4.8×</strong> (20 lần; cả hai cùng 6 cảnh báo)</td></tr>
-<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.58 s</strong></td><td>8.60 s</td><td><strong>Nhanh hơn 14.8×</strong> (5 lần; Rust duyệt 1.794 tệp, Python 1.825 tệp)</td></tr>
-<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.29 s</strong></td><td>6.89 s</td><td>Không so sánh được: phạm vi mặc định của hai bên khác nhau</td></tr>
-<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>5.91 ms</strong></td><td>—</td><td>Một lệnh được phép, trung vị 40 lần</td></tr>
-<tr><td>Hook ngân sách token (<code>guard token-budget</code>)</td><td><strong>5.64 ms</strong></td><td>—</td><td>Lần gọi đầu trong một dự án đã bật <code>flock-v1</code>, trung vị 40 lần. Lần đo tháng 10 không đo được vì lỗi thiếu tệp đánh dấu</td></tr>
-<tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.3 MiB</strong></td><td>25.4 MiB</td><td>Quét toàn kho: 20.7 so với 32.1 MiB</td></tr>
+<tr><td>Khởi động nguội</td><td><strong>5.51 ms</strong></td><td>—</td><td>Trung vị 60 lần</td></tr>
+<tr><td>Chẩn đoán hệ thống (<code>doctor</code>)</td><td><strong>154 ms</strong></td><td>214 ms</td><td><strong>Nhanh hơn 1.4×</strong> (12 lần)</td></tr>
+<tr><td>Kiểm toán CI (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>35.0 ms</td><td><strong>Nhanh hơn 4.9×</strong> (20 lần; cả hai cùng 6 cảnh báo)</td></tr>
+<tr><td>Quét thư mục skills (<code>core/skills</code>)</td><td><strong>0.60 s</strong></td><td>9.01 s</td><td><strong>Nhanh hơn 15.1×</strong> (5 lần; Rust duyệt 1.796 tệp, Python 1.827 tệp; điểm 37 so với 0)</td></tr>
+<tr><td>Quét toàn kho (<code>scan .</code>, mặc định)</td><td><strong>0.32 s</strong></td><td>6.35 s</td><td>Không so sánh được: Rust duyệt 461 tệp, Python 1.506 tệp</td></tr>
+<tr><td>Lớp bảo vệ lệnh phá hủy</td><td><strong>5.54 ms</strong></td><td>—</td><td>Một lệnh được phép, trung vị 40 lần</td></tr>
+<tr><td>Hook ngân sách token (<code>guard token-budget</code>)</td><td><strong>5.68 ms</strong></td><td>—</td><td>Lần gọi đầu trong một dự án đã bật <code>flock-v1</code>, trung vị 40 lần</td></tr>
+<tr><td>Bộ nhớ đỉnh khi quét skills</td><td><strong>16.9 MiB</strong></td><td>28.5 MiB</td><td>Quét toàn kho: 20.9 so với 31.3 MiB</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>So với lần đo 15/11 (1.5.2):</strong> tỷ lệ nhanh hơn gần như không đổi (<code>doctor</code> 1.4× và 1.4×, quét skills 14.8× và 14.5×, <code>ci check</code> 4.8× và 5.4×) và binary vẫn 22.9 MiB. Các số tuyệt đối của Rust cao hơn 3 đến 47% (quét skills 0.58 so với 0.56 s, khởi động 6.17 so với 4.21 ms), phù hợp với việc máy đang bận hơn lần trước. Chúng tôi chưa đo lại lúc máy rảnh nên chưa tách được phần do máy và phần do mã.</p>
+<p><strong>So với lần đo 16/11 (1.5.4):</strong> khởi động 5.51 so với 6.17 ms, <code>doctor</code> 154 so với 152 ms, <code>ci check</code> 7.2 so với 7.2 ms, quét skills 0.60 so với 0.58 s, quét toàn kho 0.32 so với 0.29 s, guard lệnh phá hủy 5.54 so với 5.91 ms, hook ngân sách token 5.68 so với 5.64 ms. Tỷ lệ so với Python: <code>doctor</code> 1.4× và 1.4×, <code>ci check</code> 4.9× và 4.8×, quét skills 15.1× và 14.8×. Binary lớn thêm khoảng 0.4 MiB (22.9 lên 23.3). Hai lần đo khác nhau về tải máy, trình biên dịch và số tệp trong kho, nên chênh lệch nhỏ chưa tách được nguyên nhân.</p>
 <p><strong>Số đo lịch sử ngày 15/11/2026, giữ nguyên.</strong> Ba bản dựng đo cạnh nhau (xen kẽ, trung vị, ms) để xem 1.5.2 có chậm đi so với 1.5.1 không. Cột giữa là 1.5.2 dựng chỉ với tính năng <code>cli</code>, tách riêng ảnh hưởng của máy chủ MCP.</p>
 </div>
 <div class="wp-table-wrap">
@@ -438,7 +438,8 @@
 <p><strong>Ghi chú hiệu đính so với bản 26/10/2026:</strong></p>
 <ul>
 <li>Số agent: bản đầu ghi 60 (số mục cấp một trong <code>core/agents</code>); số đúng theo <code>check_counts.py</code> là 100.</li>
-<li>Bản 28/11: cập nhật bìa, mục 3, 4.1, 5, 7, 8 và 9. Mục 4.2 và mục 6 giữ nguyên lần chạy cũ. File PDF vẫn là bản 16/11.</li>
+<li>Bản 28/11: cập nhật bìa, mục 3, 4.1, 5, 7, 8 và 9. Mục 4.2 giữ nguyên lần chạy cũ. File PDF vẫn là bản 16/11.</li>
+<li>Mục 6 đo lại ngày 28/11 cho <code>yana-rt</code> 1.5.6 (bảng chính); số của 1.5.4 được nêu trong đoạn so sánh.</li>
 <li>Mục 6 đo lại ngày 16/11 cho <code>yana-rt</code> 1.5.4 (bảng chính), cùng phương pháp xen kẽ; số đo 15/11 cho 1.5.1 và 1.5.2 được giữ nguyên bên dưới.</li>
 <li>Mục 6 được đo lại toàn bộ ngày 15/11 với phương pháp xen kẽ: quét skills 14.5× (bản đầu ghi 15.4×), <code>doctor</code> 1.4× (bản đầu ghi 2.9×), binary 22.9 MiB (bản đầu ghi 18.2 MiB). Rust quét 1.791 tệp và Python 1.795 tệp, không phải toàn bộ skill.</li>
 <li>Bảng lọc lệnh: ghi lại lớp nào chặn từng lệnh theo lần chạy 14/11; <code>chmod 777</code> không bị chặn trong chuỗi hook mặc định.</li>

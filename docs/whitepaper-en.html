@@ -174,7 +174,7 @@
         </div>
 
         <figure class="wp-figure">
-          <img src="assets/fig-1-decision-flow.png" alt="Figure 1. Deterministic Decision Flow" loading="lazy">
+          <img src="assets/fig-1-decision-flow-en.svg" alt="Figure 1. Deterministic Decision Flow" loading="lazy">
           <figcaption class="wp-figure-caption"><strong>Figure 1.</strong> Deterministic decision flow for all models. Skills educate and do not sit on the execution critical path; only guard gates and audit ledgers govern whether an action executes.</figcaption>
         </figure>
 
@@ -281,25 +281,25 @@
       <section class="wp-section" id="benchmarks">
 <h2 class="wp-sec-title"><span class="wp-sec-num">6.</span> Empirical Evaluation and Benchmarks</h2>
 <div class="wp-prose">
-<p><em>The November 28 update did not re-measure this section; every number below is from 1.5.4 or earlier.</em> Re-measured on November 16, 2026 for the latest release, <code>yana-rt 1.5.4</code> (release commit <code>c8c29fb2</code>, default build, 22.9 MiB), on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, with the method of the November 15 run: every comparison is <strong>interleaved</strong> (Rust, Python, Rust, Python, …) after one warm-up run, and the median is taken; the Python scripts run with <code>python3 -I</code>. The machine was not idle: the load average stayed between 5.0 and 5.2 throughout, so absolute times may be higher than on an idle machine. The Rust-to-Python ratios are less affected because both sides were interleaved.</p>
+<p>Measured on November 28, 2026 for the latest release, <code>yana-rt 1.5.6</code> (installed from crates.io with <code>cargo install --locked</code>, default features, 23.3 MiB), on the same <strong>Apple Silicon MacBook Air (M4, 16 GB RAM)</strong>, macOS 27.3, with the source tree at commit <code>09efe4dc</code> and the method of the two earlier runs: every comparison is <strong>interleaved</strong> (Rust, Python, Rust, Python, …) after one warm-up run, and the median is taken; the Python scripts run with <code>python3 -I</code> (3.14.7). The machine was not idle: the load average was 3.5 at the start and 4.6 at the end.</p>
 </div>
 <div class="wp-table-wrap">
 <table class="wp-table">
-<thead><tr><th>Benchmark Operation</th><th>Rust Runtime (yana-rt 1.5.4)</th><th>Python Script</th><th>Performance Delta</th></tr></thead>
+<thead><tr><th>Benchmark Operation</th><th>Rust Runtime (yana-rt 1.5.6)</th><th>Python Script</th><th>Performance Delta</th></tr></thead>
 <tbody>
-<tr><td>Cold Binary Startup</td><td><strong>6.17 ms</strong></td><td>—</td><td>Median of 60 runs</td></tr>
-<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>152 ms</strong></td><td>209 ms</td><td><strong>1.4× faster</strong> (12 runs)</td></tr>
-<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>34.1 ms</td><td><strong>4.8× faster</strong> (20 runs; both report 6 warnings)</td></tr>
-<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.58 s</strong></td><td>8.60 s</td><td><strong>14.8× faster</strong> (5 runs; Rust scanned 1,794 files, Python 1,825)</td></tr>
-<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.29 s</strong></td><td>6.89 s</td><td>Not comparable: the two default scopes differ</td></tr>
-<tr><td>Destructive Command Guard</td><td><strong>5.91 ms</strong></td><td>—</td><td>One allowed command, median of 40 runs</td></tr>
-<tr><td>Token Budget Hook (<code>guard token-budget</code>)</td><td><strong>5.64 ms</strong></td><td>—</td><td>First call in a project with <code>flock-v1</code> active, median of 40 runs. The October run could not time it because of the missing-marker error</td></tr>
-<tr><td>Peak Memory, Skills Scan</td><td><strong>16.3 MiB</strong></td><td>25.4 MiB</td><td>Full-repo scan: 20.7 vs 32.1 MiB</td></tr>
+<tr><td>Cold Binary Startup</td><td><strong>5.51 ms</strong></td><td>—</td><td>Median of 60 runs</td></tr>
+<tr><td>System Diagnostics (<code>doctor</code>)</td><td><strong>154 ms</strong></td><td>214 ms</td><td><strong>1.4× faster</strong> (12 runs)</td></tr>
+<tr><td>Governance CI Audit (<code>ci check</code>)</td><td><strong>7.2 ms</strong></td><td>35.0 ms</td><td><strong>4.9× faster</strong> (20 runs; both report 6 warnings)</td></tr>
+<tr><td>Skills Directory Scan (<code>core/skills</code>)</td><td><strong>0.60 s</strong></td><td>9.01 s</td><td><strong>15.1× faster</strong> (5 runs; Rust scanned 1,796 files, Python 1,827; score 37 vs 0)</td></tr>
+<tr><td>Full Repository Scan (<code>scan .</code>, defaults)</td><td><strong>0.32 s</strong></td><td>6.35 s</td><td>Not comparable: Rust scanned 461 files, Python 1,506</td></tr>
+<tr><td>Destructive Command Guard</td><td><strong>5.54 ms</strong></td><td>—</td><td>One allowed command, median of 40 runs</td></tr>
+<tr><td>Token Budget Hook (<code>guard token-budget</code>)</td><td><strong>5.68 ms</strong></td><td>—</td><td>First call in a project with <code>flock-v1</code> active, median of 40 runs</td></tr>
+<tr><td>Peak Memory, Skills Scan</td><td><strong>16.9 MiB</strong></td><td>28.5 MiB</td><td>Full-repo scan: 20.9 vs 31.3 MiB</td></tr>
 </tbody>
 </table>
 </div>
 <div class="wp-prose">
-<p><strong>Compared with the November 15 run (1.5.2):</strong> the speed-up ratios are almost unchanged (<code>doctor</code> 1.4× and 1.4×, skills scan 14.8× and 14.5×, <code>ci check</code> 4.8× and 5.4×), and the binary is still 22.9 MiB. Rust absolute times are 3 to 47% higher (skills scan 0.58 vs 0.56 s, startup 6.17 vs 4.21 ms), consistent with a busier machine. We have not re-run on an idle machine, so we cannot yet separate the machine's share from the code's.</p>
+<p><strong>Compared with the November 16 run (1.5.4):</strong> startup 5.51 vs 6.17 ms, <code>doctor</code> 154 vs 152 ms, <code>ci check</code> 7.2 vs 7.2 ms, skills scan 0.60 vs 0.58 s, full-repo scan 0.32 vs 0.29 s, destructive guard 5.54 vs 5.91 ms, token budget hook 5.68 vs 5.64 ms. Ratios against Python: <code>doctor</code> 1.4× and 1.4×, <code>ci check</code> 4.9× and 4.8×, skills scan 15.1× and 14.8×. The binary grew by about 0.4 MiB (22.9 to 23.3). The two runs differ in machine load, compiler and number of files in the repository, so the small differences are not attributed to a cause.</p>
 <p><strong>Historical measurements from November 15, 2026, kept as recorded.</strong> Three builds measured side by side (interleaved, medians, ms) to see whether 1.5.2 got slower than 1.5.1. The middle column is 1.5.2 built with only the <code>cli</code> feature, isolating the effect of the MCP server.</p>
 </div>
 <div class="wp-table-wrap">
@@ -439,7 +439,8 @@
 <p><strong>Corrections relative to the October 26, 2026 edition:</strong></p>
 <ul>
 <li>Agent count: the first edition said 60 (the number of top-level entries in <code>core/agents</code>); the correct figure per <code>check_counts.py</code> is 100.</li>
-<li>November 28 revision: cover and sections 3, 4.1, 5, 7, 8 and 9 updated. Sections 4.2 and 6 keep their earlier runs. The PDF is still the November 16 edition.</li>
+<li>November 28 revision: cover and sections 3, 4.1, 5, 7, 8 and 9 updated. Section 4.2 keeps its earlier run. The PDF is still the November 16 edition.</li>
+<li>Section 6 was re-measured on November 28 for <code>yana-rt</code> 1.5.6 (main table); the 1.5.4 figures are given in the comparison paragraph.</li>
 <li>Section 6 was re-measured on November 16 for <code>yana-rt</code> 1.5.4 (main table) with the same interleaved method; the November 15 measurements for 1.5.1 and 1.5.2 are kept below it.</li>
 <li>Section 6 was fully re-measured on November 15 with an interleaved method: skills scan 14.5× (the first edition said 15.4×), <code>doctor</code> 1.4× (the first edition said 2.9×), binary 22.9 MiB (the first edition said 18.2 MiB). Rust scanned 1,791 files and Python 1,795 files, not the entire skill set.</li>
 <li>Command guard table: now records which layer blocked each command, from the November 14 run; <code>chmod 777</code> is not blocked in the default hook chain.</li>

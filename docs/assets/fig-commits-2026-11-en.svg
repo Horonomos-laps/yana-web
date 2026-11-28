@@ -29,8 +29,8 @@
 <rect x="565.1" y="179.8" width="62.9" height="110.2" rx="6" fill="#8b5cf6" stroke="#8b5cf6" stroke-width="0"/>
 <text x="596.6" y="172.8" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">347</text>
 <text x="596.6" y="310" text-anchor="middle" font-size="12" fill="#5d6591">10</text>
-<rect x="663.4" y="266.8" width="62.9" height="23.2" rx="6" fill="url(#hatch)" stroke="#8b5cf6" stroke-width="1.6"/>
-<text x="694.9" y="259.8" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">73</text>
+<rect x="663.4" y="231.3" width="62.9" height="58.7" rx="6" fill="url(#hatch)" stroke="#8b5cf6" stroke-width="1.6"/>
+<text x="694.9" y="224.3" text-anchor="middle" font-size="12.5" font-weight="800" fill="#26306a">185</text>
 <text x="694.9" y="310" text-anchor="middle" font-size="12" fill="#5d6591">11*</text>
-<text x="56" y="334" font-size="11.5" fill="#6b7399">* 1–16 Nov · commits · Yana-AI main · 2026</text>
+<text x="56" y="334" font-size="11.5" fill="#6b7399">* 1–28 Nov · commits · Yana-AI main · 2026</text>
 </svg>

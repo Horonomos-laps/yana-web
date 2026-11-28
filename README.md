@@ -8,7 +8,7 @@
 
 <p align="center">
   The website and the local web app of the Yana ecosystem:<br>
-  chat, missions and an encrypted key vault, with no sign-up and no bundled keys.
+  chat, projects and an encrypted key vault, with no sign-up and no bundled keys.
 </p>
 
 <p align="center">

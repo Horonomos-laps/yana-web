@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Yana Studio · IDE Đa Agent Có Kiểm Soát 2026</title>
-  <meta name="description" content="Yana Studio được xây dựng trên nền tảng Code-OSS (VS Code), nhưng với triết lý hoàn toàn khác biệt so với Cursor: AI hoạt động dưới sự giám sát và phê duyệt minh bạch của bạn.">
+  <meta name="description" content="Yana Studio được xây dựng trên nền tảng Code-OSS (VS Code), nhưng với một nguyên tắc rõ ràng: AI hoạt động dưới sự giám sát và phê duyệt minh bạch của bạn.">
 
   <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono & Caveat (Handwritten) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,7 @@
 
       <p class="lead-text">
         Kế thừa trọn vẹn sức mạnh và extension của <strong>VS Code</strong>. 
-        Khác với Cursor hay Windsurf, ở đây <strong>bạn luôn làm chủ</strong>: AI không được phép âm thầm chạy lệnh nguy hiểm hay đè file khi chưa có cái gật đầu của bạn.
+        Ở đây <strong>bạn luôn làm chủ</strong>: AI không được phép âm thầm chạy lệnh nguy hiểm hay đè file khi chưa có cái gật đầu của bạn.
       </p>
 
       <div style="display: flex; gap: 16px; justify-content: center; align-items: center; margin-bottom: 36px; flex-wrap: wrap;">
@@ -58,7 +58,7 @@
           Khám phá không gian làm việc (Trượt ngang) →
         </a>
         <a href="#comparison" class="btn-spring-2026 btn-spring-secondary">
-          So sánh trực diện với Cursor
+          Cách Studio kiểm soát AI
         </a>
       </div>
 
@@ -140,13 +140,13 @@
       </div>
 
       <div class="marquee-line marquee-line-reverse">
-        <div class="marquee-chip">✨ Claude 3.7 Sonnet &amp; Opus</div>
+        <div class="marquee-chip">✨ Claude qua API key</div>
         <div class="marquee-chip">🧠 DeepSeek Reasoner</div>
         <div class="marquee-chip">🌐 Tiếng Việt · English · 한국어</div>
         <div class="marquee-chip">🔒 Local-first · key trong keystore</div>
         <div class="marquee-chip">📋 Interactive Diff Review</div>
         <div class="marquee-chip">🎨 Visual Canvas Capability</div>
-        <div class="marquee-chip">✨ Claude 3.7 Sonnet &amp; Opus</div>
+        <div class="marquee-chip">✨ Claude qua API key</div>
         <div class="marquee-chip">🧠 DeepSeek Reasoner</div>
         <div class="marquee-chip">🌐 Tiếng Việt · English · 한국어</div>
         <div class="marquee-chip">🔒 Local-first · key trong keystore</div>
@@ -207,9 +207,9 @@
             </div>
             <div class="horiz-preview-box">
               <span style="color: #a78bfa;">• Ollama Local:</span> Llama 3.2, Qwen 2.5, DeepSeek R1<br>
-              <span style="color: #38bdf8;">• Anthropic:</span> Claude 3.7 Sonnet &amp; Opus<br>
-              <span style="color: #34d399;">• OpenAI:</span> GPT-4o / o1 Architecture<br>
-              <span style="color: #f59e0b;">• Quản trị ranh giới:</span> <code>yana-rt 1.5.1</code>
+              <span style="color: #38bdf8;">• Anthropic:</span> các model Claude<br>
+              <span style="color: #34d399;">• OpenAI:</span> các model GPT<br>
+              <span style="color: #f59e0b;">• Quản trị ranh giới:</span> <code>yana-rt <span data-ver-num="rt">1.5.6</span></code>
             </div>
           </div>
 
@@ -220,9 +220,9 @@
     <!-- 4. BẢNG SO SÁNH TRỰC TIẾP: Yana Studio vs Cursor / Copilot -->
     <section class="studio26-section" id="comparison">
       <div class="studio26-head">
-        <p class="studio26-eyebrow">SO SÁNH BẢN CHẤT</p>
-        <h2>Cùng nền tảng VS Code.<br><span class="text-rainbow-2026">Khác biệt hoàn toàn về triết lý an toàn.</span></h2>
-        <p>Cursor tập trung vào việc tạo code tự động càng nhanh càng tốt. Yana Studio thiết kế cho các kỹ sư và doanh nghiệp cần sự chính xác, an toàn tuyệt đối và có bằng chứng audit minh bạch.</p>
+        <p class="studio26-eyebrow">CÁCH KIỂM SOÁT</p>
+        <h2>Cùng nền tảng VS Code.<br><span class="text-rainbow-2026">Thêm một lớp kiểm soát hành động của AI.</span></h2>
+        <p>Yana Studio dành cho người muốn thấy AI định làm gì trước khi việc đó xảy ra, và có nhật ký để soát lại sau.</p>
       </div>
 
       <div class="glass-panel-2026" style="padding: 36px 30px; overflow-x: auto;">
@@ -230,35 +230,29 @@
           <thead>
             <tr style="border-bottom: 2px solid #e2e8f0;">
               <th style="padding: 16px 20px; font-family: var(--font-display); font-size: 16px; color: var(--ink-primary); width: 25%;">Tiêu chí</th>
-              <th style="padding: 16px 20px; font-family: var(--font-display); font-size: 16px; color: var(--ink-muted); width: 37%;">Cursor / AI IDE thông thường</th>
               <th style="padding: 16px 20px; font-family: var(--font-display); font-size: 16px; color: #2563eb; width: 38%; background: rgba(37, 99, 235, 0.04); border-radius: 12px 12px 0 0;">✨ Yana Studio (Code-OSS + Runtime)</th>
             </tr>
           </thead>
           <tbody>
             <tr style="border-bottom: 1px solid #f1f5f9;">
               <td style="padding: 18px 20px; font-weight: 700; color: var(--ink-primary);">Nền tảng lõi</td>
-              <td style="padding: 18px 20px; color: var(--ink-secondary);">Fork từ VS Code</td>
               <td style="padding: 18px 20px; color: var(--ink-primary); background: rgba(37, 99, 235, 0.04); font-weight: 600;">Fork trực tiếp từ Code-OSS (VS Code chuẩn)</td>
             </tr>
             <tr style="border-bottom: 1px solid #f1f5f9;">
               <td style="padding: 18px 20px; font-weight: 700; color: var(--ink-primary);">Quyền thực thi lệnh shell</td>
-              <td style="padding: 18px 20px; color: #dc2626;">AI có thể tự sinh và chạy lệnh ẩn trong nền</td>
-              <td style="padding: 18px 20px; color: #047857; background: rgba(37, 99, 235, 0.04); font-weight: 600;">Chặn mọi lệnh phá hoại (rm, drop db). Bắt buộc người dùng bấm Approve.</td>
+              <td style="padding: 18px 20px; color: #047857; background: rgba(37, 99, 235, 0.04); font-weight: 600;">Lệnh của Yana đi qua lớp kiểm soát; lệnh rủi ro chờ bạn duyệt. Không bộ lọc nào bắt được mọi lệnh phá hoại.</td>
             </tr>
             <tr style="border-bottom: 1px solid #f1f5f9;">
               <td style="padding: 18px 20px; font-weight: 700; color: var(--ink-primary);">Kiểm soát tệp tin (File I/O)</td>
-              <td style="padding: 18px 20px; color: var(--ink-secondary);">AI tự động apply diff trực tiếp vào code</td>
               <td style="padding: 18px 20px; color: var(--ink-primary); background: rgba(37, 99, 235, 0.04); font-weight: 600;">Xem trước diff rõ ràng, phân định ranh giới read vs write</td>
             </tr>
             <tr style="border-bottom: 1px solid #f1f5f9;">
               <td style="padding: 18px 20px; font-weight: 700; color: var(--ink-primary);">Bảo mật &amp; Quyền riêng tư</td>
-              <td style="padding: 18px 20px; color: var(--ink-secondary);">Phụ thuộc máy chủ proxy của nhà cung cấp</td>
               <td style="padding: 18px 20px; color: var(--ink-primary); background: rgba(37, 99, 235, 0.04); font-weight: 600;">Chạy được offline với model cục bộ (Ollama, LM Studio, llama.cpp…)</td>
             </tr>
             <tr>
               <td style="padding: 18px 20px; font-weight: 700; color: var(--ink-primary);">Vết tích kiểm toán (Audit)</td>
-              <td style="padding: 18px 20px; color: var(--ink-muted);">Chỉ có lịch sử chat thông thường</td>
-              <td style="padding: 18px 20px; color: #2563eb; background: rgba(37, 99, 235, 0.04); border-radius: 0 0 12px 12px; font-weight: 600;">Audit Chain Hash Log: từng hành động đều được mã hóa bằng chứng</td>
+              <td style="padding: 18px 20px; color: #2563eb; background: rgba(37, 99, 235, 0.04); border-radius: 0 0 12px 12px; font-weight: 600;">Nhật ký nối chuỗi băm SHA-256: sửa hoặc xóa một dòng sẽ bị phát hiện</td>
             </tr>
           </tbody>
         </table>
@@ -338,7 +332,7 @@
 
       <div class="status-grid">
         <div class="glass-panel-2026 status-card">
-          <span class="status-tag ready">ĐÃ CÓ TRONG BẢN PHÁT TRIỂN</span>
+          <span class="status-tag ready">ĐÃ CÓ</span>
           <h3>Một workspace thật</h3>
           <ul>
             <li>Project và tệp tại chỗ, editor bảo vệ khi file đổi bên ngoài.</li>
@@ -355,7 +349,7 @@
           <ul>
             <li>Thiết kế Visual Canvas vẫn ở trạng thái thử nghiệm.</li>
             <li>Màn quản trị quyền hạn và bằng chứng chi tiết hơn đang được phát triển.</li>
-            <li>Bộ cài ký số macOS, Linux, Windows chưa đóng gói hoàn tất.</li>
+            <li>Bản macOS cho chip Apple <a href="download.html">đã tải được</a>, ký ad-hoc và chưa được Apple notarize. Chưa có bộ cài Windows và Linux.</li>
             <li>Chưa có đồng bộ đám mây (ưu tiên bảo mật dữ liệu cục bộ).</li>
           </ul>
         </div>
@@ -423,7 +417,7 @@
           </div>
           <p>Yana AI chỉ đóng vai trò trợ lý hỗ trợ kỹ thuật; <strong>quyền quyết định thực thi luôn thuộc về bạn</strong>.</p>
           <ul>
-            <li>Mọi can thiệp phá huỷ (`rm`, `drop database`, sửa file quan trọng) đều qua Cổng Hành Động (Action Gate) chờ bạn bấm Duyệt.</li>
+            <li>Lệnh cần quyền sẽ chờ bạn duyệt, trừ những việc bạn đã cho phép trước (phê duyệt được ghi nhớ, mức quyền, chế độ Tự động). Lệnh đã duyệt chạy bằng quyền tài khoản của bạn, không được cô lập.</li>
             
             <li>Yana phát hành theo giấy phép Apache 2.0. Quyền đối với nội dung do model tạo ra tùy theo điều khoản của nhà cung cấp model bạn dùng.</li>
           </ul>
@@ -607,11 +601,11 @@
         </p>
 
         <div class="studio-closing-actions">
-          <a href="runtime.html" class="btn-spring-2026 btn-spring-primary" style="padding: 16px 36px; font-size: 16px;">
-            Khám phá Kiến trúc Runtime ↗
+          <a href="download.html" class="btn-spring-2026 btn-spring-primary" style="padding: 16px 36px; font-size: 16px;">
+            Tải Yana cho macOS ↓
           </a>
-          <a href="index.html" class="btn-spring-2026 btn-spring-secondary" style="padding: 16px 32px; font-size: 16px;">
-            ← Về Trang Chủ Yana
+          <a href="runtime.html" class="btn-spring-2026 btn-spring-secondary" style="padding: 16px 32px; font-size: 16px;">
+            Kiến trúc Runtime ↗
           </a>
         </div>
       </div>
@@ -645,7 +639,7 @@
         <p>• Yana không vận hành máy chủ nhận mã nguồn của bạn.</p>
 
         <h4>3. Nguyên Tắc Giám Sát Con Người &amp; Miễn Trừ Trách Nhiệm Thực Thi (Human-in-the-Loop)</h4>
-        <p>Yana Studio tích hợp cơ chế Cổng Hành Động (Action Gate) với 6 cấp độ rủi ro (L0 đến L5). Mọi tác vụ có nguy cơ làm thay đổi hệ thống bao gồm: chạy lệnh shell nguy hiểm, ghi đè tệp tin cấu hình, xóa dữ liệu hoặc đẩy mã nguồn lên môi trường từ xa đều bắt buộc phải có sự xác nhận chủ động từ bạn.</p>
+        <p>Yana Studio tích hợp cơ chế Cổng Hành Động (Action Gate) với 6 cấp độ rủi ro (L0 đến L5). Tác vụ cần quyền sẽ chờ bạn xác nhận, trừ những việc bạn đã cho phép trước bằng phê duyệt được ghi nhớ, mức quyền hoặc chế độ Tự động. Không bộ lọc nào phát hiện được mọi thao tác phá hủy, và lệnh đã duyệt chạy bằng quyền tài khoản của bạn, không được cô lập.</p>
         <p>Yana AI từ chối mọi trách nhiệm đối với các tổn thất phát sinh do người dùng tự ý phê duyệt các lệnh có tính chất phá hoại mà hệ thống đã đưa ra cảnh báo.</p>
 
         <h4>4. Quyền Sở Hữu Trí Tuệ Đối Với Mã Nguồn Được Sinh Ra</h4>
@@ -708,7 +702,7 @@
     });
   </script>
 
-  <script src="assets/site26.js"></script>
   <script src="assets/sakura-site.js"></script>
+  <script src="assets/release-facts.js" defer></script>
 </body>
 </html>

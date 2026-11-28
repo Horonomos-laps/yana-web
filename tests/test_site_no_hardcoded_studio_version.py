@@ -18,7 +18,7 @@ from pathlib import Path
 DOCS = Path(__file__).resolve().parents[1] / "docs"
 
 # "Studio 1.5", "Studio 1.5.1", "Studio 1.6.2", with any suffix glued on.
-VERSIONED = re.compile(r"Studio v?\d+\.\d+(?:\.\d+)?[^\s<\"'),;:]*")
+VERSIONED = re.compile(r"Studio v?\d+\.\d+(?:\.\d+)?[^\s<\"'),;:]*", re.IGNORECASE)
 
 # Descriptions of the release filter, not claims about the current version.
 ALLOWED = (

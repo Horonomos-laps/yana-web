@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tải Yana 1.0 cho macOS: Yana và Yana Studio trong một app</title>
+  <title>Tải Yana cho macOS: Yana và Yana Studio trong một app</title>
   <link rel="icon" type="image/svg+xml" href="yana-mark.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -166,7 +166,7 @@
     }
   </style>
   <style>
-    .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; max-width: 1080px; margin: 0 auto 72px; padding: 0 24px; }
+    .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px; max-width: 1080px; margin: 0 auto 72px; padding: 0 24px; }
     .shot-grid figure { margin: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.12); }
     .shot-grid figure.wide { grid-column: 1 / -1; }
     .shot-grid img { display: block; width: 100%; height: auto; }
@@ -193,7 +193,7 @@
   <main id="main">
     <section class="download-hero">
       <div class="floating-hero-pill">
-        <span>✨ Yana 1.0</span>
+        <span>✨ Yana <span data-dl-version>1.0.0</span></span>
         <span style="opacity: 0.4;">·</span>
         <span style="color: #059669;">Chat · Terminal · Studio</span>
       </div>
@@ -210,7 +210,7 @@
         <h2 class="dl-os-title" style="font-size: 32px; margin: 12px 0 8px;">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 3.5c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-.99 1.74-.86 2.78.99.08 2.01-.51 2.59-1.28z"/></svg>
           macOS
-          <span class="hand-note-tag" style="font-size: 18px;">Yana 1.0.0</span>
+          <span class="hand-note-tag" style="font-size: 18px;">Yana <span data-dl-version>1.0.0</span></span>
         </h2>
         <p class="dl-os-desc" style="font-size: 15px; margin-bottom: 24px; color: #475569;">Dành cho Mac chip Apple (M1 trở lên) chạy macOS 14 Sonoma trở lên. Mở file <strong>.dmg</strong>, kéo <strong>Yana</strong> vào Applications. Yana Studio đã nằm sẵn bên trong, không cần cài riêng.</p>
         <div class="dl-btn-group" style="display: flex; flex-direction: column; gap: 12px;">
@@ -218,10 +218,10 @@
             Tải Yana <span data-dl-version>1.0.0</span> (.dmg) · <span data-dl-size>475 MB</span> ↓
           </a>
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12px; color: #64748b; padding: 4px 8px; font-family: var(--font-mono);">
-            <span>DMG ARM64 · hoặc <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.0.0/Yana-1.0.0.zip" style="color: #2563eb; text-decoration: none; font-weight: 600;">bản .zip</a></span>
-            <a href="https://github.com/Horonomos-laps/Yana-studio/releases/tag/app-v1.0.0" target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 600;">SHA-256 và ghi chú phát hành ↗</a>
+            <span>DMG ARM64 · hoặc <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.0.0/Yana-1.0.0.zip" data-dl-zip style="color: #2563eb; text-decoration: none; font-weight: 600;">bản .zip</a></span>
+            <a href="https://github.com/Horonomos-laps/Yana-studio/releases/tag/app-v1.0.0" data-dl-notes target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 600;">SHA-256 và ghi chú phát hành ↗</a>
           </div>
-          <div class="dl-sha">SHA-256 (.dmg): b7b77b697d8f03d7c78561e527b40668a401e09d2aa8ccf712b8f08d0269617c</div>
+          <div class="dl-sha">SHA-256 (.dmg): <span data-dl-sha data-sha-missing="xem trang phát hành">b7b77b697d8f03d7c78561e527b40668a401e09d2aa8ccf712b8f08d0269617c</span></div>
         </div>
       </div>
     </section>
@@ -229,7 +229,7 @@
     <section style="max-width: 1080px; margin: 0 auto 28px; padding: 0 24px;">
       <div style="text-align: center; margin-bottom: 28px;">
         <p class="floating-hero-pill" style="margin-bottom: 12px;">ẢNH CHỤP</p>
-        <h2 style="font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); font-weight: 800; color: #0f172a; margin: 8px 0;">Giao diện thật của Yana 1.0</h2>
+        <h2 style="font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); font-weight: 800; color: #0f172a; margin: 8px 0;">Giao diện thật của Yana</h2>
       </div>
     </section>
     <div class="shot-grid">
@@ -260,7 +260,7 @@
       <div class="ver-card">
         <span class="ver-kind">RUNTIME · CRATES.IO</span>
         <h3 class="ver-name">yana-rt</h3>
-        <div class="ver-num" data-ver-num="rt">1.5.2</div>
+        <div class="ver-num" data-ver-num="rt">1.5.6</div>
         <div class="ver-date" data-ver-date="rt" data-loading="1">Đang kiểm tra…</div>
         <p class="ver-desc">Runtime Rust chạy các lượt chat và kiểm soát quyền của AI. Cài và cập nhật độc lập với app.</p>
         <div class="ver-how">cargo install yana-rt</div>
@@ -269,7 +269,7 @@
       <div class="ver-card">
         <span class="ver-kind">GÓI PYTHON · PYPI</span>
         <h3 class="ver-name">yana-ai</h3>
-        <div class="ver-num" data-ver-num="pypi">1.5.2</div>
+        <div class="ver-num" data-ver-num="pypi">1.5.6</div>
         <div class="ver-date" data-ver-date="pypi" data-loading="1">Đang kiểm tra…</div>
         <p class="ver-desc">Lớp bảo vệ cho repository: quy tắc an toàn, hook và lệnh cho các AI agent.</p>
         <div class="ver-how">pip install yana-ai &amp;&amp; yana-ai install</div>
@@ -335,57 +335,7 @@
         <p>Dùng model chạy offline qua Ollama, hoặc model đám mây bằng API key của bạn. Khóa API được giữ trong Keychain của macOS.</p>
       </div>
     </div>
-  <script>
-    // Live release numbers: GitHub (app), crates.io (yana-rt), PyPI (yana-ai). All three allow browser reads (CORS *).
-    // The static numbers in the HTML stay if an API fails. Values are checked and written with textContent only.
-    (function () {
-      var LOCALE = 'vi-VN';
-      var VERSION = /^\d+\.\d+\.\d+$/;
-      var DOWNLOAD_PREFIX = 'https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v';
-      var TIMEOUT_MS = 8000;
-
-      function getJson(url) {
-        var controller = new AbortController();
-        var timer = setTimeout(function () { controller.abort(); }, TIMEOUT_MS);
-        return fetch(url, { signal: controller.signal, headers: { Accept: 'application/json' } })
-          .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
-          .finally(function () { clearTimeout(timer); });
-      }
-      function show(key, version, iso) {
-        if (!VERSION.test(version)) return;
-        document.querySelectorAll('[data-ver-num="' + key + '"]').forEach(function (el) { el.textContent = version; });
-        var when = new Date(iso);
-        if (!isNaN(when)) {
-          var text = when.toLocaleDateString(LOCALE, { year: 'numeric', month: 'short', day: 'numeric' });
-          document.querySelectorAll('[data-ver-date="' + key + '"]').forEach(function (el) { el.textContent = 'Phát hành ' + text; });
-        }
-      }
-      function markUnknown(key) {
-        document.querySelectorAll('[data-ver-date="' + key + '"]').forEach(function (el) { if (el.dataset.loading) el.textContent = ''; });
-      }
-
-      getJson('https://api.github.com/repos/Horonomos-laps/Yana-studio/releases?per_page=30').then(function (list) {
-        var release = list.filter(function (r) { return !r.draft && !r.prerelease && /^app-v\d+\.\d+\.\d+$/.test(r.tag_name); })[0];
-        if (!release) return markUnknown('app');
-        show('app', release.tag_name.slice(5), release.published_at);
-        var dmg = (release.assets || []).filter(function (a) { return /\.dmg$/.test(a.name) && a.browser_download_url.indexOf(DOWNLOAD_PREFIX) === 0; })[0];
-        if (!dmg) return;
-        var button = document.querySelector('[data-dl-dmg]');
-        if (button) button.href = dmg.browser_download_url;
-        document.querySelectorAll('[data-dl-version]').forEach(function (el) { el.textContent = release.tag_name.slice(5); });
-        document.querySelectorAll('[data-dl-size]').forEach(function (el) { el.textContent = Math.round(dmg.size / 1e6) + ' MB'; });
-      }).catch(function () { markUnknown('app'); });
-
-      getJson('https://crates.io/api/v1/crates/yana-rt').then(function (data) {
-        show('rt', data.crate.max_stable_version, data.crate.updated_at);
-      }).catch(function () { markUnknown('rt'); });
-
-      getJson('https://pypi.org/pypi/yana-ai/json').then(function (data) {
-        var files = data.urls || [];
-        show('pypi', data.info.version, files.length ? files[0].upload_time_iso_8601 || files[0].upload_time : '');
-      }).catch(function () { markUnknown('pypi'); });
-    })();
-  </script>
+  <script src="assets/release-facts.js" defer></script>
   </main>
 
   <footer class="site-footer"></footer>

@@ -16,6 +16,156 @@
   <link rel="stylesheet" href="assets/site26.css">
   <link rel="stylesheet" href="assets/studio26.css">
   <link rel="stylesheet" href="assets/download26.css">
+  <style>
+    .download-hero {
+      text-align: center;
+      padding: 120px 24px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .dl-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1080px;
+      margin: 40px auto 60px;
+      padding: 0 24px;
+    }
+    .dl-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 28px;
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.04);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .dl-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(37,99,235,0.12);
+      border-color: #bfdbfe;
+    }
+    .dl-card.featured {
+      border: 2px solid #2563eb;
+      background: linear-gradient(180deg, rgba(239,246,255,0.8) 0%, rgba(255,255,255,0.95) 100%);
+    }
+    .dl-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+      width: fit-content;
+    }
+    .dl-card.featured .dl-badge {
+      background: #2563eb;
+      color: #fff;
+    }
+    .dl-card:not(.featured) .dl-badge {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .dl-os-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ink-primary);
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dl-os-desc {
+      font-size: 14.5px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .dl-btn-group {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .dl-main-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #2563eb;
+      color: #ffffff !important;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 20px;
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 6px 20px -4px rgba(37,99,235,0.4);
+      transition: all 0.15s ease;
+    }
+    .dl-main-btn:hover {
+      background: #1d4ed8;
+      transform: scale(1.02);
+    }
+    .dl-sub-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155 !important;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+    .dl-sub-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .device-preview-card {
+      max-width: 980px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .info-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .info-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 8px;
+    }
+    .info-card p {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.6;
+      margin: 0;
+    }
+  </style>
 </head>
 <body class="sakura-site home-page">
   <div class="site26-bg-canvas" aria-hidden="true"></div>
@@ -23,13 +173,44 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <nav class="site-nav"></nav>
 
-  <main id="main" class="dl2">
-    <section class="dl2-hero" id="download">
-      <h1>Download Yana for Mac</h1>
-      <p>One download, two apps: <strong>Yana</strong> to chat and give instructions, <strong>Yana Studio</strong> to write code. Actions that matter wait for your approval.</p>
-      <a class="dl2-button" data-dl-dmg href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.1.0/Yana-1.1.0.dmg">Download Yana <span data-dl-version>1.1.0</span> (.dmg) · <span data-dl-size>478 MB</span></a>
-      <p class="dl2-meta">Apple Silicon Mac (M1 or later), macOS 14 or later · <a data-dl-zip href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.1.0/Yana-1.1.0.zip">.zip</a> · <a data-dl-notes href="https://github.com/Horonomos-laps/Yana-studio/releases/tag/app-v1.1.0">Release notes</a></p>
-      <p class="dl2-sha">SHA-256 (.dmg): <span data-dl-sha data-sha-missing="see the release page">a8e5aff6e61f1d57440c2641022e888bafff5b27da46ff5908780b161babb7e7</span></p>
+  <main id="main">
+    <section class="download-hero">
+      <div class="floating-hero-pill">
+        <span>✨ Yana <span data-dl-version>1.1.0</span></span>
+        <span style="opacity: 0.4;">·</span>
+        <span style="color: #059669;">Chat · Terminal · Studio</span>
+      </div>
+      <h1 class="studio-hero-2026" style="padding:0;margin:16px 0 20px;">An AI assistant that runs on your Mac.<br><span class="text-rainbow-2026">Anything important waits for your approval.</span></h1>
+      <p class="lead-text" style="margin:0 auto 30px;">One download, two apps: <strong>Yana</strong> (chat, terminal, plugin store) and <strong>Yana Studio</strong> (a code editor on Code-OSS) that opens from Yana in its own window. Use any model, including ones running on your own machine.</p>
+    </section>
+
+    <section class="dl-cards-grid perspective-container-2026" id="download" style="max-width: 680px;">
+      <div class="dl-card featured has-glow-2026 card-3d-interactive" style="padding: 40px 36px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+          <span class="organic-badge-pulse">Official release · Apple Silicon</span>
+          <span style="font-family: var(--font-mono); font-size: 13px; color: #059669; font-weight: 700;">macOS 14+</span>
+        </div>
+        <h2 class="dl-os-title" style="font-size: 32px; margin: 12px 0 8px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 3.5c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.65 1.35-.58.67-.99 1.74-.86 2.78.99.08 2.01-.51 2.59-1.28z"/></svg>
+          macOS
+          <span class="hand-note-tag" style="font-size: 18px;">Yana <span data-dl-version>1.1.0</span></span>
+        </h2>
+        <p class="dl-os-desc" style="font-size: 15px; margin-bottom: 24px; color: #475569;">For Macs with Apple silicon (M1 and later) running macOS 14 Sonoma or newer. Open the <strong>.dmg</strong> and drag <strong>Yana</strong> into Applications. Yana Studio is already inside, nothing else to install.</p>
+        <div class="dl-btn-group" style="display: flex; flex-direction: column; gap: 12px;">
+          <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.1.0/Yana-1.1.0.dmg" data-dl-dmg class="btn-spring-2026 btn-spring-primary dl-main-btn" style="padding: 16px 28px; font-size: 16px; justify-content: center;">
+            Download Yana <span data-dl-version>1.1.0</span> (.dmg) · <span data-dl-size>478 MB</span> ↓
+          </a>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 12px; color: #64748b; padding: 4px 8px; font-family: var(--font-mono);">
+            <span>DMG ARM64 · or the <a href="https://github.com/Horonomos-laps/Yana-studio/releases/download/app-v1.1.0/Yana-1.1.0.zip" data-dl-zip style="color: #2563eb; text-decoration: none; font-weight: 600;">.zip build</a></span>
+            <a href="https://github.com/Horonomos-laps/Yana-studio/releases/tag/app-v1.1.0" data-dl-notes target="_blank" rel="noopener noreferrer" style="color: #2563eb; text-decoration: none; font-weight: 600;">SHA-256 and release notes ↗</a>
+          </div>
+          <div class="dl-sha">SHA-256 (.dmg): <span data-dl-sha data-sha-missing="see the release page">a8e5aff6e61f1d57440c2641022e888bafff5b27da46ff5908780b161babb7e7</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="dl2">
+    <section class="dl2-first">
       <img class="dl2-shot" src="assets/app110-chat.jpg" alt="The Yana 1.1.0 chat screen" width="1800" height="1216">
     </section>
 
@@ -89,6 +270,7 @@ yana-rt chat --provider ollama</pre></article>
 yana-ai install</pre></article>
       </div>
     </section>
+    </div>
   </main>
   <script src="assets/release-facts.js" defer></script>
 

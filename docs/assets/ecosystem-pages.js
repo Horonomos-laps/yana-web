@@ -239,7 +239,7 @@
     };
 
     const copy = isVietnamese ? {
-      home: "Trang chủ", open: "Mở menu", close: "Đóng menu", language: "EN", cta: "Tải Studio",
+      home: "Trang chủ", open: "Mở menu", close: "Đóng menu", language: "EN", cta: "Tải Yana",
       products: "Sản phẩm", platform: "Nền tảng", trust: "Trust", resources: "Tài nguyên",
       productsEyebrow: "KHÁM PHÁ YANA", productsTitle: "Những bề mặt để làm việc.",
       platformEyebrow: "NỀN TẢNG", platformTitle: "Mọi lớp bên dưới Studio.",
@@ -248,7 +248,7 @@
       studio: "Yana Studio", studioDetail: "Workspace trực quan cho AI có kiểm soát",
       runtime: "Yana Runtime", runtimeDetail: "Control plane và thực thi có giới hạn",
       wheelbot: "Yana Wheelbot", wheelbotDetail: "Ranh giới AI vật lý",
-      download: "Tải Studio", downloadDetail: "Bộ cài macOS Apple Silicon",
+      download: "Tải Yana", downloadDetail: "Bộ cài macOS Apple Silicon",
       ecosystem: "Hệ sinh thái", ecosystemDetail: "Xem các bề mặt Yana",
       integrations: "Tích hợp", integrationsDetail: "Dùng Yana với agent bạn đang có",
       showcase: "Trình diễn MacBook 3D", showcaseDetail: "Giao diện Yana Studio trên một chiếc MacBook (minh hoạ)",
@@ -267,7 +267,7 @@
       security: "Security", securityDetail: "Chính sách bảo mật",
       source: "GitHub", sourceDetail: "Mã nguồn Yana"
     } : {
-      home: "Home", open: "Open menu", close: "Close menu", language: "VI", cta: "Get Studio",
+      home: "Home", open: "Open menu", close: "Close menu", language: "VI", cta: "Get Yana",
       products: "Products", platform: "Platform", trust: "Trust", resources: "Resources",
       productsEyebrow: "EXPLORE YANA", productsTitle: "The surfaces where work happens.",
       platformEyebrow: "THE PLATFORM", platformTitle: "Everything beneath Studio.",
@@ -276,7 +276,7 @@
       studio: "Yana Studio", studioDetail: "Visual workspace for governed AI",
       runtime: "Yana Runtime", runtimeDetail: "Control plane and bounded execution",
       wheelbot: "Yana Wheelbot", wheelbotDetail: "The physical-AI boundary",
-      download: "Download Studio", downloadDetail: "Apple Silicon macOS installer",
+      download: "Download Yana", downloadDetail: "Apple Silicon macOS installer",
       ecosystem: "Ecosystem", ecosystemDetail: "See Yana's real surfaces",
       integrations: "Integrations", integrationsDetail: "Use Yana with the agent you already have",
       showcase: "3D MacBook showcase", showcaseDetail: "Yana Studio on a MacBook (illustration)",

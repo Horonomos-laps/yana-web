@@ -30,17 +30,17 @@
   const copy = vi ? {
     announcement:"Yana kết nối AI với công việc thật, còn quyền kiểm soát vẫn nằm trong tay anh.",
     products:"Sản phẩm",platform:"Nền tảng",solutions:"Giải pháp",resources:"Tài nguyên",about:"Về Yana",
-    source:"Mã nguồn",updates:"Cập nhật",download:"Tải Studio",search:"Tìm kiếm",docs:"Docs",start:"Bắt đầu",
+    source:"Mã nguồn",updates:"Cập nhật",download:"Tải Yana",search:"Tìm kiếm",docs:"Docs",start:"Bắt đầu",
     productsTitle:"Các bề mặt của Yana.",platformTitle:"Những lớp vận hành bên dưới.",solutionsTitle:"Yana giúp được gì?",resourcesTitle:"Tài liệu và hỗ trợ."
   } : ko ? {
     announcement:"Yana는 AI를 실제 작업에 연결하고, 결정권은 사람에게 남깁니다.",
     products:"제품",platform:"플랫폼",solutions:"활용 방법",resources:"자료",about:"Yana 소개",
-    source:"소스 코드",updates:"업데이트",download:"Studio 다운로드",search:"검색",docs:"문서",start:"시작하기",
+    source:"소스 코드",updates:"업데이트",download:"Yana 다운로드",search:"검색",docs:"문서",start:"시작하기",
     productsTitle:"Yana의 제품.",platformTitle:"시스템을 이루는 계층.",solutionsTitle:"Yana로 할 수 있는 일",resourcesTitle:"문서와 지원."
   } : {
     announcement:"Yana connects AI to real work while authority stays with you.",
     products:"Products",platform:"Platform",solutions:"Solutions",resources:"Resources",about:"About Yana",
-    source:"Source",updates:"Updates",download:"Download Studio",search:"Search",docs:"Docs",start:"Get started",
+    source:"Source",updates:"Updates",download:"Download Yana",search:"Search",docs:"Docs",start:"Get started",
     productsTitle:"The Yana surfaces.",platformTitle:"The layers underneath.",solutionsTitle:"What can Yana do?",resourcesTitle:"Documentation and support."
   };
   const liquidKnobButton = (extraClass,label,ariaLabel) => `<div class="liquid-stage liquid-stage--knob menu-knob" data-liquid-metal="cta"><div class="liquid-plate" aria-hidden="true"></div><button class="liquid-button liquid-button--knob ${extraClass}" type="button" aria-label="${ariaLabel}" aria-expanded="false"><span class="lbl">${label}</span></button></div>`;
@@ -65,7 +65,7 @@
       developers:"개발자용","ai-agents":"AI 에이전트용",
       teams:"팀용","infra-teams":"인프라팀용","quick-start":"빠른 시작",documentation:"문서",
       architecture:"아키텍처",commands:"명령어 안내",examples:"예시",updates:"업데이트 / 변경 기록",
-      download:"Studio 다운로드",support:"지원 및 문의",legal:"법적 고지",privacy:"개인정보 보호",thanks:"감사의 말"
+      download:"Yana 다운로드",support:"지원 및 문의",legal:"법적 고지",privacy:"개인정보 보호",thanks:"감사의 말"
     };
     const item=(id,path,viTitle,enTitle,viDetail,enDetail,icon,keywords="")=>({
       id,href:/^https?:/.test(path)?path:route(path),title:vi?viTitle:ko?(koreanTitles[id]||enTitle):enTitle,
@@ -79,7 +79,7 @@
       ]},
       resources:{label:copy.resources,title:copy.resourcesTitle,items:[
         item("whitepaper","whitepaper","Báo cáo kỹ thuật (Whitepaper)","Technical Whitepaper","Kiến trúc điều phối, benchmark & ranh giới an toàn","Architecture, benchmarks & safety boundaries","📄","whitepaper report research architecture benchmark"),
-        item("download","download","Tải Studio & CLI","Download Studio & CLI","Bộ cài macOS, Win, Linux & PyPI CLI","Installers for Mac, Windows, Linux & PyPI","↓","download mac windows linux pypi pip"),
+        item("download","download","Tải Yana & CLI","Download Yana & CLI","App cho macOS, CLI qua PyPI và crates.io","macOS app, CLI from PyPI and crates.io","↓","download mac windows linux pypi pip"),
         item("integrations","integrations","Tích hợp","Integrations","Dùng Yana với agent bạn đang có","Use Yana with the agent you already have","⇄","integrations agent claude code cursor codex"),
         item("showcase","macbook_3d_showcase","Trình diễn MacBook 3D","3D MacBook showcase","Giao diện Yana Studio trên một chiếc MacBook (minh hoạ)","Yana Studio on a MacBook (illustration)","▣","macbook 3d showcase demo studio"),
         item("updates","updates","Cập nhật / Changelog","Updates / Changelog","Lịch sử phiên bản & lộ trình phát triển","Ecosystem release history & roadmap","◴","releases version changelog updates"),

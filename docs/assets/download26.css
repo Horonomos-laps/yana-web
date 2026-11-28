@@ -1,0 +1,48 @@
+/* The download pages (vi, en, ko). Own prefix so the shared site styles do not collide. */
+.dl2 { --dl-ink: #0f172a; --dl-text: #475569; --dl-line: #e2e8f0; --dl-blue: #1d62d8; --dl-soft: #f4f8ff; }
+.dl2 section { max-width: 1120px; margin: 0 auto; padding: 56px 24px; }
+.dl2 h1, .dl2 h2, .dl2 h3 { font-family: var(--font-display, system-ui, sans-serif); color: var(--dl-ink); text-wrap: balance; }
+.dl2 h1 { font-size: clamp(34px, 6vw, 64px); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 16px; }
+.dl2 h2 { font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; margin: 0 0 12px; }
+.dl2 h3 { font-size: 21px; margin: 0 0 8px; }
+.dl2 p, .dl2 li { color: var(--dl-text); font-size: 16px; line-height: 1.65; }
+.dl2 a { color: var(--dl-blue); }
+
+.dl2 .dl2-hero { text-align: center; padding-top: 128px; }
+.dl2 .dl2-hero h1 { max-width: none; margin-inline: auto; text-align: center; }
+.dl2 .dl2-hero > p { max-width: 640px; margin: 0 auto 28px; font-size: 18px; }
+.dl2 .dl2-button { display: inline-flex; align-items: center; gap: 10px; background: var(--dl-blue); color: #fff; font-weight: 700; font-size: 17px; padding: 16px 30px; border-radius: 14px; text-decoration: none; transition: background-color .15s ease, transform .15s ease; }
+.dl2 .dl2-button:hover { background: #164fb3; transform: translateY(-2px); }
+.dl2 .dl2-button:active { transform: translateY(0); }
+.dl2 a:focus-visible { outline: 3px solid var(--dl-blue); outline-offset: 3px; }
+.dl2 .dl2-meta { margin: 16px auto 0; font-size: 14px; }
+.dl2 .dl2-sha { margin: 6px auto 0; font: 12px/1.6 var(--font-mono, ui-monospace, monospace); color: #64748b; word-break: break-all; max-width: 640px; }
+.dl2 .dl2-shot { display: block; width: 100%; height: auto; border: 1px solid var(--dl-line); border-radius: 16px; box-shadow: 0 24px 60px -28px rgba(15, 23, 42, .35); background: #fff; }
+.dl2 .dl2-hero .dl2-shot { margin-top: 48px; }
+
+.dl2 .dl2-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; align-items: center; }
+.dl2 .dl2-split.dl2-flip > :first-child { order: 2; }
+.dl2 .dl2-menu { justify-self: center; width: min(100%, 360px); height: auto;border-radius: 18px; box-shadow: 0 24px 60px -24px rgba(15, 23, 42, .5); }
+
+.dl2 .dl2-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; margin-top: 28px; }
+.dl2 .dl2-card { background: #fff; border: 1px solid var(--dl-line); border-radius: 16px; padding: 24px; }
+.dl2 .dl2-card p { margin: 0; }
+.dl2 .dl2-card.dl2-tint { background: var(--dl-soft); border-color: #d6e4fb; }
+
+.dl2 .dl2-install ol { padding-left: 20px; }
+.dl2 .dl2-install li { margin-bottom: 10px; }
+.dl2 .dl2-guide { justify-self: center; width: min(100%, 460px); height: auto; border: 1px solid var(--dl-line); border-radius: 16px; }
+
+.dl2 .dl2-versions .dl2-num { font: 800 34px/1.2 var(--font-mono, ui-monospace, monospace); color: var(--dl-ink); }
+.dl2 .dl2-date { font-size: 13px; min-height: 22px; }
+.dl2 code, .dl2 pre { font-family: var(--font-mono, ui-monospace, monospace); }
+.dl2 pre { background: #0f172a; color: #e2e8f0; border-radius: 12px; padding: 14px 16px; font-size: 13px; overflow-x: auto; margin: 12px 0 0; }
+
+@media (max-width: 820px) {
+  .dl2 section { padding: 40px 18px; }
+  .dl2 .dl2-hero { padding-top: 104px; }
+  .dl2 .dl2-split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .dl2 .dl2-split.dl2-flip > :first-child { order: 0; }
+  .dl2 .dl2-button { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .dl2 .dl2-button { transition: none; } }
